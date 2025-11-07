@@ -1,5 +1,4 @@
 import { UserPlus, Plus, BarChart3 } from "lucide-react";
-import React from "react";
 
 const steps = [
   {

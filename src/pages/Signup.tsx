@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -14,6 +14,7 @@ import {
   validateName,
   getPasswordErrors
 } from "../lib/validations";
+import styles from "./Signup.module.scss";
 
 /**
  * US-1: Sign-up básico (HU10)
@@ -214,7 +215,7 @@ export default function Signup() {
       // Simulación de respuesta exitosa
       toast.success("Cuenta creada con éxito", {
         description: "Serás redirigido al login",
-        icon: <CheckCircle2 className="h-5 w-5" />
+        icon: <CheckCircle2 />
       });
       
       // Redirigir a login después de 500ms
@@ -234,30 +235,30 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className={styles.signupPage}>
+      <div className={styles.container}>
         {/* Botón para volver */}
         <Link 
           to="/" 
-          className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
+          className={styles.backLink}
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm">Volver al inicio</span>
+          <ArrowLeft />
+          <span>Volver al inicio</span>
         </Link>
 
         <Card>
-          <CardHeader className="space-y-2">
-            <CardTitle className="text-2xl text-slate-900">Crear cuenta</CardTitle>
-            <CardDescription>
+          <CardHeader className={styles.cardHeader}>
+            <CardTitle className={styles.cardTitle}>Crear cuenta</CardTitle>
+            <CardDescription className={styles.cardDescription}>
               Ingresa tus datos para registrarte en la plataforma
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <form onSubmit={handleSubmit} className={styles.form} noValidate>
               {/* Nombres */}
-              <div className="space-y-2">
+              <div className={styles.formGroup}>
                 <Label htmlFor="firstName">
-                  Nombres <span className="text-red-600">*</span>
+                  Nombres <span className={styles.required}>*</span>
                 </Label>
                 <Input
                   id="firstName"
@@ -266,14 +267,14 @@ export default function Signup() {
                   value={formData.firstName}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.firstName && errors.firstName ? "border-red-600" : ""}
+                  className={touched.firstName && errors.firstName ? styles.inputError : ""}
                   aria-invalid={touched.firstName && errors.firstName ? "true" : "false"}
                   aria-describedby={errors.firstName ? "firstName-error" : undefined}
                 />
                 {touched.firstName && errors.firstName && (
                   <p 
                     id="firstName-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
@@ -283,9 +284,9 @@ export default function Signup() {
               </div>
 
               {/* Apellidos */}
-              <div className="space-y-2">
+              <div className={styles.formGroup}>
                 <Label htmlFor="lastName">
-                  Apellidos <span className="text-red-600">*</span>
+                  Apellidos <span className={styles.required}>*</span>
                 </Label>
                 <Input
                   id="lastName"
@@ -294,14 +295,14 @@ export default function Signup() {
                   value={formData.lastName}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.lastName && errors.lastName ? "border-red-600" : ""}
+                  className={touched.lastName && errors.lastName ? styles.inputError : ""}
                   aria-invalid={touched.lastName && errors.lastName ? "true" : "false"}
                   aria-describedby={errors.lastName ? "lastName-error" : undefined}
                 />
                 {touched.lastName && errors.lastName && (
                   <p 
                     id="lastName-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
@@ -311,9 +312,9 @@ export default function Signup() {
               </div>
 
               {/* Edad */}
-              <div className="space-y-2">
+              <div className={styles.formGroup}>
                 <Label htmlFor="age">
-                  Edad <span className="text-red-600">*</span>
+                  Edad <span className={styles.required}>*</span>
                 </Label>
                 <Input
                   id="age"
@@ -323,14 +324,14 @@ export default function Signup() {
                   value={formData.age}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.age && errors.age ? "border-red-600" : ""}
+                  className={touched.age && errors.age ? styles.inputError : ""}
                   aria-invalid={touched.age && errors.age ? "true" : "false"}
                   aria-describedby={errors.age ? "age-error" : undefined}
                 />
                 {touched.age && errors.age && (
                   <p 
                     id="age-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
@@ -340,9 +341,9 @@ export default function Signup() {
               </div>
 
               {/* Correo electrónico */}
-              <div className="space-y-2">
+              <div className={styles.formGroup}>
                 <Label htmlFor="email">
-                  Correo electrónico <span className="text-red-600">*</span>
+                  Correo electrónico <span className={styles.required}>*</span>
                 </Label>
                 <Input
                   id="email"
@@ -351,14 +352,14 @@ export default function Signup() {
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.email && errors.email ? "border-red-600" : ""}
+                  className={touched.email && errors.email ? styles.inputError : ""}
                   aria-invalid={touched.email && errors.email ? "true" : "false"}
                   aria-describedby={errors.email ? "email-error" : undefined}
                 />
                 {touched.email && errors.email && (
                   <p 
                     id="email-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
@@ -368,9 +369,9 @@ export default function Signup() {
               </div>
 
               {/* Contraseña */}
-              <div className="space-y-2">
+              <div className={styles.formGroup}>
                 <Label htmlFor="password">
-                  Contraseña <span className="text-red-600">*</span>
+                  Contraseña <span className={styles.required}>*</span>
                 </Label>
                 <Input
                   id="password"
@@ -379,14 +380,14 @@ export default function Signup() {
                   value={formData.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.password && errors.password ? "border-red-600" : ""}
+                  className={touched.password && errors.password ? styles.inputError : ""}
                   aria-invalid={touched.password && errors.password ? "true" : "false"}
                   aria-describedby={errors.password ? "password-error" : undefined}
                 />
                 {touched.password && errors.password && (
                   <p 
                     id="password-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
@@ -396,9 +397,9 @@ export default function Signup() {
               </div>
 
               {/* Confirmar contraseña */}
-              <div className="space-y-2">
+              <div className={styles.formGroup}>
                 <Label htmlFor="confirmPassword">
-                  Confirmar contraseña <span className="text-red-600">*</span>
+                  Confirmar contraseña <span className={styles.required}>*</span>
                 </Label>
                 <Input
                   id="confirmPassword"
@@ -407,14 +408,14 @@ export default function Signup() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.confirmPassword && errors.confirmPassword ? "border-red-600" : ""}
+                  className={touched.confirmPassword && errors.confirmPassword ? styles.inputError : ""}
                   aria-invalid={touched.confirmPassword && errors.confirmPassword ? "true" : "false"}
                   aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
                 />
                 {touched.confirmPassword && errors.confirmPassword && (
                   <p 
                     id="confirmPassword-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
@@ -426,12 +427,12 @@ export default function Signup() {
               {/* Botón de registro */}
               <Button
                 type="submit"
-                className="w-full"
+                className={styles.submitButton}
                 disabled={!isFormValid() || isLoading}
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className={styles.spinner} />
                     Procesando...
                   </>
                 ) : (
@@ -440,9 +441,9 @@ export default function Signup() {
               </Button>
 
               {/* Link a login */}
-              <div className="text-center text-sm text-slate-600">
+              <div className={styles.footerLink}>
                 ¿Ya tienes una cuenta?{" "}
-                <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+                <Link to="/login" className={styles.loginLink}>
                   Inicia sesión
                 </Link>
               </div>

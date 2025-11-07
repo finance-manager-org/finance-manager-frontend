@@ -146,7 +146,7 @@ export default function Login() {
       const userName = "Usuario"; // Este valor vendría del backend
       toast.success(`¡Hola, ${userName}!`, {
         description: "Has iniciado sesión correctamente",
-        icon: <CheckCircle2 className="h-5 w-5" />
+        icon: <CheckCircle2 />
       });
       
       // Redirigir a dashboard después de 500ms
@@ -175,14 +175,14 @@ export default function Login() {
       <div className={styles.container}>
         {/* Botón para volver */}
         <Link to="/" className={styles.backLink}>
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm">Volver al inicio</span>
+          <ArrowLeft />
+          <span>Volver al inicio</span>
         </Link>
 
         <Card>
-          <CardHeader className="space-y-2">
-            <CardTitle className="text-2xl text-slate-900">Iniciar sesión</CardTitle>
-            <CardDescription>
+          <CardHeader className={styles.cardHeader}>
+            <CardTitle className={styles.cardTitle}>Iniciar sesión</CardTitle>
+            <CardDescription className={styles.cardDescription}>
               Ingresa tus credenciales para acceder a tu cuenta
             </CardDescription>
           </CardHeader>
@@ -201,7 +201,7 @@ export default function Login() {
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.email && errors.email ? "border-red-600" : ""}
+                  className={touched.email && errors.email ? styles.inputError : ""}
                   aria-invalid={touched.email && errors.email ? "true" : "false"}
                   aria-describedby={errors.email ? "email-error" : undefined}
                 />
@@ -225,7 +225,7 @@ export default function Login() {
                   </Label>
                   <Link 
                     to="/forgot-password" 
-                    className="text-sm text-blue-600 hover:text-blue-700"
+                    className={styles.forgotPasswordLink}
                   >
                     ¿Olvidaste tu contraseña?
                   </Link>
@@ -238,7 +238,7 @@ export default function Login() {
                   value={formData.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.password && errors.password ? "border-red-600" : ""}
+                  className={touched.password && errors.password ? styles.inputError : ""}
                   aria-invalid={touched.password && errors.password ? "true" : "false"}
                   aria-describedby={errors.password ? "password-error" : undefined}
                 />
@@ -262,7 +262,7 @@ export default function Login() {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className={styles.spinner} />
                     Iniciando sesión...
                   </>
                 ) : (
@@ -273,7 +273,7 @@ export default function Login() {
               {/* Link a registro */}
               <div className={styles.footerLink}>
                 ¿No tienes una cuenta?{" "}
-                <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
+                <Link to="/signup" className={styles.signupLink}>
                   Regístrate
                 </Link>
               </div>

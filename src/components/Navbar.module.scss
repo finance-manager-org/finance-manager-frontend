@@ -23,6 +23,26 @@
   }
 }
 
+// Back Link (for auth pages)
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #0f172a;
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
 // Logo
 .logo {
   display: flex;
@@ -115,9 +135,14 @@
   }
 
   svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
   }
+}
+
+// Auth buttons - mobile full width
+.mobileAuthButton {
+  width: 100%;
 }
 
 // Mobile Menu

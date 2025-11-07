@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../co
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { validateEmail, validateRequired } from "../lib/validations";
+import styles from "./ForgotPassword.module.scss";
 
 /**
  * US-3: Recuperar contraseña (HU12) - Parte 1
@@ -121,7 +122,7 @@ export default function ForgotPassword() {
       
       toast.success("Correo enviado", {
         description: "Revisa tu bandeja de entrada para continuar",
-        icon: <Mail className="h-5 w-5" />
+        icon: <Mail />
       });
       
     } catch (error) {
@@ -146,23 +147,23 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className={styles.forgotPasswordPage}>
+      <div className={styles.container}>
         {/* Botón para volver */}
         <Link 
           to="/login" 
-          className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
+          className={styles.backLink}
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm">Volver al inicio de sesión</span>
+          <ArrowLeft />
+          <span>Volver al inicio de sesión</span>
         </Link>
 
         <Card>
-          <CardHeader className="space-y-2">
-            <CardTitle className="text-2xl text-slate-900">
+          <CardHeader className={styles.cardHeader}>
+            <CardTitle className={styles.cardTitle}>
               {emailSent ? "Correo enviado" : "Recuperar contraseña"}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className={styles.cardDescription}>
               {emailSent 
                 ? "Te hemos enviado un enlace para restablecer tu contraseña. El enlace es válido por 1 hora."
                 : "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña"
@@ -171,24 +172,24 @@ export default function ForgotPassword() {
           </CardHeader>
           <CardContent>
             {emailSent ? (
-              <div className="space-y-4">
+              <div className={styles.successSection}>
                 {/* Mensaje de éxito */}
-                <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <Mail className="w-5 h-5 text-green-600" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-green-900">
+                <div className={styles.successBox}>
+                  <Mail />
+                  <div className={styles.successContent}>
+                    <p className={styles.successTitle}>
                       Revisa tu correo
                     </p>
-                    <p className="text-sm text-green-700">
+                    <p className={styles.successEmail}>
                       {formData.email}
                     </p>
                   </div>
                 </div>
 
                 {/* Instrucciones */}
-                <div className="space-y-2 text-sm text-slate-600">
+                <div className={styles.instructions}>
                   <p>Si no recibes el correo en unos minutos:</p>
-                  <ul className="list-disc list-inside space-y-1 ml-2">
+                  <ul className={styles.instructionsList}>
                     <li>Revisa tu carpeta de spam</li>
                     <li>Verifica que el correo sea correcto</li>
                     <li>Intenta reenviar el correo</li>
@@ -196,29 +197,29 @@ export default function ForgotPassword() {
                 </div>
 
                 {/* Botones */}
-                <div className="space-y-2">
+                <div className={styles.buttonsGroup}>
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full"
+                    className={styles.resendButton}
                     onClick={handleResend}
                   >
                     Enviar a otro correo
                   </Button>
                   
-                  <Link to="/login" className="block">
-                    <Button variant="ghost" className="w-full">
+                  <Link to="/login" className={styles.backToLoginLink}>
+                    <Button variant="ghost" className={styles.backToLoginButton}>
                       Volver al inicio de sesión
                     </Button>
                   </Link>
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              <form onSubmit={handleSubmit} className={styles.form} noValidate>
                 {/* Correo electrónico */}
-                <div className="space-y-2">
+                <div className={styles.formGroup}>
                   <Label htmlFor="email">
-                    Correo electrónico <span className="text-red-600">*</span>
+                    Correo electrónico <span className={styles.required}>*</span>
                   </Label>
                   <Input
                     id="email"
@@ -229,14 +230,14 @@ export default function ForgotPassword() {
                     value={formData.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className={touched.email && errors.email ? "border-red-600" : ""}
+                    className={touched.email && errors.email ? styles.inputError : ""}
                     aria-invalid={touched.email && errors.email ? "true" : "false"}
                     aria-describedby={errors.email ? "email-error" : undefined}
                   />
                   {touched.email && errors.email && (
                     <p 
                       id="email-error" 
-                      className="text-sm text-red-600" 
+                      className={styles.errorMessage}
                       role="alert"
                       aria-live="polite"
                     >
@@ -248,12 +249,12 @@ export default function ForgotPassword() {
                 {/* Botón de enviar */}
                 <Button
                   type="submit"
-                  className="w-full"
+                  className={styles.submitButton}
                   disabled={!isFormValid() || isLoading}
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className={styles.spinner} />
                       Enviando...
                     </>
                   ) : (
@@ -262,9 +263,9 @@ export default function ForgotPassword() {
                 </Button>
 
                 {/* Link para volver */}
-                <div className="text-center text-sm text-slate-600">
+                <div className={styles.footerLink}>
                   ¿Recordaste tu contraseña?{" "}
-                  <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+                  <Link to="/login" className={styles.loginLink}>
                     Inicia sesión
                   </Link>
                 </div>

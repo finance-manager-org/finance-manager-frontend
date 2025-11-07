@@ -13,6 +13,24 @@
   }
 }
 
+// Card Header Styles
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.cardDescription {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
 // Back Link
 .backLink {
   display: inline-flex;
@@ -58,33 +76,23 @@
       color: #dc2626;
     }
   }
+}
 
-  input {
-    width: 100%;
-    padding: 0.625rem 0.875rem;
-    font-size: 0.875rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.375rem;
-    transition: all 0.2s ease;
+// Input Error State
+.inputError {
+  border-color: #dc2626 !important;
 
-    &:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    &.error {
-      border-color: #dc2626;
-
-      &:focus {
-        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-      }
-    }
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
   }
 }
 
 // Password Field with Forgot Link
 .passwordGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
   .passwordLabel {
     display: flex;
     align-items: center;
@@ -95,17 +103,22 @@
       font-size: 0.875rem;
       font-weight: 500;
       color: #0f172a;
-    }
 
-    a {
-      font-size: 0.875rem;
-      color: #3b82f6;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: #2563eb;
+      .required {
+        color: #dc2626;
       }
     }
+  }
+}
+
+// Forgot Password Link
+.forgotPasswordLink {
+  font-size: 0.875rem;
+  color: #3b82f6;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #2563eb;
   }
 }
 
@@ -132,10 +145,33 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+}
 
-  svg {
-    width: 1rem;
-    height: 1rem;
+// Spinner Animation
+.spinner {
+  margin-right: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Signup Link
+.signupLink {
+  color: #3b82f6;
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #2563eb;
   }
 }
 
@@ -145,16 +181,6 @@
   font-size: 0.875rem;
   color: #475569;
   margin-top: 1rem;
-
-  a {
-    color: #3b82f6;
-    font-weight: 500;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: #2563eb;
-    }
-  }
 }
 
 // Responsive

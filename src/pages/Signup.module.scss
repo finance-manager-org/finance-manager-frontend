@@ -13,6 +13,24 @@
   }
 }
 
+// Card Header Styles
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.cardDescription {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
 // Back Link
 .backLink {
   display: inline-flex;
@@ -88,6 +106,15 @@
   }
 }
 
+// Input Error State
+.inputError {
+  border-color: #dc2626 !important;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+  }
+}
+
 // Two columns for names
 .formRow {
   display: grid;
@@ -126,10 +153,33 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+}
 
-  svg {
-    width: 1rem;
-    height: 1rem;
+// Spinner Animation
+.spinner {
+  margin-right: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Login Link
+.loginLink {
+  color: #3b82f6;
+  font-weight: 500;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #2563eb;
   }
 }
 
@@ -139,27 +189,9 @@
   font-size: 0.875rem;
   color: #475569;
   margin-top: 1rem;
-
-  a {
-    color: #3b82f6;
-    font-weight: 500;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: #2563eb;
-    }
-  }
 }
 
-// Card Spacing
-.card {
-  padding: 2rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-
-  @media (max-width: 640px) {
-    padding: 1.5rem;
-  }
-}
+// Card Spacing (removed empty rule)
 
 // Responsive
 @media (max-width: 640px) {

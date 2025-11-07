@@ -110,12 +110,12 @@ export function Navbar() {
             
             <div className={styles.mobileAuthSection}>
               <Link to="/login">
-                <Button variant="ghost" size="sm" className="w-full">
+                <Button variant="ghost" size="sm" className={styles.mobileAuthButton}>
                   Iniciar Sesión
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button size="sm" className="w-full">
+                <Button size="sm" className={styles.mobileAuthButton}>
                   Registrarse
                 </Button>
               </Link>

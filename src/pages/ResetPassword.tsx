@@ -11,6 +11,7 @@ import {
   validateRequired,
   getPasswordErrors
 } from "../lib/validations";
+import styles from "./ResetPassword.module.scss";
 
 /**
  * US-3: Recuperar contraseña (HU12) - Parte 2

@@ -203,18 +203,33 @@ Every push and pull request triggers automated checks:
 
 ### Continuous Deployment (CD)
 
-Automatic deployment to production on merge to `main`:
+Automatic deployment to Vercel:
 
+**Develop Branch (Preview/Staging)**:
+```yaml
+Workflow: Deploy to Vercel (Develop)
+Trigger: Push to develop branch
+URL: https://finance-manager-frontend-ivan-ausechas-projects.vercel.app
+Steps:
+  1. Run tests
+  2. Build project  
+  3. Deploy to Vercel preview
+```
+
+**Main Branch (Production)**:
 ```yaml
 Workflow: CD Pipeline
 Trigger: Push to main branch
+URL: https://finance-manager-frontend.vercel.app
 Steps:
   1. Build production bundle
   2. Create deployment package
-  3. Deploy to production environment
+  3. Deploy to Vercel production
   4. Run health checks
   5. Send deployment notifications
 ```
+
+**Configuration**: See [`.github/VERCEL_SETUP.md`](.github/VERCEL_SETUP.md) for detailed setup instructions.
 
 ### 🔒 Branch Protection Rules
 

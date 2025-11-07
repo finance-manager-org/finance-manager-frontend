@@ -1,7 +1,6 @@
 import { Button } from "./ui/button";
 import { ArrowRight, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
-import React from "react";
 
 export function Hero() {
   return (

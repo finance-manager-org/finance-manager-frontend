@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -11,7 +11,6 @@ import {
   validateRequired,
   getPasswordErrors
 } from "../lib/validations";
-import styles from "./ResetPassword.module.scss";
 
 /**
  * US-3: Recuperar contraseña (HU12) - Parte 2

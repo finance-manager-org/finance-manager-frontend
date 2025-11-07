@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import { ArrowRight, TrendingUp } from "lucide-react";
+import { Link } from "react-router-dom";
 import React from "react";
 
 export function Hero() {
@@ -22,13 +23,17 @@ export function Hero() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button size="lg" className="gap-2">
-              Comenzar Gratis
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-            <Button size="lg" variant="outline">
-              Ver Demo
-            </Button>
+            <Link to="/signup">
+              <Button size="lg" className="gap-2">
+                Comenzar Gratis
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button size="lg" variant="outline">
+                Iniciar Sesión
+              </Button>
+            </Link>
           </div>
           
           <div className="pt-8 grid grid-cols-3 gap-8 max-w-2xl mx-auto">

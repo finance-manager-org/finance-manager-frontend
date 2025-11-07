@@ -1,0 +1,217 @@
+// Dashboard Page Styles
+.dashboardPage {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+}
+
+// Header
+.header {
+  border-bottom: 1px solid #e2e8f0;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  .headerContainer {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #0f172a;
+
+        @media (max-width: 640px) {
+          font-size: 1.125rem;
+        }
+      }
+    }
+
+    .headerActions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+}
+
+// Main Content
+.mainContent {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+
+  @media (max-width: 640px) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+// Greeting Section
+.greetingSection {
+  margin-bottom: 2rem;
+
+  .greeting {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+
+    @media (max-width: 640px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .subtitle {
+    color: #475569;
+    font-size: 1rem;
+  }
+}
+
+// Content Sections
+.contentSections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// Info Card
+.infoCard {
+  padding: 2rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border-radius: 0.75rem;
+  background-color: #ffffff;
+
+  @media (max-width: 640px) {
+    padding: 1.5rem;
+  }
+
+  .featureList {
+    margin-top: 1rem;
+
+    p {
+      color: #475569;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+      margin-left: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      li {
+        color: #475569;
+        font-size: 0.9375rem;
+      }
+    }
+  }
+}
+
+// Stats Grid
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .statCard {
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+
+    .statLabel {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-bottom: 0.5rem;
+    }
+
+    .statValue {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+
+      &.income {
+        color: #16a34a;
+      }
+
+      &.expense {
+        color: #dc2626;
+      }
+
+      &.balance {
+        color: #3b82f6;
+      }
+    }
+
+    .statNote {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+// Info Banner
+.infoBanner {
+  border: 1px solid #bfdbfe;
+  background-color: #eff6ff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+
+  .bannerContent {
+    display: flex;
+    gap: 0.75rem;
+
+    .indicator {
+      flex-shrink: 0;
+      width: 0.5rem;
+      height: 0.5rem;
+      background-color: #3b82f6;
+      border-radius: 9999px;
+      margin-top: 0.5rem;
+    }
+
+    .bannerText {
+      flex: 1;
+
+      .bannerTitle {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #1e3a8a;
+        margin-bottom: 0.25rem;
+      }
+
+      .bannerDescription {
+        font-size: 0.875rem;
+        color: #1e40af;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: 640px) {
+  .dashboardPage {
+    .headerContainer {
+      padding: 0.875rem 1rem;
+    }
+  }
+}

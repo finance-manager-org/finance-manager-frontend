@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -6,7 +6,8 @@ import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { validatePassword, validateEmail, validateRequired } from "../lib/validations";
+import { validateEmail, validateRequired } from "../lib/validations";
+import styles from "./Login.module.scss";
 
 /**
  * US-2: Login / Logout (HU11)
@@ -170,13 +171,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className={styles.loginPage}>
+      <div className={styles.container}>
         {/* Botón para volver */}
-        <Link 
-          to="/" 
-          className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
-        >
+        <Link to="/" className={styles.backLink}>
           <ArrowLeft className="w-4 h-4" />
           <span className="text-sm">Volver al inicio</span>
         </Link>
@@ -189,11 +187,11 @@ export default function Login() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <form onSubmit={handleSubmit} className={styles.form} noValidate>
               {/* Correo electrónico */}
-              <div className="space-y-2">
+              <div className={styles.formGroup}>
                 <Label htmlFor="email">
-                  Correo electrónico <span className="text-red-600">*</span>
+                  Correo electrónico <span className={styles.required}>*</span>
                 </Label>
                 <Input
                   id="email"
@@ -210,7 +208,7 @@ export default function Login() {
                 {touched.email && errors.email && (
                   <p 
                     id="email-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage} 
                     role="alert"
                     aria-live="polite"
                   >
@@ -220,10 +218,10 @@ export default function Login() {
               </div>
 
               {/* Contraseña */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
+              <div className={styles.passwordGroup}>
+                <div className={styles.passwordLabel}>
                   <Label htmlFor="password">
-                    Contraseña <span className="text-red-600">*</span>
+                    Contraseña <span className={styles.required}>*</span>
                   </Label>
                   <Link 
                     to="/forgot-password" 
@@ -247,7 +245,7 @@ export default function Login() {
                 {touched.password && errors.password && (
                   <p 
                     id="password-error" 
-                    className="text-sm text-red-600" 
+                    className={styles.errorMessage} 
                     role="alert"
                     aria-live="polite"
                   >
@@ -259,7 +257,7 @@ export default function Login() {
               {/* Botón de inicio de sesión */}
               <Button
                 type="submit"
-                className="w-full"
+                className={styles.submitButton}
                 disabled={!isFormValid() || isLoading}
               >
                 {isLoading ? (
@@ -273,7 +271,7 @@ export default function Login() {
               </Button>
 
               {/* Link a registro */}
-              <div className="text-center text-sm text-slate-600">
+              <div className={styles.footerLink}>
                 ¿No tienes una cuenta?{" "}
                 <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
                   Regístrate

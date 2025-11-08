@@ -1,20 +1,17 @@
-import { Hero } from "./components/Hero";
-import { Features } from "./components/Features";
-import { HowItWorks } from "./components/HowItWorks";
-import { Benefits } from "./components/Benefits";
-import { CTA } from "./components/CTA";
-import { Footer } from "./components/Footer";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import  LandingPage  from "./pages/LandingPage";
+import  RegisterPage  from "./pages/RegisterPage";
+import  LoginPage  from "./pages/LoginPage";
 import React from "react";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <Hero />
-      <Features />
-      <Benefits />
-      <HowItWorks />
-      <CTA />
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

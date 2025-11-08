@@ -1,8 +1,14 @@
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { ArrowRight, TrendingUp } from "lucide-react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import useRedirect from "../BasicFuntions/funtions";
 
 export function Hero() {
+  const navigate = useNavigate();
+  const { goToRegister } = useRedirect();
+
   return (
     <section className="px-4 py-20 md:py-32">
       <div className="max-w-6xl mx-auto">
@@ -22,10 +28,10 @@ export function Hero() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button size="lg" className="gap-2">
-              Comenzar Gratis
-              <ArrowRight className="w-4 h-4" />
-            </Button>
+              <Button onClick={goToRegister} size="lg" className="gap-2">
+                Comenzar Gratis
+                <ArrowRight className="w-4 h-4" />
+              </Button>
             <Button size="lg" variant="outline">
               Ver Demo
             </Button>

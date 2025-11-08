@@ -1,4 +1,5 @@
 import { UserPlus, Plus, BarChart3 } from "lucide-react";
+import useRedirect from "../BasicFuntions/funtions";
 import React from "react";
 
 const steps = [
@@ -23,6 +24,7 @@ const steps = [
 ];
 
 export function HowItWorks() {
+  const { goToRegister } = useRedirect();
   return (
     <section className="px-4 py-20 bg-white">
       <div className="max-w-6xl mx-auto">
@@ -40,7 +42,10 @@ export function HowItWorks() {
             <div key={index} className="text-center space-y-4">
               <div className="relative inline-block">
                 <div className="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto">
-                  <step.icon className="w-10 h-10 text-white" />
+                  <step.icon 
+                  className="w-10 h-10 text-white cursor-pointer" 
+                  onClick={index === 0 ? goToRegister : undefined}
+                  />
                 </div>
                 <div className="absolute -top-2 -right-2 w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm">
                   {step.number}

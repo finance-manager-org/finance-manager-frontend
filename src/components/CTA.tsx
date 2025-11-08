@@ -1,8 +1,14 @@
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import useRedirect from "../BasicFuntions/funtions";
 import React from "react";
 
 export function CTA() {
+  const navigate = useNavigate();
+  const { goToRegister } = useRedirect();
+
   return (
     <section className="px-4 py-20">
       <div className="max-w-4xl mx-auto">
@@ -26,10 +32,10 @@ export function CTA() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="gap-2">
-                Crear Cuenta Gratis
-                <ArrowRight className="w-4 h-4" />
-              </Button>
+                <Button onClick={goToRegister} size="lg" variant="secondary" className="gap-2">
+                  Crear Cuenta Gratis
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
               <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10">
                 Contactar Ventas
               </Button>

@@ -1,5 +1,5 @@
 import { UserPlus, Plus, BarChart3 } from "lucide-react";
-import useRedirect from "../BasicFuntions/funtions";
+import useRedirect from "../basicFuntions/funtions";
 import React from "react";
 
 const steps = [

@@ -6,7 +6,7 @@ import { CTA } from "../components/CTA";
 import { Footer } from "../components/Footer";
 import React from "react";
 
-export default function LandingPage() {
+export function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <Hero />

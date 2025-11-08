@@ -3,11 +3,10 @@ import { Button } from "./ui/button";
 import { ArrowRight, TrendingUp } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useRedirect from "../BasicFuntions/funtions";
+import  useRedirect  from "../basicFuntions/funtions";
 
 export function Hero() {
-  const navigate = useNavigate();
-  const { goToRegister } = useRedirect();
+  const { goToRegister , goToCalendar, goToDashboard} = useRedirect();
 
   return (
     <section className="px-4 py-20 md:py-32">
@@ -34,6 +33,12 @@ export function Hero() {
               </Button>
             <Button size="lg" variant="outline">
               Ver Demo
+            </Button>
+            <Button onClick = {goToDashboard} size="lg" variant="outline">
+              Ver Dashboard
+            </Button>
+            <Button onClick = {goToCalendar} size="lg" variant="outline">
+              Ver Calendar
             </Button>
           </div>
           

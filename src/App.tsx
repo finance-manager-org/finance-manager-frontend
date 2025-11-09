@@ -10,7 +10,6 @@ import ProfilePage from "./pages/ProfilePage";
 import { ArticlesPage } from "./pages/ArticlesPage";
 import { Navbar } from "./components/Navbar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { Sidebar } from "./components/Sidebar";
 import React from "react";
 
 export default function App() {
@@ -26,10 +25,7 @@ export default function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <div className="flex min-h-screen">
-                <Sidebar />
-                <DashboardPage />
-              </div>
+              <DashboardPage />
             </ProtectedRoute>
           }
         />
@@ -37,10 +33,7 @@ export default function App() {
           path="/calendar"
           element={
             <ProtectedRoute>
-              <div className="flex min-h-screen">
-                <Sidebar />
-                <CalendarPage />
-              </div>
+              <CalendarPage />
             </ProtectedRoute>
           }
         />
@@ -48,10 +41,7 @@ export default function App() {
           path="/categories"
           element={
             <ProtectedRoute>
-              <div className="flex min-h-screen">
-                <Sidebar />
-                <CategoriesPage />
-              </div>
+              <CategoriesPage />
             </ProtectedRoute>
           }
         />
@@ -59,10 +49,7 @@ export default function App() {
           path="/accounts"
           element={
             <ProtectedRoute>
-              <div className="flex min-h-screen">
-                <Sidebar />
-                <AccountsPage />
-              </div>
+              <AccountsPage />
             </ProtectedRoute>
           }
         />
@@ -70,10 +57,7 @@ export default function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <div className="flex min-h-screen">
-                <Sidebar />
-                <ProfilePage />
-              </div>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

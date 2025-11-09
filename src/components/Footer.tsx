@@ -1,4 +1,5 @@
 import { Wallet } from "lucide-react";
+import { Link } from "react-router-dom";
 import React from "react";
 
 export function Footer() {
@@ -9,7 +10,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-white">
               <Wallet className="w-6 h-6" />
-              <span>FinanzasApp</span>
+              <span className="font-bold text-lg">FinanzasApp</span>
             </div>
             <p className="text-sm">
               Tu compañero de confianza para la gestión inteligente de finanzas personales.
@@ -17,27 +18,59 @@ export function Footer() {
           </div>
           
           <div>
-            <div className="text-white mb-4">Producto</div>
+            <div className="text-white font-semibold mb-4">Producto</div>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Características</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Precios</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Seguridad</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Actualizaciones</a></li>
+              <li>
+                <Link to="/dashboard" className="hover:text-white transition-colors">
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/categories" className="hover:text-white transition-colors">
+                  Categorías
+                </Link>
+              </li>
+              <li>
+                <Link to="/accounts" className="hover:text-white transition-colors">
+                  Cuentas
+                </Link>
+              </li>
+              <li>
+                <Link to="/profile" className="hover:text-white transition-colors">
+                  Gestión de Cuenta
+                </Link>
+              </li>
             </ul>
           </div>
           
           <div>
-            <div className="text-white mb-4">Empresa</div>
+            <div className="text-white font-semibold mb-4">Recursos</div>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Sobre nosotros</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Carreras</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contacto</a></li>
+              <li>
+                <Link to="/articles" className="hover:text-white transition-colors">
+                  Artículos
+                </Link>
+              </li>
+              <li>
+                <Link to="/#how-it-works" className="hover:text-white transition-colors">
+                  Cómo funciona
+                </Link>
+              </li>
+              <li>
+                <Link to="/register" className="hover:text-white transition-colors">
+                  Crear cuenta
+                </Link>
+              </li>
+              <li>
+                <Link to="/login" className="hover:text-white transition-colors">
+                  Iniciar sesión
+                </Link>
+              </li>
             </ul>
           </div>
           
           <div>
-            <div className="text-white mb-4">Legal</div>
+            <div className="text-white font-semibold mb-4">Legal</div>
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="hover:text-white transition-colors">Privacidad</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Términos</a></li>

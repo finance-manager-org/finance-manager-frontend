@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Calendar, Clock, TrendingUp, PiggyBank, Shield, Zap } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { Footer } from "../components/Footer";
 
 const articles = [
   {
@@ -190,7 +191,7 @@ export function ArticlesPage() {
             <div className="space-y-8">
               {article.content.map((section, index) => (
                 <div key={index}>
-                  <h2 className="text-2xl font-bold text-slate-900 mb-3">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-4">
                     {section.subtitle}
                   </h2>
                   <p className="text-lg text-slate-700 leading-relaxed">
@@ -216,6 +217,8 @@ export function ArticlesPage() {
             </div>
           </div>
         </div>
+
+        <Footer />
       </div>
     );
   }
@@ -300,6 +303,8 @@ export function ArticlesPage() {
           </Link>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

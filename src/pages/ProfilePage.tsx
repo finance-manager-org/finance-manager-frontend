@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { authApi } from "../lib/api";
 import { toast } from "sonner";
 import { Button } from "../components/ui/button";
+import { Sidebar } from "../components/Sidebar";
 import {
   Dialog,
   DialogContent,
@@ -196,14 +197,19 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-slate-600">Cargando perfil...</div>
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-slate-600">Cargando perfil...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 overflow-auto bg-slate-50">
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <div className="flex-1 overflow-auto bg-slate-50">
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto">
@@ -543,6 +549,7 @@ export default function ProfilePage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      </div>
     </div>
   );
 }

@@ -145,13 +145,13 @@ export function ArticlesPage() {
   if (article) {
     const IconComponent = article.icon;
     return (
-      <div className="min-h-screen bg-slate-50">
-        {/* Header */}
-        <div className={`bg-gradient-to-r ${article.color} text-white py-20`}>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        {/* Header con espacio para navbar */}
+        <div className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200">
+          <div className="max-w-4xl mx-auto">
             <Button
               variant="ghost"
-              className="text-white hover:bg-white/20 mb-6"
+              className="mb-6 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               onClick={() => setSelectedArticle(null)}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -159,23 +159,23 @@ export function ArticlesPage() {
             </Button>
             
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <IconComponent className="w-6 h-6" />
+              <div className={`w-12 h-12 bg-gradient-to-r ${article.color} rounded-lg flex items-center justify-center`}>
+                <IconComponent className="w-6 h-6 text-white" />
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
               {article.title}
             </h1>
             
-            <div className="flex items-center gap-6 text-white/90">
+            <div className="flex items-center gap-6 text-slate-600">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <span>{article.date}</span>
+                <span className="text-sm">{article.date}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span>{article.readTime} de lectura</span>
+                <span className="text-sm">{article.readTime} de lectura</span>
               </div>
             </div>
           </div>
@@ -183,18 +183,18 @@ export function ArticlesPage() {
 
         {/* Content */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 md:p-12">
-            <p className="text-xl text-slate-700 mb-8 leading-relaxed">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-10">
+            <p className="text-xl text-slate-700 mb-10 leading-relaxed border-l-4 border-blue-600 pl-6">
               {article.excerpt}
             </p>
 
             <div className="space-y-8">
               {article.content.map((section, index) => (
-                <div key={index}>
-                  <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                <div key={index} className="space-y-3">
+                  <h2 className="text-2xl font-bold text-slate-900">
                     {section.subtitle}
                   </h2>
-                  <p className="text-lg text-slate-700 leading-relaxed">
+                  <p className="text-base text-slate-700 leading-relaxed">
                     {section.text}
                   </p>
                 </div>
@@ -225,79 +225,85 @@ export function ArticlesPage() {
 
   // Lista de artículos
   return (
-    <div className="min-h-screen bg-slate-50 pt-20">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* Hero Section con espacio para navbar */}
+      <section className="px-4 pt-32 pb-20 bg-white border-b border-slate-200">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full border border-blue-200 mb-6">
+            <TrendingUp className="w-4 h-4" />
+            <span className="text-sm">Educación Financiera</span>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
             Artículos de Finanzas Personales
           </h1>
-          <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
+          
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Consejos prácticos, estrategias comprobadas y conocimiento financiero
             para ayudarte a construir un futuro próspero
           </p>
         </div>
-      </div>
+      </section>
 
       {/* Articles Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {articles.map((article) => {
             const IconComponent = article.icon;
             return (
-              <div
+              <article
                 key={article.id}
-                className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md hover:border-slate-300 transition-all cursor-pointer group"
                 onClick={() => setSelectedArticle(article.id)}
               >
                 <div className={`h-2 bg-gradient-to-r ${article.color}`} />
                 
                 <div className="p-6">
                   <div className="flex items-start gap-4 mb-4">
-                    <div className={`w-12 h-12 bg-gradient-to-r ${article.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                    <div className={`w-12 h-12 bg-gradient-to-r ${article.color} rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                       <IconComponent className="w-6 h-6 text-white" />
                     </div>
-                    <div className="flex-1">
-                      <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                    <div className="flex-1 min-w-0">
+                      <h2 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-700 transition-colors">
                         {article.title}
                       </h2>
-                      <div className="flex items-center gap-4 text-sm text-slate-600">
+                      <div className="flex items-center gap-4 text-xs text-slate-500">
                         <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
+                          <Calendar className="w-3 h-3" />
                           <span>{article.date}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
+                          <Clock className="w-3 h-3" />
                           <span>{article.readTime}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-slate-700 mb-4 line-clamp-3">
+                  <p className="text-slate-600 text-sm mb-4 line-clamp-3 leading-relaxed">
                     {article.excerpt}
                   </p>
 
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full group-hover:bg-slate-50">
                     Leer Artículo Completo
                   </Button>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
 
         {/* CTA Section */}
-        <div className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 md:p-12 text-center text-white">
+        <div className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-8 md:p-12 text-center text-white shadow-lg">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Transforma tu Conocimiento en Acción
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-blue-50 mb-8 max-w-2xl mx-auto">
             Estos artículos son solo el comienzo. Con Finance Manager,
             puedes aplicar todo lo que aprendes de forma inmediata.
           </p>
           <Link to="/register">
-            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+            <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50 font-semibold">
               Empieza Gratis Hoy
             </Button>
           </Link>

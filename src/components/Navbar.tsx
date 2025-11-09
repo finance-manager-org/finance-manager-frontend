@@ -46,8 +46,8 @@ export function Navbar() {
     }
   };
 
-  // Mostrar en landing page, login y register pages
-  const shouldShowNavbar = ["/", "/login", "/register", "/signup"].includes(
+  // Mostrar en landing page, login, register y articles pages
+  const shouldShowNavbar = ["/", "/login", "/register", "/signup", "/articles"].includes(
     location.pathname
   );
 

@@ -27,7 +27,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, TrendingUp, TrendingDown, Loader2 } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  TrendingUp,
+  TrendingDown,
+  Loader2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { categoryApi, Category, ApiError } from "../lib/api";
 import { Sidebar } from "../components/Sidebar";
@@ -39,7 +46,9 @@ export function CategoriesPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form state
@@ -163,7 +172,9 @@ export function CategoriesPage() {
         <div className="bg-white border-b border-slate-200 px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">Gestión de Categorías</h1>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">
+                Gestión de Categorías
+              </h1>
               <p className="text-slate-600">
                 Organiza tus finanzas con categorías personalizadas
               </p>
@@ -239,7 +250,8 @@ export function CategoriesPage() {
                 No hay categorías
               </h3>
               <p className="text-slate-600 mb-6">
-                Comienza creando tu primera categoría para organizar tus finanzas
+                Comienza creando tu primera categoría para organizar tus
+                finanzas
               </p>
               <Button onClick={() => setIsCreateOpen(true)} className="gap-2">
                 <Plus className="w-4 h-4" />
@@ -249,20 +261,21 @@ export function CategoriesPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {categories.map((category) => (
-                <Card key={category.id} className="hover:shadow-lg transition-shadow bg-white">
+                <Card
+                  key={category.id}
+                  className="hover:shadow-lg transition-shadow bg-white"
+                >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div
-                          className="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-100 text-blue-700"
-                        >
+                        <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-100 text-blue-700">
                           <TrendingUp className="w-6 h-6" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{category.tipo}</CardTitle>
-                          <CardDescription>
-                            Categoría general
-                          </CardDescription>
+                          <CardTitle className="text-lg">
+                            {category.tipo}
+                          </CardTitle>
+                          <CardDescription>Categoría general</CardDescription>
                         </div>
                       </div>
                     </div>
@@ -350,12 +363,14 @@ export function CategoriesPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. La categoría "{selectedCategory?.tipo}" será
-              eliminada permanentemente.
+              Esta acción no se puede deshacer. La categoría "
+              {selectedCategory?.tipo}" será eliminada permanentemente.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isSubmitting}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={isSubmitting}>
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isSubmitting}

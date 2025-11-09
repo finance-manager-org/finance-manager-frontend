@@ -13,12 +13,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        console.log("ProtectedRoute: Verificando autenticación...");
-        const profile = await authApi.getProfile();
-        console.log("ProtectedRoute: Usuario autenticado:", profile);
+        await authApi.getProfile();
         setIsAuthenticated(true);
       } catch (error) {
-        console.error("ProtectedRoute: Error de autenticación:", error);
         setIsAuthenticated(false);
       } finally {
         setIsLoading(false);

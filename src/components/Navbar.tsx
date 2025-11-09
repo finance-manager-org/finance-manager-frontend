@@ -47,7 +47,9 @@ export function Navbar() {
   };
 
   // Mostrar en landing page, login y register pages
-  const shouldShowNavbar = ["/", "/login", "/register", "/signup"].includes(location.pathname);
+  const shouldShowNavbar = ["/", "/login", "/register", "/signup"].includes(
+    location.pathname
+  );
 
   if (!shouldShowNavbar) {
     return null;
@@ -75,13 +77,22 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className={styles.desktopNav}>
-            <button onClick={() => scrollToSection("features")} className={styles.navLink}>
+            <button
+              onClick={() => scrollToSection("features")}
+              className={styles.navLink}
+            >
               Características
             </button>
-            <button onClick={() => scrollToSection("benefits")} className={styles.navLink}>
+            <button
+              onClick={() => scrollToSection("benefits")}
+              className={styles.navLink}
+            >
               Beneficios
             </button>
-            <button onClick={() => scrollToSection("how-it-works")} className={styles.navLink}>
+            <button
+              onClick={() => scrollToSection("how-it-works")}
+              className={styles.navLink}
+            >
               Cómo funciona
             </button>
           </div>
@@ -134,10 +145,16 @@ export function Navbar() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className={styles.mobileMenu}>
-            <button onClick={() => scrollToSection("features")} className={styles.mobileNavLink}>
+            <button
+              onClick={() => scrollToSection("features")}
+              className={styles.mobileNavLink}
+            >
               Características
             </button>
-            <button onClick={() => scrollToSection("benefits")} className={styles.mobileNavLink}>
+            <button
+              onClick={() => scrollToSection("benefits")}
+              className={styles.mobileNavLink}
+            >
               Beneficios
             </button>
             <button
@@ -154,14 +171,18 @@ export function Navbar() {
                     // Mostrar opciones cuando está autenticado
                     <>
                       <Link to="/dashboard">
-                        <Button variant="ghost" size="sm" className={styles.mobileAuthButton}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={styles.mobileAuthButton}
+                        >
                           <User className="w-4 h-4 mr-2" />
                           Mi Cuenta
                         </Button>
                       </Link>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         className={styles.mobileAuthButton}
                         onClick={handleLogout}
                       >
@@ -173,7 +194,11 @@ export function Navbar() {
                     // Mostrar login/registro cuando NO está autenticado
                     <>
                       <Link to="/login">
-                        <Button variant="ghost" size="sm" className={styles.mobileAuthButton}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className={styles.mobileAuthButton}
+                        >
                           Iniciar Sesión
                         </Button>
                       </Link>

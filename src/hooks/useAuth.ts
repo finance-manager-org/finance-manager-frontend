@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { authApi } from '../lib/api';
+import { useState, useEffect } from "react";
+import { authApi } from "../lib/api";
 
 /**
  * Custom hook to manage authentication state
@@ -35,7 +35,7 @@ export function useAuth() {
       setIsAuthenticated(false);
       setUser(null);
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      console.error("Error al cerrar sesión:", error);
     }
   };
 
@@ -44,6 +44,6 @@ export function useAuth() {
     isLoading,
     user,
     logout,
-    checkAuth
+    checkAuth,
   };
 }

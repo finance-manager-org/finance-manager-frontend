@@ -1,5 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Calendar, TrendingUp, Settings, LogOut, Wallet, FolderKanban } from "lucide-react";
+import {
+  LayoutDashboard,
+  Calendar,
+  TrendingUp,
+  Settings,
+  LogOut,
+  Wallet,
+  FolderKanban,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import React, { useEffect, useState } from "react";
 import { authApi } from "../lib/api";
@@ -81,7 +89,7 @@ export function Sidebar() {
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
-          
+
           return (
             <Link
               key={item.path}
@@ -115,13 +123,17 @@ export function Sidebar() {
               {getInitials(user.nickname)}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm text-slate-900 truncate">{user.nickname}</div>
-              <div className="text-xs text-slate-500 truncate">{user.email}</div>
+              <div className="text-sm text-slate-900 truncate">
+                {user.nickname}
+              </div>
+              <div className="text-xs text-slate-500 truncate">
+                {user.email}
+              </div>
             </div>
           </div>
         ) : null}
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           className="w-full justify-start gap-2 text-slate-600"
           onClick={handleLogout}
         >

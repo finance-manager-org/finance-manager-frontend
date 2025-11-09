@@ -1,4 +1,3 @@
-
 /**
  * API Service - Centralizes all HTTP requests to the backend
  * Base URL configured via environment variable
@@ -66,7 +65,7 @@ export interface ResetPasswordResponse {
  */
 async function apiRequest<T>(
   endpoint: string,
-  options: RequestInit = {},
+  options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
@@ -155,7 +154,7 @@ export const authApi = {
    * Send password recovery email
    */
   forgotPassword: async (
-    data: ForgotPasswordRequest,
+    data: ForgotPasswordRequest
   ): Promise<ForgotPasswordResponse> => {
     return apiRequest<ForgotPasswordResponse>("/api/auth/recover", {
       method: "POST",
@@ -169,7 +168,7 @@ export const authApi = {
    */
   resetPassword: async (
     token: string,
-    data: ResetPasswordRequest,
+    data: ResetPasswordRequest
   ): Promise<ResetPasswordResponse> => {
     return apiRequest<ResetPasswordResponse>(`/api/auth/reset/${token}`, {
       method: "POST",
@@ -224,11 +223,16 @@ export const categoryApi = {
    * POST /api/category
    * Create a new category
    */
-  create: async (data: CreateCategoryRequest): Promise<{ message: string; category: Category }> => {
-    return apiRequest<{ message: string; category: Category }>("/api/category", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+  create: async (
+    data: CreateCategoryRequest
+  ): Promise<{ message: string; category: Category }> => {
+    return apiRequest<{ message: string; category: Category }>(
+      "/api/category",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    );
   },
 
   /**
@@ -255,11 +259,17 @@ export const categoryApi = {
    * PUT /api/category/:id
    * Update category
    */
-  update: async (id: number, data: UpdateCategoryRequest): Promise<{ message: string; category: Category }> => {
-    return apiRequest<{ message: string; category: Category }>(`/api/category/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
+  update: async (
+    id: number,
+    data: UpdateCategoryRequest
+  ): Promise<{ message: string; category: Category }> => {
+    return apiRequest<{ message: string; category: Category }>(
+      `/api/category/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }
+    );
   },
 
   /**

@@ -7,8 +7,10 @@ import { CalendarPage } from "./pages/CalendarPage";
 import { CategoriesPage } from "./pages/CategoriesPage";
 import { AccountsPage } from "./pages/AccountsPage";
 import ProfilePage from "./pages/ProfilePage";
+import { ArticlesPage } from "./pages/ArticlesPage";
 import { Navbar } from "./components/Navbar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Sidebar } from "./components/Sidebar";
 import React from "react";
 
 export default function App() {
@@ -19,11 +21,15 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/articles" element={<ArticlesPage />} />
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <DashboardPage />
+              </div>
             </ProtectedRoute>
           }
         />
@@ -31,7 +37,10 @@ export default function App() {
           path="/calendar"
           element={
             <ProtectedRoute>
-              <CalendarPage />
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <CalendarPage />
+              </div>
             </ProtectedRoute>
           }
         />
@@ -39,7 +48,10 @@ export default function App() {
           path="/categories"
           element={
             <ProtectedRoute>
-              <CategoriesPage />
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <CategoriesPage />
+              </div>
             </ProtectedRoute>
           }
         />
@@ -47,7 +59,10 @@ export default function App() {
           path="/accounts"
           element={
             <ProtectedRoute>
-              <AccountsPage />
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <AccountsPage />
+              </div>
             </ProtectedRoute>
           }
         />
@@ -55,7 +70,10 @@ export default function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <ProfilePage />
+              <div className="flex min-h-screen">
+                <Sidebar />
+                <ProfilePage />
+              </div>
             </ProtectedRoute>
           }
         />

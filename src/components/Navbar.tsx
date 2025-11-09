@@ -77,18 +77,9 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className={styles.desktopNav}>
-            <button
-              onClick={() => scrollToSection("features")}
-              className={styles.navLink}
-            >
-              Características
-            </button>
-            <button
-              onClick={() => scrollToSection("benefits")}
-              className={styles.navLink}
-            >
-              Beneficios
-            </button>
+            <Link to="/articles" className={styles.navLink}>
+              Artículos
+            </Link>
             <button
               onClick={() => scrollToSection("how-it-works")}
               className={styles.navLink}
@@ -145,18 +136,13 @@ export function Navbar() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className={styles.mobileMenu}>
-            <button
-              onClick={() => scrollToSection("features")}
+            <Link
+              to="/articles"
               className={styles.mobileNavLink}
+              onClick={() => setIsMenuOpen(false)}
             >
-              Características
-            </button>
-            <button
-              onClick={() => scrollToSection("benefits")}
-              className={styles.mobileNavLink}
-            >
-              Beneficios
-            </button>
+              Artículos
+            </Link>
             <button
               onClick={() => scrollToSection("how-it-works")}
               className={styles.mobileNavLink}

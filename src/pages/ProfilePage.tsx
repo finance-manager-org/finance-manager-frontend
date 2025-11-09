@@ -36,11 +36,11 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Edit Profile Dialog
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editForm, setEditForm] = useState({ nickname: "", email: "" });
-  
+
   // Change Password Dialog
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [passwordForm, setPasswordForm] = useState({
@@ -48,12 +48,12 @@ export default function ProfilePage() {
     newPassword: "",
     confirmPassword: "",
   });
-  
+
   // Delete Account Dialog
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -79,12 +79,12 @@ export default function ProfilePage() {
 
   const handleEditProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!editForm.nickname.trim()) {
       toast.error("El nombre de usuario es requerido");
       return;
     }
-    
+
     if (!editForm.email.trim()) {
       toast.error("El email es requerido");
       return;
@@ -96,7 +96,7 @@ export default function ProfilePage() {
         nickname: editForm.nickname,
         email: editForm.email,
       });
-      
+
       setUser(response.user);
       toast.success("Perfil actualizado exitosamente");
       setIsEditDialogOpen(false);
@@ -109,17 +109,21 @@ export default function ProfilePage() {
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!passwordForm.currentPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
+
+    if (
+      !passwordForm.currentPassword ||
+      !passwordForm.newPassword ||
+      !passwordForm.confirmPassword
+    ) {
       toast.error("Todos los campos son requeridos");
       return;
     }
-    
+
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       toast.error("Las contraseñas nuevas no coinciden");
       return;
     }
-    
+
     if (passwordForm.newPassword.length < 8) {
       toast.error("La contraseña debe tener al menos 8 caracteres");
       return;
@@ -132,7 +136,7 @@ export default function ProfilePage() {
         newPassword: passwordForm.newPassword,
         confirmPassword: passwordForm.confirmPassword,
       });
-      
+
       toast.success("Contraseña actualizada exitosamente");
       setIsPasswordDialogOpen(false);
       setPasswordForm({
@@ -152,16 +156,18 @@ export default function ProfilePage() {
       toast.error("La contraseña es requerida");
       return;
     }
-    
+
     if (!deleteConfirm) {
-      toast.error("Debes confirmar que entiendes que esta acción es irreversible");
+      toast.error(
+        "Debes confirmar que entiendes que esta acción es irreversible"
+      );
       return;
     }
 
     try {
       setIsSubmitting(true);
       await authApi.deleteAccount({ password: deletePassword });
-      
+
       toast.success("Cuenta eliminada exitosamente");
       navigate("/login");
     } catch (error: any) {
@@ -242,7 +248,9 @@ export default function ProfilePage() {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <User className="w-4 h-4 text-slate-400" />
-                    <Label className="text-sm text-slate-600">Nombre de usuario</Label>
+                    <Label className="text-sm text-slate-600">
+                      Nombre de usuario
+                    </Label>
                   </div>
                   <p className="text-slate-900 font-medium">
                     {user?.nickname || "Sin nombre"}
@@ -252,13 +260,17 @@ export default function ProfilePage() {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Mail className="w-4 h-4 text-slate-400" />
-                    <Label className="text-sm text-slate-600">Correo electrónico</Label>
+                    <Label className="text-sm text-slate-600">
+                      Correo electrónico
+                    </Label>
                   </div>
                   <p className="text-slate-900 font-medium">{user?.email}</p>
                 </div>
 
                 <div>
-                  <Label className="text-sm text-slate-600">Miembro desde</Label>
+                  <Label className="text-sm text-slate-600">
+                    Miembro desde
+                  </Label>
                   <p className="text-slate-900 font-medium">
                     {user && formatDate(user.createdAt)}
                   </p>
@@ -274,7 +286,7 @@ export default function ProfilePage() {
             <h2 className="text-xl font-semibold text-slate-900 mb-4">
               Seguridad
             </h2>
-            
+
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                 <div className="flex items-center gap-3">
@@ -305,9 +317,10 @@ export default function ProfilePage() {
               Zona de Peligro
             </h2>
             <p className="text-slate-600 mb-4">
-              Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, está seguro.
+              Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor,
+              está seguro.
             </p>
-            
+
             <Button
               onClick={() => setIsDeleteDialogOpen(true)}
               variant="destructive"
@@ -372,7 +385,10 @@ export default function ProfilePage() {
       </Dialog>
 
       {/* Change Password Dialog */}
-      <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+      <Dialog
+        open={isPasswordDialogOpen}
+        onOpenChange={setIsPasswordDialogOpen}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Cambiar Contraseña</DialogTitle>
@@ -389,7 +405,10 @@ export default function ProfilePage() {
                   type="password"
                   value={passwordForm.currentPassword}
                   onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
+                    setPasswordForm({
+                      ...passwordForm,
+                      currentPassword: e.target.value,
+                    })
                   }
                   placeholder="Tu contraseña actual"
                 />
@@ -401,22 +420,31 @@ export default function ProfilePage() {
                   type="password"
                   value={passwordForm.newPassword}
                   onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, newPassword: e.target.value })
+                    setPasswordForm({
+                      ...passwordForm,
+                      newPassword: e.target.value,
+                    })
                   }
                   placeholder="Nueva contraseña"
                 />
                 <p className="text-xs text-slate-600">
-                  Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial
+                  Mínimo 8 caracteres, con mayúscula, minúscula, número y
+                  carácter especial
                 </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
+                <Label htmlFor="confirmPassword">
+                  Confirmar nueva contraseña
+                </Label>
                 <Input
                   id="confirmPassword"
                   type="password"
                   value={passwordForm.confirmPassword}
                   onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
+                    setPasswordForm({
+                      ...passwordForm,
+                      confirmPassword: e.target.value,
+                    })
                   }
                   placeholder="Confirma tu nueva contraseña"
                 />
@@ -447,7 +475,10 @@ export default function ProfilePage() {
       </Dialog>
 
       {/* Delete Account AlertDialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-red-600">
@@ -455,10 +486,10 @@ export default function ProfilePage() {
             </AlertDialogTitle>
             <AlertDialogDescription className="space-y-4">
               <p className="font-semibold text-slate-900">
-                Esta acción no se puede deshacer. Esto eliminará permanentemente tu cuenta y
-                todos tus datos asociados.
+                Esta acción no se puede deshacer. Esto eliminará permanentemente
+                tu cuenta y todos tus datos asociados.
               </p>
-              
+
               <div className="space-y-3 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="deletePassword">
@@ -472,7 +503,7 @@ export default function ProfilePage() {
                     placeholder="Tu contraseña"
                   />
                 </div>
-                
+
                 <div className="flex items-start gap-2">
                   <input
                     id="deleteConfirm"
@@ -485,8 +516,8 @@ export default function ProfilePage() {
                     htmlFor="deleteConfirm"
                     className="text-sm font-normal cursor-pointer"
                   >
-                    Entiendo que esta acción es irreversible y eliminará permanentemente
-                    mi cuenta y todos mis datos
+                    Entiendo que esta acción es irreversible y eliminará
+                    permanentemente mi cuenta y todos mis datos
                   </Label>
                 </div>
               </div>

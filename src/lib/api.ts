@@ -283,4 +283,95 @@ export const categoryApi = {
   },
 };
 
+/**
+ * Account interfaces
+ */
+export interface Account {
+  id: number;
+  name: string | null;
+  money: number;
+  userId: number;
+  categoryId: number;
+  createdAt: string;
+  category?: Category;
+}
+
+export interface CreateAccountRequest {
+  name: string;
+  money: number;
+  categoryId: number;
+  userId: number;
+}
+
+export interface UpdateAccountRequest {
+  name?: string;
+  money?: number;
+  categoryId?: number;
+}
+
+/**
+ * Account API endpoints
+ */
+export const accountApi = {
+  /**
+   * POST /api/account
+   * Create a new account
+   */
+  create: async (
+    data: CreateAccountRequest
+  ): Promise<{ message: string; account: Account }> => {
+    return apiRequest<{ message: string; account: Account }>("/api/account", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * GET /api/account/:userId
+   * Get all accounts for a specific user
+   */
+  getAll: async (userId: number): Promise<Account[]> => {
+    return apiRequest<Account[]>(`/api/account/${userId}`, {
+      method: "GET",
+    });
+  },
+
+  /**
+   * GET /api/account/:id
+   * Get account by ID
+   */
+  getById: async (id: number): Promise<Account> => {
+    return apiRequest<Account>(`/api/account/${id}`, {
+      method: "GET",
+    });
+  },
+
+  /**
+   * PUT /api/account/:id
+   * Update account
+   */
+  update: async (
+    id: number,
+    data: UpdateAccountRequest
+  ): Promise<{ message: string; account: Account }> => {
+    return apiRequest<{ message: string; account: Account }>(
+      `/api/account/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }
+    );
+  },
+
+  /**
+   * DELETE /api/account/:id
+   * Delete account
+   */
+  delete: async (id: number): Promise<{ message: string }> => {
+    return apiRequest<{ message: string }>(`/api/account/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
 export { API_BASE_URL };

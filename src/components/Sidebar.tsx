@@ -17,6 +17,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Calendar, label: "Calendario", path: "/calendar" },
   { icon: FolderKanban, label: "Categorías", path: "/categories" },
+  { icon: Wallet, label: "Cuentas", path: "/accounts" },
   { icon: TrendingUp, label: "Reportes", path: "/reports" },
   { icon: Settings, label: "Configuración", path: "/settings" },
 ];

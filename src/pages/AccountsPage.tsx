@@ -96,8 +96,7 @@ export function AccountsPage() {
     } catch (error) {
       const apiError = error as ApiError;
       toast.error("Error al cargar datos", {
-        description:
-          apiError.message || "No se pudieron cargar las categorías",
+        description: apiError.message || "No se pudieron cargar las categorías",
       });
     } finally {
       setIsLoading(false);
@@ -106,12 +105,12 @@ export function AccountsPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!userId) {
       toast.error("Error: Usuario no identificado");
       return;
     }
-    
+
     setIsSubmitting(true);
 
     try {

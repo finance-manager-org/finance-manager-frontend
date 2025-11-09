@@ -3,10 +3,10 @@ import {
   LayoutDashboard,
   Calendar,
   TrendingUp,
-  Settings,
   LogOut,
   Wallet,
   FolderKanban,
+  User,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import React, { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ const menuItems = [
   { icon: FolderKanban, label: "Categorías", path: "/categories" },
   { icon: Wallet, label: "Cuentas", path: "/accounts" },
   { icon: TrendingUp, label: "Reportes", path: "/reports" },
-  { icon: Settings, label: "Configuración", path: "/settings" },
+  { icon: User, label: "Gestión de Cuenta", path: "/profile" },
 ];
 
 interface UserProfile {

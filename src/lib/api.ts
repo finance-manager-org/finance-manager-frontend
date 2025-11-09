@@ -187,6 +187,51 @@ export const authApi = {
   },
 
   /**
+   * PUT /api/auth/profile
+   * Update authenticated user profile (nickname and/or email)
+   */
+  updateProfile: async (data: {
+    nickname?: string;
+    email?: string;
+  }): Promise<{ message: string; user: SignupResponse["user"] }> => {
+    return apiRequest<{ message: string; user: SignupResponse["user"] }>(
+      "/api/auth/profile",
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }
+    );
+  },
+
+  /**
+   * POST /api/auth/change-password
+   * Change user password (requires current password)
+   */
+  changePassword: async (data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }): Promise<{ message: string }> => {
+    return apiRequest<{ message: string }>("/api/auth/change-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * DELETE /api/auth/account
+   * Delete user account (requires password confirmation)
+   */
+  deleteAccount: async (data: {
+    password: string;
+  }): Promise<{ message: string }> => {
+    return apiRequest<{ message: string }>("/api/auth/account", {
+      method: "DELETE",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
    * POST /api/auth/refresh
    * Refresh access token using refresh token from cookies
    */

@@ -3,10 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { validateEmail, validateRequired } from "../lib/validations";
+import { authApi, ApiError } from "../lib/api";
 import styles from "./Login.module.scss";
 
 /**
@@ -121,32 +128,21 @@ export default function Login() {
     setErrors(newErrors);
 
     // Si hay errores, no continuar
-    if (Object.values(newErrors).some(error => error !== "")) {
+    if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Simular llamada al backend (reemplazar cuando esté disponible)
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Llamada al backend
+      const response = await authApi.login({
+        email: formData.email,
+        password: formData.password,
+      });
 
-      // TODO: Integrar con el backend
-      // const response = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     email: formData.email,
-      //     password: formData.password
-      //   })
-      // });
-
-      // TODO: Almacenar token en localStorage o cookie HttpOnly
-      // localStorage.setItem('token', response.token);
-
-      // Simulación de respuesta exitosa
-      const userName = "Usuario"; // Este valor vendría del backend
-      toast.success(`¡Hola, ${userName}!`, {
+      // Las cookies (AccessToken, RefreshToken, deviceId) se establecen automáticamente
+      toast.success(`¡Hola, ${response.user.nickname}!`, {
         description: "Has iniciado sesión correctamente",
         icon: <CheckCircle2 />,
       });
@@ -157,15 +153,33 @@ export default function Login() {
       }, 500);
     } catch (error) {
       // Manejo de errores del servidor
-      // 401 Unauthorized -> Credenciales incorrectas
-      // 423 Locked -> Cuenta bloqueada
-      // 429 Too Many Requests -> Demasiados intentos
-      // 5xx -> Error del servidor
+      const apiError = error as ApiError;
 
-      toast.error("Error al iniciar sesión", {
-        description: "Correo o contraseña inválidos",
-      });
-      console.error("Error en login:", error);
+      if (apiError.statusCode === 401) {
+        toast.error("Credenciales inválidas", {
+          description: "Correo o contraseña incorrectos",
+        });
+        setErrors({
+          email: "Verifica tus credenciales",
+          password: "Verifica tus credenciales",
+        });
+      } else if (apiError.statusCode === 423) {
+        toast.error("Cuenta bloqueada", {
+          description: "Contacta al soporte para más información",
+        });
+      } else if (apiError.statusCode === 429) {
+        toast.error("Demasiados intentos", {
+          description: "Por favor, espera unos minutos antes de intentar nuevamente",
+        });
+      } else if (apiError.statusCode === 0) {
+        toast.error("Error de conexión", {
+          description: apiError.message,
+        });
+      } else {
+        toast.error("Error al iniciar sesión", {
+          description: "Por favor, intenta de nuevo más tarde",
+        });
+      }
     } finally {
       setIsLoading(false);
     }

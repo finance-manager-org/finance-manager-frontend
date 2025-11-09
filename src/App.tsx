@@ -41,7 +41,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/reset/:token" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Toaster />

@@ -3,10 +3,17 @@ import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { validateEmail, validateRequired } from "../lib/validations";
+import { authApi, ApiError } from "../lib/api";
 import styles from "./ForgotPassword.module.scss";
 
 /**
@@ -100,34 +107,36 @@ export default function ForgotPassword() {
     setIsLoading(true);
 
     try {
-      // Simular llamada al backend (reemplazar cuando esté disponible)
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Llamada al backend
+      await authApi.forgotPassword({
+        email: formData.email,
+      });
 
-      // TODO: Integrar con el backend
-      // const response = await fetch('/api/auth/forgot-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     email: formData.email
-      //   })
-      // });
-
-      // Nota: El backend debe devolver HTTP 202 Accepted para no revelar
+      // Nota: El backend siempre responde con 200 para no revelar
       // si el correo existe o no (seguridad)
 
       // Marcar como enviado
       setEmailSent(true);
 
-      toast.success("Correo enviado", {
-        description: "Revisa tu bandeja de entrada para continuar",
+      toast.success("Revisa tu correo", {
+        description:
+          "Si el correo existe, recibirás un enlace para restablecer tu contraseña",
         icon: <Mail />,
       });
     } catch (error) {
       // Manejo de errores del servidor
-      toast.error("Error al enviar el correo", {
-        description: "Por favor, intenta de nuevo más tarde",
-      });
-      console.error("Error en forgot password:", error);
+      const apiError = error as ApiError;
+
+      if (apiError.statusCode === 0) {
+        toast.error("Error de conexión", {
+          description: apiError.message,
+        });
+      } else {
+        // Incluso en error, no revelar si el correo existe
+        toast.error("Error al enviar el correo", {
+          description: "Por favor, intenta de nuevo más tarde",
+        });
+      }
     } finally {
       setIsLoading(false);
     }

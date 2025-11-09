@@ -3,7 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -14,6 +20,7 @@ import {
   validateName,
   getPasswordErrors,
 } from "../lib/validations";
+import { authApi, ApiError } from "../lib/api";
 import styles from "./Signup.module.scss";
 
 /**
@@ -21,8 +28,7 @@ import styles from "./Signup.module.scss";
  * Formulario de registro con validación en tiempo real
  *
  * Campos requeridos:
- * - Nombres (solo letras, mín. 2 caracteres)
- * - Apellidos (solo letras, mín. 2 caracteres)
+ * - Nombre completo (solo letras, mín. 2 caracteres)
  * - Edad (≥ 13 años)
  * - Correo electrónico (formato RFC 5322)
  * - Contraseña (≥ 8 caracteres, mayúscula, minúscula, número y carácter especial)
@@ -34,8 +40,7 @@ export default function Signup() {
 
   // Estado del formulario
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    nickname: "",
     age: "",
     email: "",
     password: "",
@@ -44,8 +49,7 @@ export default function Signup() {
 
   // Estado de los errores
   const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
+    nickname: "",
     age: "",
     email: "",
     password: "",
@@ -54,8 +58,7 @@ export default function Signup() {
 
   // Estado de campos tocados
   const [touched, setTouched] = useState({
-    firstName: false,
-    lastName: false,
+    nickname: false,
     age: false,
     email: false,
     password: false,
@@ -67,13 +70,12 @@ export default function Signup() {
    */
   const validateField = (name: string, value: string): string => {
     switch (name) {
-      case "firstName":
-      case "lastName":
+      case "nickname":
         if (!validateRequired(value)) {
           return "Este campo es requerido";
         }
         if (!validateName(value)) {
-          return "Solo se permiten letras (mínimo 2 caracteres)";
+          return "El nombre debe tener al menos 2 caracteres y solo letras";
         }
         return "";
 
@@ -127,12 +129,12 @@ export default function Signup() {
    */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Validar solo si el campo ya fue tocado
     if (touched[name as keyof typeof touched]) {
       const error = validateField(name, value);
-      setErrors(prev => ({ ...prev, [name]: error }));
+      setErrors((prev) => ({ ...prev, [name]: error }));
     }
   };
 
@@ -141,9 +143,9 @@ export default function Signup() {
    */
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setTouched(prev => ({ ...prev, [name]: true }));
+    setTouched((prev) => ({ ...prev, [name]: true }));
     const error = validateField(name, value);
-    setErrors(prev => ({ ...prev, [name]: error }));
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   /**
@@ -151,14 +153,13 @@ export default function Signup() {
    */
   const isFormValid = (): boolean => {
     return (
-      Object.values(formData).every(value => value.trim() !== "") &&
-      Object.values(errors).every(error => error === "") &&
+      Object.values(formData).every((value) => value.trim() !== "") &&
+      Object.values(errors).every((error) => error === "") &&
       validatePassword(formData.password) &&
       formData.password === formData.confirmPassword &&
       validateEmail(formData.email) &&
       validateAge(formData.age) &&
-      validateName(formData.firstName) &&
-      validateName(formData.lastName)
+      validateName(formData.nickname)
     );
   };
 
@@ -170,8 +171,7 @@ export default function Signup() {
 
     // Marcar todos los campos como tocados
     setTouched({
-      firstName: true,
-      lastName: true,
+      nickname: true,
       age: true,
       email: true,
       password: true,
@@ -180,43 +180,37 @@ export default function Signup() {
 
     // Validar todos los campos
     const newErrors = {
-      firstName: validateField("firstName", formData.firstName),
-      lastName: validateField("lastName", formData.lastName),
+      nickname: validateField("nickname", formData.nickname),
       age: validateField("age", formData.age),
       email: validateField("email", formData.email),
       password: validateField("password", formData.password),
-      confirmPassword: validateField("confirmPassword", formData.confirmPassword),
+      confirmPassword: validateField(
+        "confirmPassword",
+        formData.confirmPassword,
+      ),
     };
 
     setErrors(newErrors);
 
     // Si hay errores, no continuar
-    if (Object.values(newErrors).some(error => error !== "")) {
+    if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Simular llamada al backend (reemplazar cuando esté disponible)
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Llamada al backend
+      const response = await authApi.signup({
+        nickname: formData.nickname,
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      });
 
-      // TODO: Integrar con el backend
-      // const response = await fetch('/api/auth/signup', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     firstName: formData.firstName,
-      //     lastName: formData.lastName,
-      //     age: parseInt(formData.age),
-      //     email: formData.email,
-      //     password: formData.password
-      //   })
-      // });
-
-      // Simulación de respuesta exitosa
+      // Mostrar mensaje de éxito
       toast.success("Cuenta creada con éxito", {
-        description: "Serás redirigido al login",
+        description: `Bienvenido, ${response.user.nickname}!`,
         icon: <CheckCircle2 />,
       });
 
@@ -226,10 +220,30 @@ export default function Signup() {
       }, 500);
     } catch (error) {
       // Manejo de errores del servidor
-      toast.error("Error al crear la cuenta", {
-        description: "Por favor, intenta de nuevo más tarde",
-      });
-      console.error("Error en registro:", error);
+      const apiError = error as ApiError;
+
+      if (apiError.statusCode === 400) {
+        toast.error("Datos inválidos", {
+          description:
+            apiError.message || "Verifica que todos los campos sean correctos",
+        });
+      } else if (apiError.statusCode === 409) {
+        toast.error("Email ya registrado", {
+          description: "Este correo electrónico ya está en uso",
+        });
+        setErrors((prev) => ({
+          ...prev,
+          email: "Este email ya está registrado",
+        }));
+      } else if (apiError.statusCode === 0) {
+        toast.error("Error de conexión", {
+          description: apiError.message,
+        });
+      } else {
+        toast.error("Error al crear la cuenta", {
+          description: "Por favor, intenta de nuevo más tarde",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -253,58 +267,39 @@ export default function Signup() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className={styles.form} noValidate>
-              {/* Nombres */}
+              {/* Nombre completo / Nickname */}
               <div className={styles.formGroup}>
-                <Label htmlFor="firstName">
-                  Nombres <span className={styles.required}>*</span>
+                <Label htmlFor="nickname">
+                  Nombre completo <span className={styles.required}>*</span>
                 </Label>
                 <Input
-                  id="firstName"
-                  name="firstName"
+                  id="nickname"
+                  name="nickname"
                   type="text"
-                  value={formData.firstName}
+                  placeholder="Juan Pérez"
+                  value={formData.nickname}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.firstName && errors.firstName ? styles.inputError : ""}
-                  aria-invalid={touched.firstName && errors.firstName ? "true" : "false"}
-                  aria-describedby={errors.firstName ? "firstName-error" : undefined}
+                  className={
+                    touched.nickname && errors.nickname
+                      ? styles.inputError
+                      : ""
+                  }
+                  aria-invalid={
+                    touched.nickname && errors.nickname ? "true" : "false"
+                  }
+                  aria-describedby={
+                    errors.nickname ? "nickname-error" : undefined
+                  }
                 />
-                {touched.firstName && errors.firstName && (
+                {touched.nickname && errors.nickname && (
                   <p
-                    id="firstName-error"
+                    id="nickname-error"
                     className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
-                    {errors.firstName}
-                  </p>
-                )}
-              </div>
-
-              {/* Apellidos */}
-              <div className={styles.formGroup}>
-                <Label htmlFor="lastName">
-                  Apellidos <span className={styles.required}>*</span>
-                </Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={touched.lastName && errors.lastName ? styles.inputError : ""}
-                  aria-invalid={touched.lastName && errors.lastName ? "true" : "false"}
-                  aria-describedby={errors.lastName ? "lastName-error" : undefined}
-                />
-                {touched.lastName && errors.lastName && (
-                  <p
-                    id="lastName-error"
-                    className={styles.errorMessage}
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    {errors.lastName}
+                    {errors.nickname}
                   </p>
                 )}
               </div>

@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { ArrowLeft, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
-import { validatePassword, validateRequired, getPasswordErrors } from "../lib/validations";
+import {
+  validatePassword,
+  validateRequired,
+  getPasswordErrors,
+} from "../lib/validations";
+import { authApi, ApiError } from "../lib/api";
+import styles from "./ResetPassword.module.scss";
 
 /**
  * US-3: Recuperar contraseña (HU12) - Parte 2
@@ -18,8 +30,7 @@ import { validatePassword, validateRequired, getPasswordErrors } from "../lib/va
  */
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const { token } = useParams<{ token: string }>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isValidatingToken, setIsValidatingToken] = useState(true);
@@ -52,23 +63,22 @@ export default function ResetPassword() {
       if (!token) {
         setIsTokenValid(false);
         setIsValidatingToken(false);
+        toast.error("Token inválido", {
+          description: "El enlace de recuperación no es válido",
+        });
         return;
       }
 
       try {
-        // Simular validación del token (reemplazar cuando esté disponible el backend)
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // TODO: Integrar con el backend
-        // const response = await fetch(`/api/auth/validate-reset-token?token=${token}`);
-        // const data = await response.json();
-        // setIsTokenValid(response.ok);
-
-        // Simulación: token válido si tiene más de 10 caracteres
-        setIsTokenValid(token.length > 10);
+        // En una implementación real, harías una llamada al backend
+        // para validar el token antes de permitir el reset
+        // Por ahora, asumimos que el token en la URL es válido
+        setIsTokenValid(true);
       } catch (error) {
-        console.error("Error validando token:", error);
         setIsTokenValid(false);
+        toast.error("Token inválido o expirado", {
+          description: "Solicita un nuevo enlace de recuperación",
+        });
       } finally {
         setIsValidatingToken(false);
       }
@@ -148,6 +158,13 @@ export default function ResetPassword() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!token) {
+      toast.error("Token no válido", {
+        description: "No se puede restablecer la contraseña sin un token válido",
+      });
+      return;
+    }
+
     // Marcar todos los campos como tocados
     setTouched({
       password: true,
@@ -157,31 +174,27 @@ export default function ResetPassword() {
     // Validar todos los campos
     const newErrors = {
       password: validateField("password", formData.password),
-      confirmPassword: validateField("confirmPassword", formData.confirmPassword),
+      confirmPassword: validateField(
+        "confirmPassword",
+        formData.confirmPassword,
+      ),
     };
 
     setErrors(newErrors);
 
     // Si hay errores, no continuar
-    if (Object.values(newErrors).some(error => error !== "")) {
+    if (Object.values(newErrors).some((error) => error !== "")) {
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Simular llamada al backend (reemplazar cuando esté disponible)
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // TODO: Integrar con el backend
-      // const response = await fetch('/api/auth/reset-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     token: token,
-      //     password: formData.password
-      //   })
-      // });
+      // Llamada al backend
+      await authApi.resetPassword(token, {
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      });
 
       // Marcar como contraseña restablecida
       setPasswordReset(true);
@@ -191,16 +204,32 @@ export default function ResetPassword() {
         icon: <CheckCircle2 className="h-5 w-5" />,
       });
 
-      // Redirigir a login después de 500ms
+      // Redirigir a login después de 1500ms
       setTimeout(() => {
         navigate("/login");
-      }, 500);
+      }, 1500);
     } catch (error) {
       // Manejo de errores del servidor
-      toast.error("Error al actualizar la contraseña", {
-        description: "Por favor, intenta de nuevo",
-      });
-      console.error("Error en reset password:", error);
+      const apiError = error as ApiError;
+
+      if (apiError.statusCode === 400) {
+        toast.error("Token inválido o expirado", {
+          description: "Solicita un nuevo enlace de recuperación",
+        });
+        setIsTokenValid(false);
+      } else if (apiError.statusCode === 422) {
+        toast.error("Contraseña inválida", {
+          description: "La contraseña no cumple con los requisitos de seguridad",
+        });
+      } else if (apiError.statusCode === 0) {
+        toast.error("Error de conexión", {
+          description: apiError.message,
+        });
+      } else {
+        toast.error("Error al actualizar la contraseña", {
+          description: "Por favor, intenta de nuevo",
+        });
+      }
     } finally {
       setIsLoading(false);
     }

@@ -1,12 +1,21 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Checkbox } from "../components/ui/checkbox";
-import { Wallet, Mail, Lock, User, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Wallet, Mail, Lock, User, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
+import {
+  validatePassword,
+  validateEmail,
+  validateRequired,
+  validateName,
+  getPasswordErrors,
+} from "../lib/validations";
+import { authApi, ApiError } from "../lib/api";
 
 const benefits = [
   "Acceso inmediato a todas las funciones",
@@ -16,18 +25,180 @@ const benefits = [
 ];
 
 export function RegisterPage() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-    name: "",
+    nickname: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
   const [acceptTerms, setAcceptTerms] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Estado de los errores
+  const [errors, setErrors] = useState({
+    nickname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  // Estado de campos tocados
+  const [touched, setTouched] = useState({
+    nickname: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+
+  /**
+   * Validación en tiempo real de cada campo
+   */
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case "nickname":
+        if (!validateRequired(value)) {
+          return "Este campo es requerido";
+        }
+        if (!validateName(value)) {
+          return "El nombre debe tener al menos 2 caracteres y solo letras";
+        }
+        return "";
+
+      case "email":
+        if (!validateRequired(value)) {
+          return "Este campo es requerido";
+        }
+        if (!validateEmail(value)) {
+          return "Formato de correo inválido";
+        }
+        return "";
+
+      case "password":
+        if (!validateRequired(value)) {
+          return "Este campo es requerido";
+        }
+        const passwordErrors = getPasswordErrors(value);
+        if (passwordErrors.length > 0) {
+          return passwordErrors.join(", ");
+        }
+        return "";
+
+      case "confirmPassword":
+        if (!validateRequired(value)) {
+          return "Este campo es requerido";
+        }
+        if (value !== formData.password) {
+          return "Las contraseñas no coinciden";
+        }
+        return "";
+
+      default:
+        return "";
+    }
+  };
+
+  /**
+   * Maneja el cambio en los campos del formulario
+   */
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validar solo si el campo ya fue tocado
+    if (touched[name as keyof typeof touched]) {
+      const error = validateField(name, value);
+      setErrors((prev) => ({ ...prev, [name]: error }));
+    }
+  };
+
+  /**
+   * Marca el campo como tocado al perder el foco
+   */
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const error = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica de registro aquí
-    console.log("Registro:", formData);
+
+    // Marcar todos los campos como tocados
+    setTouched({
+      nickname: true,
+      email: true,
+      password: true,
+      confirmPassword: true,
+    });
+
+    // Validar todos los campos
+    const newErrors = {
+      nickname: validateField("nickname", formData.nickname),
+      email: validateField("email", formData.email),
+      password: validateField("password", formData.password),
+      confirmPassword: validateField("confirmPassword", formData.confirmPassword),
+    };
+
+    setErrors(newErrors);
+
+    // Si hay errores o no se aceptaron los términos, no continuar
+    if (Object.values(newErrors).some((error) => error !== "")) {
+      toast.error("Por favor corrige los errores del formulario");
+      return;
+    }
+
+    if (!acceptTerms) {
+      toast.error("Debes aceptar los términos y condiciones");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Llamada al backend
+      const response = await authApi.signup({
+        nickname: formData.nickname,
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      });
+
+      toast.success(`¡Bienvenido, ${response.user.nickname}!`, {
+        description: "Tu cuenta ha sido creada exitosamente",
+        icon: <CheckCircle2 />,
+      });
+
+      // Redirigir a login después de 1 segundo
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    } catch (error) {
+      // Manejo de errores del servidor
+      const apiError = error as ApiError;
+
+      if (apiError.statusCode === 409) {
+        toast.error("Este correo ya está registrado", {
+          description: "Intenta con otro correo o inicia sesión",
+        });
+        setErrors((prev) => ({
+          ...prev,
+          email: "Este correo ya está en uso",
+        }));
+      } else if (apiError.statusCode === 0) {
+        toast.error("Error de conexión", {
+          description: apiError.message,
+        });
+      } else {
+        toast.error("Error al crear la cuenta", {
+          description: apiError.message || "Por favor, intenta de nuevo más tarde",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -90,20 +261,25 @@ export function RegisterPage() {
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-slate-700">
+                    <Label htmlFor="nickname" className="text-slate-700">
                       Nombre completo
                     </Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <Input
-                        id="name"
+                        id="nickname"
+                        name="nickname"
                         type="text"
                         placeholder="Juan Pérez"
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="pl-10"
+                        value={formData.nickname}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`pl-10 ${errors.nickname && touched.nickname ? 'border-red-500' : ''}`}
                         required
                       />
+                      {errors.nickname && touched.nickname && (
+                        <p className="text-sm text-red-500 mt-1">{errors.nickname}</p>
+                      )}
                     </div>
                   </div>
 
@@ -115,13 +291,18 @@ export function RegisterPage() {
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <Input
                         id="email"
+                        name="email"
                         type="email"
                         placeholder="tu@email.com"
                         value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="pl-10"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`pl-10 ${errors.email && touched.email ? 'border-red-500' : ''}`}
                         required
                       />
+                      {errors.email && touched.email && (
+                        <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+                      )}
                     </div>
                   </div>
 
@@ -133,13 +314,18 @@ export function RegisterPage() {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <Input
                         id="password"
+                        name="password"
                         type="password"
                         placeholder="Mínimo 8 caracteres"
                         value={formData.password}
-                        onChange={(e) => setFormData({...formData, password: e.target.value})}
-                        className="pl-10"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`pl-10 ${errors.password && touched.password ? 'border-red-500' : ''}`}
                         required
                       />
+                      {errors.password && touched.password && (
+                        <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+                      )}
                     </div>
                   </div>
 
@@ -151,13 +337,18 @@ export function RegisterPage() {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <Input
                         id="confirmPassword"
+                        name="confirmPassword"
                         type="password"
                         placeholder="Repite tu contraseña"
                         value={formData.confirmPassword}
-                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                        className="pl-10"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`pl-10 ${errors.confirmPassword && touched.confirmPassword ? 'border-red-500' : ''}`}
                         required
                       />
+                      {errors.confirmPassword && touched.confirmPassword && (
+                        <p className="text-sm text-red-500 mt-1">{errors.confirmPassword}</p>
+                      )}
                     </div>
                   </div>
 
@@ -165,7 +356,7 @@ export function RegisterPage() {
                     <Checkbox 
                       id="terms" 
                       checked={acceptTerms}
-                      onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                      onCheckedChange={(checked: boolean) => setAcceptTerms(checked)}
                       className="mt-0.5"
                     />
                     <label htmlFor="terms" className="text-sm text-slate-600 cursor-pointer">
@@ -183,10 +374,19 @@ export function RegisterPage() {
                   <Button 
                     type="submit" 
                     className="w-full gap-2"
-                    disabled={!acceptTerms}
+                    disabled={!acceptTerms || isLoading}
                   >
-                    Crear mi cuenta gratis
-                    <ArrowRight className="w-4 h-4" />
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Creando cuenta...
+                      </>
+                    ) : (
+                      <>
+                        Crear mi cuenta gratis
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </Button>
 
                   <div className="relative py-4">

@@ -1,24 +1,159 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Checkbox } from "../components/ui/checkbox";
-import { Wallet, Mail, Lock, ArrowRight } from "lucide-react";
+import { Wallet, Mail, Lock, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
 import React from "react";
+import { toast } from "sonner";
+import { validateEmail, validateRequired } from "../lib/validations";
+import { authApi, ApiError } from "../lib/api";
 
 export function LoginPage() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Estado de los errores
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  // Estado de campos tocados
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+  });
+
+  /**
+   * Validación en tiempo real de cada campo
+   */
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case "email":
+        if (!validateRequired(value)) {
+          return "Este campo es requerido";
+        }
+        if (!validateEmail(value)) {
+          return "Formato de correo inválido";
+        }
+        return "";
+
+      case "password":
+        if (!validateRequired(value)) {
+          return "Este campo es requerido";
+        }
+        return "";
+
+      default:
+        return "";
+    }
+  };
+
+  /**
+   * Maneja el cambio en los campos del formulario
+   */
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+
+    // Validar solo si el campo ya fue tocado
+    if (touched[name as keyof typeof touched]) {
+      const error = validateField(name, value);
+      setErrors(prev => ({ ...prev, [name]: error }));
+    }
+  };
+
+  /**
+   * Marca el campo como tocado al perder el foco
+   */
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    const error = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Lógica de login aquí
-    console.log("Login:", formData);
+    
+    // Marcar todos los campos como tocados
+    setTouched({
+      email: true,
+      password: true,
+    });
+
+    // Validar todos los campos
+    const newErrors = {
+      email: validateField("email", formData.email),
+      password: validateField("password", formData.password),
+    };
+
+    setErrors(newErrors);
+
+    // Si hay errores, no continuar
+    if (Object.values(newErrors).some((error) => error !== "")) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Llamada al backend
+      const response = await authApi.login({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      toast.success(`¡Hola, ${response.user.nickname}!`, {
+        description: "Has iniciado sesión correctamente",
+        icon: <CheckCircle2 />,
+      });
+
+      // Redirigir a dashboard después de 500ms
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 500);
+    } catch (error) {
+      // Manejo de errores del servidor
+      const apiError = error as ApiError;
+
+      if (apiError.statusCode === 401) {
+        toast.error("Credenciales inválidas", {
+          description: "Correo o contraseña incorrectos",
+        });
+        setErrors({
+          email: "Verifica tus credenciales",
+          password: "Verifica tus credenciales",
+        });
+      } else if (apiError.statusCode === 423) {
+        toast.error("Cuenta bloqueada", {
+          description: "Contacta al soporte para más información",
+        });
+      } else if (apiError.statusCode === 429) {
+        toast.error("Demasiados intentos", {
+          description: "Por favor, espera unos minutos antes de intentar nuevamente",
+        });
+      } else if (apiError.statusCode === 0) {
+        toast.error("Error de conexión", {
+          description: apiError.message,
+        });
+      } else {
+        toast.error("Error al iniciar sesión", {
+          description: "Por favor, intenta de nuevo más tarde",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,13 +226,18 @@ export function LoginPage() {
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <Input
                         id="email"
+                        name="email"
                         type="email"
                         placeholder="tu@email.com"
                         value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="pl-10"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`pl-10 ${errors.email && touched.email ? 'border-red-500' : ''}`}
                         required
                       />
+                      {errors.email && touched.email && (
+                        <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+                      )}
                     </div>
                   </div>
 
@@ -109,13 +249,18 @@ export function LoginPage() {
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <Input
                         id="password"
+                        name="password"
                         type="password"
                         placeholder="Tu contraseña"
                         value={formData.password}
-                        onChange={(e) => setFormData({...formData, password: e.target.value})}
-                        className="pl-10"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`pl-10 ${errors.password && touched.password ? 'border-red-500' : ''}`}
                         required
                       />
+                      {errors.password && touched.password && (
+                        <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+                      )}
                     </div>
                   </div>
 
@@ -124,7 +269,7 @@ export function LoginPage() {
                       <Checkbox 
                         id="remember" 
                         checked={rememberMe}
-                        onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                        onCheckedChange={(checked: boolean) => setRememberMe(checked)}
                       />
                       <label htmlFor="remember" className="text-sm text-slate-600 cursor-pointer">
                         Recordarme
@@ -135,9 +280,18 @@ export function LoginPage() {
                     </a>
                   </div>
 
-                  <Button type="submit" className="w-full gap-2">
-                    Iniciar sesión
-                    <ArrowRight className="w-4 h-4" />
+                  <Button type="submit" className="w-full gap-2" disabled={isLoading}>
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Iniciando sesión...
+                      </>
+                    ) : (
+                      <>
+                        Iniciar sesión
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </Button>
 
                   <div className="relative py-4">

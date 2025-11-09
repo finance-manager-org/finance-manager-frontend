@@ -3,6 +3,12 @@
   import App from "./App.tsx";
   import "./index.css";
   import React from "react";
+  import { Toaster } from "sonner";
 
-  createRoot(document.getElementById("root")!).render(<App />);
+  createRoot(document.getElementById("root")!).render(
+    <>
+      <App />
+      <Toaster position="top-right" richColors />
+    </>
+  );
   

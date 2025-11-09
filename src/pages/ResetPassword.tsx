@@ -6,16 +6,12 @@ import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { ArrowLeft, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
-import {
-  validatePassword,
-  validateRequired,
-  getPasswordErrors
-} from "../lib/validations";
+import { validatePassword, validateRequired, getPasswordErrors } from "../lib/validations";
 
 /**
  * US-3: Recuperar contraseña (HU12) - Parte 2
  * Formulario para restablecer la contraseña con token
- * 
+ *
  * Campos requeridos:
  * - Nueva contraseña (≥ 8 caracteres, mayúscula, minúscula, número y carácter especial)
  * - Confirmar contraseña (debe coincidir)
@@ -24,28 +20,28 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [isValidatingToken, setIsValidatingToken] = useState(true);
   const [isTokenValid, setIsTokenValid] = useState(false);
   const [passwordReset, setPasswordReset] = useState(false);
-  
+
   // Estado del formulario
   const [formData, setFormData] = useState({
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   // Estado de los errores
   const [errors, setErrors] = useState({
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   // Estado de campos tocados
   const [touched, setTouched] = useState({
     password: false,
-    confirmPassword: false
+    confirmPassword: false,
   });
 
   /**
@@ -62,15 +58,14 @@ export default function ResetPassword() {
       try {
         // Simular validación del token (reemplazar cuando esté disponible el backend)
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         // TODO: Integrar con el backend
         // const response = await fetch(`/api/auth/validate-reset-token?token=${token}`);
         // const data = await response.json();
         // setIsTokenValid(response.ok);
-        
+
         // Simulación: token válido si tiene más de 10 caracteres
         setIsTokenValid(token.length > 10);
-        
       } catch (error) {
         console.error("Error validando token:", error);
         setIsTokenValid(false);
@@ -96,7 +91,7 @@ export default function ResetPassword() {
           return passwordErrors.join(", ");
         }
         return "";
-      
+
       case "confirmPassword":
         if (!validateRequired(value)) {
           return "Este campo es requerido";
@@ -105,7 +100,7 @@ export default function ResetPassword() {
           return "Las contraseñas no coinciden";
         }
         return "";
-      
+
       default:
         return "";
     }
@@ -117,7 +112,7 @@ export default function ResetPassword() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Validar solo si el campo ya fue tocado
     if (touched[name as keyof typeof touched]) {
       const error = validateField(name, value);
@@ -139,10 +134,12 @@ export default function ResetPassword() {
    * Valida si el formulario completo es válido
    */
   const isFormValid = (): boolean => {
-    return Object.values(formData).every(value => value.trim() !== "") &&
-           Object.values(errors).every(error => error === "") &&
-           validatePassword(formData.password) &&
-           formData.password === formData.confirmPassword;
+    return (
+      Object.values(formData).every(value => value.trim() !== "") &&
+      Object.values(errors).every(error => error === "") &&
+      validatePassword(formData.password) &&
+      formData.password === formData.confirmPassword
+    );
   };
 
   /**
@@ -150,19 +147,19 @@ export default function ResetPassword() {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Marcar todos los campos como tocados
     setTouched({
       password: true,
-      confirmPassword: true
+      confirmPassword: true,
     });
 
     // Validar todos los campos
     const newErrors = {
       password: validateField("password", formData.password),
-      confirmPassword: validateField("confirmPassword", formData.confirmPassword)
+      confirmPassword: validateField("confirmPassword", formData.confirmPassword),
     };
-    
+
     setErrors(newErrors);
 
     // Si hay errores, no continuar
@@ -175,7 +172,7 @@ export default function ResetPassword() {
     try {
       // Simular llamada al backend (reemplazar cuando esté disponible)
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // TODO: Integrar con el backend
       // const response = await fetch('/api/auth/reset-password', {
       //   method: 'POST',
@@ -185,24 +182,23 @@ export default function ResetPassword() {
       //     password: formData.password
       //   })
       // });
-      
+
       // Marcar como contraseña restablecida
       setPasswordReset(true);
-      
+
       toast.success("Contraseña actualizada", {
         description: "Ahora puedes iniciar sesión con tu nueva contraseña",
-        icon: <CheckCircle2 className="h-5 w-5" />
+        icon: <CheckCircle2 className="h-5 w-5" />,
       });
-      
+
       // Redirigir a login después de 500ms
       setTimeout(() => {
         navigate("/login");
       }, 500);
-      
     } catch (error) {
       // Manejo de errores del servidor
       toast.error("Error al actualizar la contraseña", {
-        description: "Por favor, intenta de nuevo"
+        description: "Por favor, intenta de nuevo",
       });
       console.error("Error en reset password:", error);
     } finally {
@@ -237,8 +233,8 @@ export default function ResetPassword() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
         <div className="w-full max-w-md">
-          <Link 
-            to="/login" 
+          <Link
+            to="/login"
             className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -248,9 +244,7 @@ export default function ResetPassword() {
           <Card>
             <CardHeader className="space-y-2">
               <CardTitle className="text-2xl text-slate-900">Enlace inválido</CardTitle>
-              <CardDescription>
-                Este enlace es inválido o ha caducado
-              </CardDescription>
+              <CardDescription>Este enlace es inválido o ha caducado</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -267,11 +261,9 @@ export default function ResetPassword() {
 
               <div className="space-y-2">
                 <Link to="/forgot-password" className="block">
-                  <Button className="w-full">
-                    Solicitar nuevo enlace
-                  </Button>
+                  <Button className="w-full">Solicitar nuevo enlace</Button>
                 </Link>
-                
+
                 <Link to="/login" className="block">
                   <Button variant="outline" className="w-full">
                     Volver al inicio de sesión
@@ -291,8 +283,8 @@ export default function ResetPassword() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <Link 
-          to="/login" 
+        <Link
+          to="/login"
           className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -326,9 +318,9 @@ export default function ResetPassword() {
                   aria-describedby={errors.password ? "password-error" : undefined}
                 />
                 {touched.password && errors.password && (
-                  <p 
-                    id="password-error" 
-                    className="text-sm text-red-600" 
+                  <p
+                    id="password-error"
+                    className="text-sm text-red-600"
                     role="alert"
                     aria-live="polite"
                   >
@@ -336,7 +328,8 @@ export default function ResetPassword() {
                   </p>
                 )}
                 <p className="text-xs text-slate-500">
-                  Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial
+                  Mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter
+                  especial
                 </p>
               </div>
 
@@ -353,14 +346,18 @@ export default function ResetPassword() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.confirmPassword && errors.confirmPassword ? "border-red-600" : ""}
-                  aria-invalid={touched.confirmPassword && errors.confirmPassword ? "true" : "false"}
+                  className={
+                    touched.confirmPassword && errors.confirmPassword ? "border-red-600" : ""
+                  }
+                  aria-invalid={
+                    touched.confirmPassword && errors.confirmPassword ? "true" : "false"
+                  }
                   aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
                 />
                 {touched.confirmPassword && errors.confirmPassword && (
-                  <p 
-                    id="confirmPassword-error" 
-                    className="text-sm text-red-600" 
+                  <p
+                    id="confirmPassword-error"
+                    className="text-sm text-red-600"
                     role="alert"
                     aria-live="polite"
                   >
@@ -370,11 +367,7 @@ export default function ResetPassword() {
               </div>
 
               {/* Botón de restablecer */}
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={!isFormValid() || isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={!isFormValid() || isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

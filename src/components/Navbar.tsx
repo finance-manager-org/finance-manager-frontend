@@ -42,22 +42,13 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className={styles.desktopNav}>
-            <button
-              onClick={() => scrollToSection("features")}
-              className={styles.navLink}
-            >
+            <button onClick={() => scrollToSection("features")} className={styles.navLink}>
               Características
             </button>
-            <button
-              onClick={() => scrollToSection("benefits")}
-              className={styles.navLink}
-            >
+            <button onClick={() => scrollToSection("benefits")} className={styles.navLink}>
               Beneficios
             </button>
-            <button
-              onClick={() => scrollToSection("how-it-works")}
-              className={styles.navLink}
-            >
+            <button onClick={() => scrollToSection("how-it-works")} className={styles.navLink}>
               Cómo funciona
             </button>
           </div>
@@ -70,9 +61,7 @@ export function Navbar() {
               </Button>
             </Link>
             <Link to="/signup">
-              <Button size="sm">
-                Registrarse
-              </Button>
+              <Button size="sm">Registrarse</Button>
             </Link>
           </div>
 
@@ -89,16 +78,10 @@ export function Navbar() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className={styles.mobileMenu}>
-            <button
-              onClick={() => scrollToSection("features")}
-              className={styles.mobileNavLink}
-            >
+            <button onClick={() => scrollToSection("features")} className={styles.mobileNavLink}>
               Características
             </button>
-            <button
-              onClick={() => scrollToSection("benefits")}
-              className={styles.mobileNavLink}
-            >
+            <button onClick={() => scrollToSection("benefits")} className={styles.mobileNavLink}>
               Beneficios
             </button>
             <button
@@ -107,7 +90,7 @@ export function Navbar() {
             >
               Cómo funciona
             </button>
-            
+
             <div className={styles.mobileAuthSection}>
               <Link to="/login">
                 <Button variant="ghost" size="sm" className={styles.mobileAuthButton}>

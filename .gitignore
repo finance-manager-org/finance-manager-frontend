@@ -49,6 +49,10 @@ Thumbs.db
 # Optional eslint cache
 .eslintcache
 
+# Documentation with sensitive information
+SONARCLOUD_SETUP.md
+ENTREGA_2.md
+
 # Optional stylelint cache
 .stylelintcache
 

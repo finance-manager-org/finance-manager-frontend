@@ -2,7 +2,7 @@
  * Validación de contraseñas según los requisitos de las HU
  * @param password - La contraseña a validar
  * @returns true si la contraseña es válida
- * 
+ *
  * Requisitos:
  * - Mínimo 8 caracteres
  * - Al menos una letra mayúscula
@@ -12,12 +12,12 @@
  */
 export function validatePassword(password: string): boolean {
   if (password.length < 8) return false;
-  
+
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
   const hasNumber = /[0-9]/.test(password);
   const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
-  
+
   return hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
 }
 
@@ -28,7 +28,7 @@ export function validatePassword(password: string): boolean {
  */
 export function getPasswordErrors(password: string): string[] {
   const errors: string[] = [];
-  
+
   if (password.length < 8) {
     errors.push("Mínimo 8 caracteres");
   }
@@ -44,7 +44,7 @@ export function getPasswordErrors(password: string): string[] {
   if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
     errors.push("Al menos un carácter especial");
   }
-  
+
   return errors;
 }
 
@@ -64,7 +64,7 @@ export function validateEmail(email: string): boolean {
  * @returns true si la edad es válida (≥ 13 años)
  */
 export function validateAge(age: string | number): boolean {
-  const ageNum = typeof age === 'string' ? parseInt(age, 10) : age;
+  const ageNum = typeof age === "string" ? parseInt(age, 10) : age;
   return !isNaN(ageNum) && ageNum >= 13 && ageNum <= 120;
 }
 

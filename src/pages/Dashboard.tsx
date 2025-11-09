@@ -8,7 +8,7 @@ import { toast } from "sonner";
  * Dashboard - Página placeholder
  * Esta es una página temporal que muestra un mensaje de bienvenida
  * después de un login exitoso.
- * 
+ *
  * TODO: Implementar el dashboard completo con:
  * - Resumen de finanzas
  * - Gráficos de ingresos y gastos
@@ -26,11 +26,11 @@ export default function Dashboard() {
     // localStorage.removeItem('token');
     // o
     // document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    
+
     toast.success("Sesión cerrada correctamente", {
-      description: "Hasta pronto"
+      description: "Hasta pronto",
     });
-    
+
     // Redirigir a la página de inicio
     navigate("/");
   };
@@ -43,7 +43,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold text-slate-900">Finance Manager</h1>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Link to="/">
               <Button variant="ghost" size="sm" className="gap-2">
@@ -64,12 +64,8 @@ export default function Dashboard() {
         <div className="space-y-6">
           {/* Saludo */}
           <div>
-            <h2 className="text-3xl font-bold text-slate-900">
-              ¡Hola, Usuario! 👋
-            </h2>
-            <p className="text-slate-600 mt-2">
-              Bienvenido a tu panel de control financiero
-            </p>
+            <h2 className="text-3xl font-bold text-slate-900">¡Hola, Usuario! 👋</h2>
+            <p className="text-slate-600 mt-2">Bienvenido a tu panel de control financiero</p>
           </div>
 
           {/* Card de información */}
@@ -81,9 +77,7 @@ export default function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-slate-600">
-                Próximas funcionalidades:
-              </p>
+              <p className="text-slate-600">Próximas funcionalidades:</p>
               <ul className="list-disc list-inside space-y-2 text-slate-600 ml-2">
                 <li>Resumen de ingresos y gastos del mes</li>
                 <li>Gráficos interactivos de tus finanzas</li>
@@ -140,8 +134,9 @@ export default function Dashboard() {
                     ¡Has completado el proceso de autenticación!
                   </p>
                   <p className="text-sm text-blue-700 mt-1">
-                    El sistema de login, registro y recuperación de contraseña está funcionando correctamente.
-                    Una vez que el backend esté disponible, podrás empezar a gestionar tus finanzas.
+                    El sistema de login, registro y recuperación de contraseña está funcionando
+                    correctamente. Una vez que el backend esté disponible, podrás empezar a
+                    gestionar tus finanzas.
                   </p>
                 </div>
               </div>

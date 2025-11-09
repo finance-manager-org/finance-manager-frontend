@@ -12,27 +12,27 @@ import styles from "./ForgotPassword.module.scss";
 /**
  * US-3: Recuperar contraseña (HU12) - Parte 1
  * Formulario para solicitar el restablecimiento de contraseña
- * 
+ *
  * Campo requerido:
  * - Correo electrónico (formato RFC 5322)
  */
 export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
-  
+
   // Estado del formulario
   const [formData, setFormData] = useState({
-    email: ""
+    email: "",
   });
 
   // Estado de los errores
   const [errors, setErrors] = useState({
-    email: ""
+    email: "",
   });
 
   // Estado de campos tocados
   const [touched, setTouched] = useState({
-    email: false
+    email: false,
   });
 
   /**
@@ -54,7 +54,7 @@ export default function ForgotPassword() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setFormData({ email: value });
-    
+
     // Validar solo si el campo ya fue tocado
     if (touched.email) {
       const error = validateField(value);
@@ -76,9 +76,7 @@ export default function ForgotPassword() {
    * Valida si el formulario es válido
    */
   const isFormValid = (): boolean => {
-    return formData.email.trim() !== "" &&
-           errors.email === "" &&
-           validateEmail(formData.email);
+    return formData.email.trim() !== "" && errors.email === "" && validateEmail(formData.email);
   };
 
   /**
@@ -86,7 +84,7 @@ export default function ForgotPassword() {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Marcar el campo como tocado
     setTouched({ email: true });
 
@@ -104,7 +102,7 @@ export default function ForgotPassword() {
     try {
       // Simular llamada al backend (reemplazar cuando esté disponible)
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // TODO: Integrar con el backend
       // const response = await fetch('/api/auth/forgot-password', {
       //   method: 'POST',
@@ -113,22 +111,21 @@ export default function ForgotPassword() {
       //     email: formData.email
       //   })
       // });
-      
+
       // Nota: El backend debe devolver HTTP 202 Accepted para no revelar
       // si el correo existe o no (seguridad)
-      
+
       // Marcar como enviado
       setEmailSent(true);
-      
+
       toast.success("Correo enviado", {
         description: "Revisa tu bandeja de entrada para continuar",
-        icon: <Mail />
+        icon: <Mail />,
       });
-      
     } catch (error) {
       // Manejo de errores del servidor
       toast.error("Error al enviar el correo", {
-        description: "Por favor, intenta de nuevo más tarde"
+        description: "Por favor, intenta de nuevo más tarde",
       });
       console.error("Error en forgot password:", error);
     } finally {
@@ -150,10 +147,7 @@ export default function ForgotPassword() {
     <div className={styles.forgotPasswordPage}>
       <div className={styles.container}>
         {/* Botón para volver */}
-        <Link 
-          to="/login" 
-          className={styles.backLink}
-        >
+        <Link to="/login" className={styles.backLink}>
           <ArrowLeft />
           <span>Volver al inicio de sesión</span>
         </Link>
@@ -164,10 +158,9 @@ export default function ForgotPassword() {
               {emailSent ? "Correo enviado" : "Recuperar contraseña"}
             </CardTitle>
             <CardDescription className={styles.cardDescription}>
-              {emailSent 
+              {emailSent
                 ? "Te hemos enviado un enlace para restablecer tu contraseña. El enlace es válido por 1 hora."
-                : "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña"
-              }
+                : "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña"}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -177,12 +170,8 @@ export default function ForgotPassword() {
                 <div className={styles.successBox}>
                   <Mail />
                   <div className={styles.successContent}>
-                    <p className={styles.successTitle}>
-                      Revisa tu correo
-                    </p>
-                    <p className={styles.successEmail}>
-                      {formData.email}
-                    </p>
+                    <p className={styles.successTitle}>Revisa tu correo</p>
+                    <p className={styles.successEmail}>{formData.email}</p>
                   </div>
                 </div>
 
@@ -206,7 +195,7 @@ export default function ForgotPassword() {
                   >
                     Enviar a otro correo
                   </Button>
-                  
+
                   <Link to="/login" className={styles.backToLoginLink}>
                     <Button variant="ghost" className={styles.backToLoginButton}>
                       Volver al inicio de sesión
@@ -235,8 +224,8 @@ export default function ForgotPassword() {
                     aria-describedby={errors.email ? "email-error" : undefined}
                   />
                   {touched.email && errors.email && (
-                    <p 
-                      id="email-error" 
+                    <p
+                      id="email-error"
                       className={styles.errorMessage}
                       role="alert"
                       aria-live="polite"

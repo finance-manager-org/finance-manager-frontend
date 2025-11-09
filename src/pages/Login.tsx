@@ -12,7 +12,7 @@ import styles from "./Login.module.scss";
 /**
  * US-2: Login / Logout (HU11)
  * Formulario de inicio de sesión con validación en tiempo real
- * 
+ *
  * Campos requeridos:
  * - Correo electrónico (formato RFC 5322)
  * - Contraseña
@@ -20,23 +20,23 @@ import styles from "./Login.module.scss";
 export default function Login() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Estado del formulario
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   // Estado de los errores
   const [errors, setErrors] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   // Estado de campos tocados
   const [touched, setTouched] = useState({
     email: false,
-    password: false
+    password: false,
   });
 
   /**
@@ -52,13 +52,13 @@ export default function Login() {
           return "Formato de correo inválido";
         }
         return "";
-      
+
       case "password":
         if (!validateRequired(value)) {
           return "Este campo es requerido";
         }
         return "";
-      
+
       default:
         return "";
     }
@@ -70,7 +70,7 @@ export default function Login() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Validar solo si el campo ya fue tocado
     if (touched[name as keyof typeof touched]) {
       const error = validateField(name, value);
@@ -92,10 +92,12 @@ export default function Login() {
    * Valida si el formulario completo es válido
    */
   const isFormValid = (): boolean => {
-    return Object.values(formData).every(value => value.trim() !== "") &&
-           Object.values(errors).every(error => error === "") &&
-           validateEmail(formData.email) &&
-           validateRequired(formData.password);
+    return (
+      Object.values(formData).every(value => value.trim() !== "") &&
+      Object.values(errors).every(error => error === "") &&
+      validateEmail(formData.email) &&
+      validateRequired(formData.password)
+    );
   };
 
   /**
@@ -103,19 +105,19 @@ export default function Login() {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Marcar todos los campos como tocados
     setTouched({
       email: true,
-      password: true
+      password: true,
     });
 
     // Validar todos los campos
     const newErrors = {
       email: validateField("email", formData.email),
-      password: validateField("password", formData.password)
+      password: validateField("password", formData.password),
     };
-    
+
     setErrors(newErrors);
 
     // Si hay errores, no continuar
@@ -128,7 +130,7 @@ export default function Login() {
     try {
       // Simular llamada al backend (reemplazar cuando esté disponible)
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // TODO: Integrar con el backend
       // const response = await fetch('/api/auth/login', {
       //   method: 'POST',
@@ -138,31 +140,30 @@ export default function Login() {
       //     password: formData.password
       //   })
       // });
-      
+
       // TODO: Almacenar token en localStorage o cookie HttpOnly
       // localStorage.setItem('token', response.token);
-      
+
       // Simulación de respuesta exitosa
       const userName = "Usuario"; // Este valor vendría del backend
       toast.success(`¡Hola, ${userName}!`, {
         description: "Has iniciado sesión correctamente",
-        icon: <CheckCircle2 />
+        icon: <CheckCircle2 />,
       });
-      
+
       // Redirigir a dashboard después de 500ms
       setTimeout(() => {
         navigate("/dashboard");
       }, 500);
-      
     } catch (error) {
       // Manejo de errores del servidor
       // 401 Unauthorized -> Credenciales incorrectas
       // 423 Locked -> Cuenta bloqueada
       // 429 Too Many Requests -> Demasiados intentos
       // 5xx -> Error del servidor
-      
+
       toast.error("Error al iniciar sesión", {
-        description: "Correo o contraseña inválidos"
+        description: "Correo o contraseña inválidos",
       });
       console.error("Error en login:", error);
     } finally {
@@ -206,9 +207,9 @@ export default function Login() {
                   aria-describedby={errors.email ? "email-error" : undefined}
                 />
                 {touched.email && errors.email && (
-                  <p 
-                    id="email-error" 
-                    className={styles.errorMessage} 
+                  <p
+                    id="email-error"
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >
@@ -223,10 +224,7 @@ export default function Login() {
                   <Label htmlFor="password">
                     Contraseña <span className={styles.required}>*</span>
                   </Label>
-                  <Link 
-                    to="/forgot-password" 
-                    className={styles.forgotPasswordLink}
-                  >
+                  <Link to="/forgot-password" className={styles.forgotPasswordLink}>
                     ¿Olvidaste tu contraseña?
                   </Link>
                 </div>
@@ -243,9 +241,9 @@ export default function Login() {
                   aria-describedby={errors.password ? "password-error" : undefined}
                 />
                 {touched.password && errors.password && (
-                  <p 
-                    id="password-error" 
-                    className={styles.errorMessage} 
+                  <p
+                    id="password-error"
+                    className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
                   >

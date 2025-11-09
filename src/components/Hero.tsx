@@ -11,16 +11,16 @@ export function Hero() {
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm">Control total de tus finanzas personales</span>
           </div>
-          
+
           <h1 className="max-w-4xl mx-auto text-slate-900">
             Administra tus ingresos y gastos de forma inteligente
           </h1>
-          
+
           <p className="max-w-2xl mx-auto text-slate-600 text-lg">
-            Toma el control de tu dinero con nuestra plataforma intuitiva. Registra tus ingresos, 
+            Toma el control de tu dinero con nuestra plataforma intuitiva. Registra tus ingresos,
             controla tus gastos y visualiza tu salud financiera en tiempo real.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link to="/signup">
               <Button size="lg" className="gap-2">
@@ -34,7 +34,7 @@ export function Hero() {
               </Button>
             </Link>
           </div>
-          
+
           <div className="pt-8 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div>
               <div className="text-blue-600">10,000+</div>

@@ -12,14 +12,14 @@ import {
   validateAge,
   validateRequired,
   validateName,
-  getPasswordErrors
+  getPasswordErrors,
 } from "../lib/validations";
 import styles from "./Signup.module.scss";
 
 /**
  * US-1: Sign-up básico (HU10)
  * Formulario de registro con validación en tiempo real
- * 
+ *
  * Campos requeridos:
  * - Nombres (solo letras, mín. 2 caracteres)
  * - Apellidos (solo letras, mín. 2 caracteres)
@@ -31,7 +31,7 @@ import styles from "./Signup.module.scss";
 export default function Signup() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Estado del formulario
   const [formData, setFormData] = useState({
     firstName: "",
@@ -39,7 +39,7 @@ export default function Signup() {
     age: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   // Estado de los errores
@@ -49,7 +49,7 @@ export default function Signup() {
     age: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   // Estado de campos tocados
@@ -59,7 +59,7 @@ export default function Signup() {
     age: false,
     email: false,
     password: false,
-    confirmPassword: false
+    confirmPassword: false,
   });
 
   /**
@@ -76,7 +76,7 @@ export default function Signup() {
           return "Solo se permiten letras (mínimo 2 caracteres)";
         }
         return "";
-      
+
       case "age":
         if (!validateRequired(value)) {
           return "Este campo es requerido";
@@ -88,7 +88,7 @@ export default function Signup() {
           return "Debes tener al menos 13 años";
         }
         return "";
-      
+
       case "email":
         if (!validateRequired(value)) {
           return "Este campo es requerido";
@@ -97,7 +97,7 @@ export default function Signup() {
           return "Formato de correo inválido";
         }
         return "";
-      
+
       case "password":
         if (!validateRequired(value)) {
           return "Este campo es requerido";
@@ -107,7 +107,7 @@ export default function Signup() {
           return passwordErrors.join(", ");
         }
         return "";
-      
+
       case "confirmPassword":
         if (!validateRequired(value)) {
           return "Este campo es requerido";
@@ -116,7 +116,7 @@ export default function Signup() {
           return "Las contraseñas no coinciden";
         }
         return "";
-      
+
       default:
         return "";
     }
@@ -128,7 +128,7 @@ export default function Signup() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Validar solo si el campo ya fue tocado
     if (touched[name as keyof typeof touched]) {
       const error = validateField(name, value);
@@ -150,14 +150,16 @@ export default function Signup() {
    * Valida si el formulario completo es válido
    */
   const isFormValid = (): boolean => {
-    return Object.values(formData).every(value => value.trim() !== "") &&
-           Object.values(errors).every(error => error === "") &&
-           validatePassword(formData.password) &&
-           formData.password === formData.confirmPassword &&
-           validateEmail(formData.email) &&
-           validateAge(formData.age) &&
-           validateName(formData.firstName) &&
-           validateName(formData.lastName);
+    return (
+      Object.values(formData).every(value => value.trim() !== "") &&
+      Object.values(errors).every(error => error === "") &&
+      validatePassword(formData.password) &&
+      formData.password === formData.confirmPassword &&
+      validateEmail(formData.email) &&
+      validateAge(formData.age) &&
+      validateName(formData.firstName) &&
+      validateName(formData.lastName)
+    );
   };
 
   /**
@@ -165,7 +167,7 @@ export default function Signup() {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Marcar todos los campos como tocados
     setTouched({
       firstName: true,
@@ -173,7 +175,7 @@ export default function Signup() {
       age: true,
       email: true,
       password: true,
-      confirmPassword: true
+      confirmPassword: true,
     });
 
     // Validar todos los campos
@@ -183,9 +185,9 @@ export default function Signup() {
       age: validateField("age", formData.age),
       email: validateField("email", formData.email),
       password: validateField("password", formData.password),
-      confirmPassword: validateField("confirmPassword", formData.confirmPassword)
+      confirmPassword: validateField("confirmPassword", formData.confirmPassword),
     };
-    
+
     setErrors(newErrors);
 
     // Si hay errores, no continuar
@@ -198,7 +200,7 @@ export default function Signup() {
     try {
       // Simular llamada al backend (reemplazar cuando esté disponible)
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // TODO: Integrar con el backend
       // const response = await fetch('/api/auth/signup', {
       //   method: 'POST',
@@ -211,22 +213,21 @@ export default function Signup() {
       //     password: formData.password
       //   })
       // });
-      
+
       // Simulación de respuesta exitosa
       toast.success("Cuenta creada con éxito", {
         description: "Serás redirigido al login",
-        icon: <CheckCircle2 />
+        icon: <CheckCircle2 />,
       });
-      
+
       // Redirigir a login después de 500ms
       setTimeout(() => {
         navigate("/login");
       }, 500);
-      
     } catch (error) {
       // Manejo de errores del servidor
       toast.error("Error al crear la cuenta", {
-        description: "Por favor, intenta de nuevo más tarde"
+        description: "Por favor, intenta de nuevo más tarde",
       });
       console.error("Error en registro:", error);
     } finally {
@@ -238,10 +239,7 @@ export default function Signup() {
     <div className={styles.signupPage}>
       <div className={styles.container}>
         {/* Botón para volver */}
-        <Link 
-          to="/" 
-          className={styles.backLink}
-        >
+        <Link to="/" className={styles.backLink}>
           <ArrowLeft />
           <span>Volver al inicio</span>
         </Link>
@@ -272,8 +270,8 @@ export default function Signup() {
                   aria-describedby={errors.firstName ? "firstName-error" : undefined}
                 />
                 {touched.firstName && errors.firstName && (
-                  <p 
-                    id="firstName-error" 
+                  <p
+                    id="firstName-error"
                     className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
@@ -300,8 +298,8 @@ export default function Signup() {
                   aria-describedby={errors.lastName ? "lastName-error" : undefined}
                 />
                 {touched.lastName && errors.lastName && (
-                  <p 
-                    id="lastName-error" 
+                  <p
+                    id="lastName-error"
                     className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
@@ -329,12 +327,7 @@ export default function Signup() {
                   aria-describedby={errors.age ? "age-error" : undefined}
                 />
                 {touched.age && errors.age && (
-                  <p 
-                    id="age-error" 
-                    className={styles.errorMessage}
-                    role="alert"
-                    aria-live="polite"
-                  >
+                  <p id="age-error" className={styles.errorMessage} role="alert" aria-live="polite">
                     {errors.age}
                   </p>
                 )}
@@ -357,8 +350,8 @@ export default function Signup() {
                   aria-describedby={errors.email ? "email-error" : undefined}
                 />
                 {touched.email && errors.email && (
-                  <p 
-                    id="email-error" 
+                  <p
+                    id="email-error"
                     className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
@@ -385,8 +378,8 @@ export default function Signup() {
                   aria-describedby={errors.password ? "password-error" : undefined}
                 />
                 {touched.password && errors.password && (
-                  <p 
-                    id="password-error" 
+                  <p
+                    id="password-error"
                     className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"
@@ -408,13 +401,17 @@ export default function Signup() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  className={touched.confirmPassword && errors.confirmPassword ? styles.inputError : ""}
-                  aria-invalid={touched.confirmPassword && errors.confirmPassword ? "true" : "false"}
+                  className={
+                    touched.confirmPassword && errors.confirmPassword ? styles.inputError : ""
+                  }
+                  aria-invalid={
+                    touched.confirmPassword && errors.confirmPassword ? "true" : "false"
+                  }
                   aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined}
                 />
                 {touched.confirmPassword && errors.confirmPassword && (
-                  <p 
-                    id="confirmPassword-error" 
+                  <p
+                    id="confirmPassword-error"
                     className={styles.errorMessage}
                     role="alert"
                     aria-live="polite"

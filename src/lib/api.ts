@@ -1,3 +1,4 @@
+
 /**
  * API Service - Centralizes all HTTP requests to the backend
  * Base URL configured via environment variable
@@ -203,19 +204,16 @@ export const authApi = {
 export interface Category {
   id: number;
   tipo: string;
-  Isincome: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface CreateCategoryRequest {
   tipo: string;
-  isIncome: boolean;
 }
 
 export interface UpdateCategoryRequest {
   tipo?: string;
-  isIncome?: boolean;
 }
 
 /**

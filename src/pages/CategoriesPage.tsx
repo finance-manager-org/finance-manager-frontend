@@ -45,7 +45,6 @@ export function CategoriesPage() {
   // Form state
   const [formData, setFormData] = useState({
     tipo: "",
-    isIncome: false,
   });
 
   // Load categories
@@ -75,13 +74,12 @@ export function CategoriesPage() {
     try {
       const response = await categoryApi.create({
         tipo: formData.tipo,
-        isIncome: formData.isIncome,
       });
 
       toast.success("Categoría creada exitosamente");
       setCategories([...categories, response.category]);
       setIsCreateOpen(false);
-      setFormData({ tipo: "", isIncome: false });
+      setFormData({ tipo: "" });
     } catch (error) {
       const apiError = error as ApiError;
       toast.error("Error al crear categoría", {
@@ -101,7 +99,6 @@ export function CategoriesPage() {
     try {
       const response = await categoryApi.update(selectedCategory.id, {
         tipo: formData.tipo,
-        isIncome: formData.isIncome,
       });
 
       toast.success("Categoría actualizada exitosamente");
@@ -112,7 +109,7 @@ export function CategoriesPage() {
       );
       setIsEditOpen(false);
       setSelectedCategory(null);
-      setFormData({ tipo: "", isIncome: false });
+      setFormData({ tipo: "" });
     } catch (error) {
       const apiError = error as ApiError;
       toast.error("Error al actualizar categoría", {
@@ -148,7 +145,6 @@ export function CategoriesPage() {
     setSelectedCategory(category);
     setFormData({
       tipo: category.tipo,
-      isIncome: category.Isincome,
     });
     setIsEditOpen(true);
   };
@@ -200,36 +196,6 @@ export function CategoriesPage() {
                       placeholder="Ej: Alimentación, Transporte, Salario..."
                       required
                     />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Tipo</Label>
-                    <div className="flex gap-4">
-                      <button
-                        type="button"
-                        onClick={() => setFormData({ ...formData, isIncome: false })}
-                        className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-                          !formData.isIncome
-                            ? "border-red-500 bg-red-50 text-red-700"
-                            : "border-slate-200 hover:border-slate-300"
-                        }`}
-                      >
-                        <TrendingDown className="w-6 h-6 mx-auto mb-2" />
-                        <div className="font-semibold">Gasto</div>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setFormData({ ...formData, isIncome: true })}
-                        className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-                          formData.isIncome
-                            ? "border-green-500 bg-green-50 text-green-700"
-                            : "border-slate-200 hover:border-slate-300"
-                        }`}
-                      >
-                        <TrendingUp className="w-6 h-6 mx-auto mb-2" />
-                        <div className="font-semibold">Ingreso</div>
-                      </button>
-                    </div>
                   </div>
 
                   <div className="flex gap-2 justify-end pt-4">
@@ -288,22 +254,14 @@ export function CategoriesPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <div
-                          className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                            category.Isincome
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
+                          className="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-100 text-blue-700"
                         >
-                          {category.Isincome ? (
-                            <TrendingUp className="w-6 h-6" />
-                          ) : (
-                            <TrendingDown className="w-6 h-6" />
-                          )}
+                          <TrendingUp className="w-6 h-6" />
                         </div>
                         <div>
                           <CardTitle className="text-lg">{category.tipo}</CardTitle>
                           <CardDescription>
-                            {category.Isincome ? "Ingreso" : "Gasto"}
+                            Categoría general
                           </CardDescription>
                         </div>
                       </div>
@@ -360,36 +318,6 @@ export function CategoriesPage() {
                 placeholder="Ej: Alimentación, Transporte, Salario..."
                 required
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Tipo</Label>
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, isIncome: false })}
-                  className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-                    !formData.isIncome
-                      ? "border-red-500 bg-red-50 text-red-700"
-                      : "border-slate-200 hover:border-slate-300"
-                  }`}
-                >
-                  <TrendingDown className="w-6 h-6 mx-auto mb-2" />
-                  <div className="font-semibold">Gasto</div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, isIncome: true })}
-                  className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-                    formData.isIncome
-                      ? "border-green-500 bg-green-50 text-green-700"
-                      : "border-slate-200 hover:border-slate-300"
-                  }`}
-                >
-                  <TrendingUp className="w-6 h-6 mx-auto mb-2" />
-                  <div className="font-semibold">Ingreso</div>
-                </button>
-              </div>
             </div>
 
             <div className="flex gap-2 justify-end pt-4">

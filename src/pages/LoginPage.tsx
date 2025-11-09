@@ -113,15 +113,18 @@ export function LoginPage() {
         password: formData.password,
       });
 
+      console.log("Login exitoso:", response);
+
       toast.success(`¡Hola, ${response.user.nickname}!`, {
         description: "Has iniciado sesión correctamente",
         icon: <CheckCircle2 />,
       });
 
-      // Redirigir a dashboard después de 500ms
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 500);
+      // Pequeña pausa para asegurar que las cookies se establezcan
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Redirigir a dashboard inmediatamente
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       // Manejo de errores del servidor
       const apiError = error as ApiError;

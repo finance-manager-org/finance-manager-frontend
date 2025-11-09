@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, TrendingUp, Settings, LogOut, Wallet } from "lucide-react";
+import { LayoutDashboard, Calendar, TrendingUp, Settings, LogOut, Wallet, FolderKanban } from "lucide-react";
 import { Button } from "./ui/button";
 import React from "react";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Calendar, label: "Calendario", path: "/calendar" },
+  { icon: FolderKanban, label: "Categorías", path: "/categories" },
   { icon: TrendingUp, label: "Reportes", path: "/reports" },
   { icon: Settings, label: "Configuración", path: "/settings" },
 ];

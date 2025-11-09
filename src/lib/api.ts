@@ -197,4 +197,82 @@ export const authApi = {
   },
 };
 
+/**
+ * Category interfaces
+ */
+export interface Category {
+  id: number;
+  tipo: string;
+  Isincome: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CreateCategoryRequest {
+  tipo: string;
+  isIncome: boolean;
+}
+
+export interface UpdateCategoryRequest {
+  tipo?: string;
+  isIncome?: boolean;
+}
+
+/**
+ * Category API endpoints
+ */
+export const categoryApi = {
+  /**
+   * POST /api/category
+   * Create a new category
+   */
+  create: async (data: CreateCategoryRequest): Promise<{ message: string; category: Category }> => {
+    return apiRequest<{ message: string; category: Category }>("/api/category", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * GET /api/category
+   * Get all categories
+   */
+  getAll: async (): Promise<Category[]> => {
+    return apiRequest<Category[]>("/api/category", {
+      method: "GET",
+    });
+  },
+
+  /**
+   * GET /api/category/:id
+   * Get category by ID
+   */
+  getById: async (id: number): Promise<Category> => {
+    return apiRequest<Category>(`/api/category/${id}`, {
+      method: "GET",
+    });
+  },
+
+  /**
+   * PUT /api/category/:id
+   * Update category
+   */
+  update: async (id: number, data: UpdateCategoryRequest): Promise<{ message: string; category: Category }> => {
+    return apiRequest<{ message: string; category: Category }>(`/api/category/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * DELETE /api/category/:id
+   * Delete category
+   */
+  delete: async (id: number): Promise<{ message: string }> => {
+    return apiRequest<{ message: string }>(`/api/category/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
 export { API_BASE_URL };

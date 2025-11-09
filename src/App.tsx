@@ -4,6 +4,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { LoginPage } from "./pages/LoginPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { CalendarPage } from "./pages/CalendarPage";
+import { CategoriesPage } from "./pages/CategoriesPage";
 import { Navbar } from "./components/Navbar";
 import React from "react";
 
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
       </Routes>
     </BrowserRouter>
   );

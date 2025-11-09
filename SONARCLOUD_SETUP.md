@@ -56,10 +56,12 @@ The CI pipeline (`.github/workflows/ci.yml`) includes:
 
 ## Required Node.js Version
 
-The CI pipeline uses **Node.js 18.x** to ensure compatibility with:
+The CI pipeline uses **Node.js 20.x (LTS)** to ensure compatibility with:
 - Vitest 4.0.8
-- V8 coverage provider
-- Modern JavaScript features (node:inspector/promises)
+- V8 coverage provider (requires Node.js 19.2.0+ for `node:inspector/promises` module)
+- Modern JavaScript features and ESM support
+
+**Important**: Node.js 18.x is **NOT compatible** with Vitest 4.x + V8 coverage provider.
 
 ## Next Steps
 
@@ -79,7 +81,15 @@ https://sonarcloud.io/dashboard?id=IvanAusechaS_finance-manager-frontend
 
 ### CI Fails with "No such built-in module: node:inspector/promises"
 
-**Solution**: Updated all CI jobs to explicitly use Node.js 18.x instead of using environment variable interpolation. This ensures the GitHub Actions runner uses the correct version.
+**Root Cause**: Vitest 4.x with V8 coverage provider requires Node.js 19.2.0+ because it uses the `node:inspector/promises` module which was introduced in that version.
+
+**Solution**: Updated CI pipeline to use Node.js 20.x (current LTS) instead of 18.x:
+```yaml
+env:
+  NODE_VERSION: '20.x'
+```
+
+All jobs now explicitly use `node-version: '20.x'` in the `setup-node` action.
 
 ### Coverage Report Not Found
 

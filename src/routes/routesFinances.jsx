@@ -12,14 +12,18 @@ import AccountsPage from '../pages/AccountsPage';
 import CategoriesPage from '../pages/CategoriesPage';
 import ProfilePage from '../pages/ProfilePage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
+import { NotFoundPage } from '../pages/NotFoundPage';
 
 const RoutesPages = () => {
     return(
         <BrowserRouter>
             <Routes>
+                {/* Rutas públicas */}
                 <Route path='/' element={<LandingPage/>}/>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
+                
+                {/* Rutas protegidas */}
                 <Route path='/dashboard' element={<ProtectedRoute><DashboardPage/></ProtectedRoute>}/>
                 <Route path='/calendar' element={<ProtectedRoute><CalendarPage/></ProtectedRoute>}/>
                 <Route path='/transactions' element={<ProtectedRoute><TransactionsPage/></ProtectedRoute>}/>
@@ -28,6 +32,9 @@ const RoutesPages = () => {
                 <Route path='/tags' element={<ProtectedRoute><TagsPage/></ProtectedRoute>}/>
                 <Route path='/statistics' element={<ProtectedRoute><StatisticsPage/></ProtectedRoute>}/>
                 <Route path='/profile' element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}/>
+                
+                {/* Ruta 404 - debe ir al final */}
+                <Route path='*' element={<NotFoundPage/>}/>
             </Routes>
         </BrowserRouter>
     )

@@ -10,6 +10,8 @@ import {
   Tag,
   ArrowRightLeft,
   BarChart3,
+  Menu,
+  X,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import React, { useEffect, useState } from "react";
@@ -39,14 +41,19 @@ export function Sidebar() {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  console.log("📱 [Sidebar] Componente montado, ruta actual:", location.pathname);
 
   useEffect(() => {
     const loadUserProfile = async () => {
+      console.log("👤 [Sidebar] Cargando perfil de usuario");
       try {
         const response = await authApi.getProfile();
+        console.log("✅ [Sidebar] Perfil cargado:", response.user.nickname);
         setUser(response.user);
       } catch (error) {
-        console.error("Error loading user profile:", error);
+        console.error("❌ [Sidebar] Error al cargar perfil:", error);
         navigate("/login");
       } finally {
         setIsLoading(false);
@@ -57,14 +64,21 @@ export function Sidebar() {
   }, [navigate]);
 
   const handleLogout = async () => {
+    console.log("🚪 [Sidebar] Cerrando sesión");
     try {
       await authApi.logout();
+      console.log("✅ [Sidebar] Sesión cerrada exitosamente");
       toast.success("Sesión cerrada exitosamente");
       navigate("/login");
     } catch (error) {
+      console.error("❌ [Sidebar] Error al cerrar sesión:", error);
       toast.error("Error al cerrar sesión");
-      console.error("Logout error:", error);
     }
+  };
+
+  const handleMenuItemClick = (path: string, label: string) => {
+    console.log(`🔗 [Sidebar] Navegando a: ${path} (${label})`);
+    setIsMobileMenuOpen(false);
   };
 
   const getInitials = (nickname: string) => {
@@ -77,10 +91,45 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 min-h-screen flex flex-col">
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => {
+          console.log("🍔 [Sidebar] Toggle menú móvil:", !isMobileMenuOpen);
+          setIsMobileMenuOpen(!isMobileMenuOpen);
+        }}
+        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center border border-slate-200"
+      >
+        {isMobileMenuOpen ? (
+          <X className="w-6 h-6 text-slate-700" />
+        ) : (
+          <Menu className="w-6 h-6 text-slate-700" />
+        )}
+      </button>
+
+      {/* Overlay for mobile */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => {
+            console.log("📱 [Sidebar] Cerrando menú por overlay");
+            setIsMobileMenuOpen(false);
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed lg:static inset-y-0 left-0 z-40
+          w-64 bg-white border-r border-slate-200 min-h-screen flex flex-col
+          transition-transform duration-300 ease-in-out
+          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+        `}
+      >
       {/* Logo */}
       <div className="p-6 border-b border-slate-200">
-        <Link to="/dashboard" className="flex items-center gap-2">
+        <Link to="/dashboard" className="flex items-center gap-2" onClick={() => console.log("🏠 [Sidebar] Navegando a dashboard desde logo")}>
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
             <Wallet className="w-6 h-6 text-white" />
           </div>
@@ -101,6 +150,7 @@ export function Sidebar() {
             <Link
               key={item.path}
               to={item.path}
+              onClick={() => handleMenuItemClick(item.path, item.label)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                 isActive
                   ? "bg-blue-50 text-blue-700"
@@ -149,5 +199,6 @@ export function Sidebar() {
         </Button>
       </div>
     </aside>
+    </>
   );
 }

@@ -24,6 +24,7 @@ interface MonthlyStats {
 }
 
 export function CalendarPage() {
+  console.log("📅 [CalendarPage] Componente montado");
   const navigate = useNavigate();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedAccount, setSelectedAccount] = useState<string>("all");

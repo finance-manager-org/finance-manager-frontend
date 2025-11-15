@@ -585,7 +585,9 @@ export const transactionApi = {
     }
 
     const queryString = params.toString();
-    const url = queryString ? `/api/transaction?${queryString}` : "/api/transaction";
+    const url = queryString
+      ? `/api/transaction?${queryString}`
+      : "/api/transaction";
 
     return apiRequest<Transaction[]>(url, {
       method: "GET",

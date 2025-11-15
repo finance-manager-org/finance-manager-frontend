@@ -41,6 +41,7 @@ import { Sidebar } from "../components/Sidebar";
 import React from "react";
 
 export function CategoriesPage() {
+  console.log("📁 [CategoriesPage] Componente montado");
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);

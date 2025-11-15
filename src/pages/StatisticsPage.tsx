@@ -1,11 +1,35 @@
 import { useState, useEffect } from "react";
 import { Sidebar } from "../components/Sidebar";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 import { BarChart3, PieChart, TrendingUp, Calendar } from "lucide-react";
 import React from "react";
-import { transactionApi, accountApi, authApi, type Transaction, type Account } from "../lib/api";
-import { format, startOfMonth, endOfMonth, parseISO, eachMonthOfInterval, subMonths } from "date-fns";
+import {
+  transactionApi,
+  accountApi,
+  authApi,
+  type Transaction,
+  type Account,
+} from "../lib/api";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  parseISO,
+  eachMonthOfInterval,
+  subMonths,
+} from "date-fns";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
 
@@ -23,6 +47,7 @@ interface MonthlyTrend {
 }
 
 export function StatisticsPage() {
+  console.log("📈 [StatisticsPage] Componente montado");
   const [selectedAccount, setSelectedAccount] = useState<string>("all");
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -48,11 +73,11 @@ export function StatisticsPage() {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      
+
       // Get user profile first to get userId
       const profileResponse = await authApi.getProfile();
       const userId = profileResponse.user.id;
-      
+
       // Load accounts
       const accountsData = await accountApi.getAll(userId);
       setAccounts(accountsData);
@@ -62,14 +87,13 @@ export function StatisticsPage() {
       if (selectedAccount !== "all") {
         filters.accountId = parseInt(selectedAccount);
       }
-      
+
       const transactionsData = await transactionApi.getAll(filters);
       setTransactions(transactionsData);
 
       // Calculate statistics
       calculateCategoryStats(transactionsData);
       calculateMonthlyTrends(transactionsData);
-
     } catch (error) {
       console.error("Error loading data:", error);
       toast.error("Error al cargar los datos");
@@ -84,8 +108,8 @@ export function StatisticsPage() {
     let totalExpenses = 0;
 
     transactions
-      .filter(t => !t.isIncome)
-      .forEach(t => {
+      .filter((t) => !t.isIncome)
+      .forEach((t) => {
         const tagName = t.tag?.name || "Sin categoría";
         expensesByTag[tagName] = (expensesByTag[tagName] || 0) + t.amount;
         totalExpenses += t.amount;
@@ -110,21 +134,21 @@ export function StatisticsPage() {
     const sixMonthsAgo = subMonths(now, 5);
     const months = eachMonthOfInterval({ start: sixMonthsAgo, end: now });
 
-    const trends: MonthlyTrend[] = months.map(month => {
+    const trends: MonthlyTrend[] = months.map((month) => {
       const monthStart = startOfMonth(month);
       const monthEnd = endOfMonth(month);
 
-      const monthTransactions = transactions.filter(t => {
+      const monthTransactions = transactions.filter((t) => {
         const date = parseISO(t.transactionDate);
         return date >= monthStart && date <= monthEnd;
       });
 
       const income = monthTransactions
-        .filter(t => t.isIncome)
+        .filter((t) => t.isIncome)
         .reduce((sum, t) => sum + t.amount, 0);
 
       const expenses = monthTransactions
-        .filter(t => !t.isIncome)
+        .filter((t) => !t.isIncome)
         .reduce((sum, t) => sum + t.amount, 0);
 
       return {
@@ -138,29 +162,36 @@ export function StatisticsPage() {
   };
 
   const maxValue = Math.max(
-    ...monthlyTrends.map(t => Math.max(t.income, t.expenses))
+    ...monthlyTrends.map((t) => Math.max(t.income, t.expenses))
   );
 
   return (
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar />
-      
+
       <main className="flex-1 overflow-auto">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">Estadísticas</h1>
-              <p className="text-slate-600">Analiza tus patrones de gasto e ingreso</p>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">
+                Estadísticas
+              </h1>
+              <p className="text-slate-600">
+                Analiza tus patrones de gasto e ingreso
+              </p>
             </div>
             <div className="w-64">
-              <Select value={selectedAccount} onValueChange={setSelectedAccount}>
+              <Select
+                value={selectedAccount}
+                onValueChange={setSelectedAccount}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Todas las cuentas" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas las cuentas</SelectItem>
-                  {accounts.map(account => (
+                  {accounts.map((account) => (
                     <SelectItem key={account.id} value={account.id.toString()}>
                       {account.name}
                     </SelectItem>
@@ -206,7 +237,7 @@ export function StatisticsPage() {
                         <span className="text-slate-600">Gastos</span>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-4">
                       {monthlyTrends.map((trend, index) => (
                         <div key={index} className="space-y-2">
@@ -217,12 +248,18 @@ export function StatisticsPage() {
                             <div className="flex-1 mx-4 flex gap-1">
                               <div
                                 className="bg-green-500 rounded h-8 transition-all"
-                                style={{ width: `${(trend.income / maxValue) * 100}%` }}
+                                style={{
+                                  width: `${(trend.income / maxValue) * 100}%`,
+                                }}
                                 title={`Ingresos: $${trend.income.toFixed(2)}`}
                               />
                               <div
                                 className="bg-red-500 rounded h-8 transition-all"
-                                style={{ width: `${(trend.expenses / maxValue) * 100}%` }}
+                                style={{
+                                  width: `${
+                                    (trend.expenses / maxValue) * 100
+                                  }%`,
+                                }}
                                 title={`Gastos: $${trend.expenses.toFixed(2)}`}
                               />
                             </div>
@@ -271,17 +308,33 @@ export function StatisticsPage() {
                             const cumulativePercentage = categoryStats
                               .slice(0, index)
                               .reduce((sum, s) => sum + s.percentage, 0);
-                            
+
                             return (
                               <div
                                 key={stat.name}
                                 className="absolute inset-0 rounded-full border-8 transition-all hover:scale-105"
                                 style={{
                                   borderColor: stat.color,
-                                  transform: `rotate(${cumulativePercentage * 3.6}deg)`,
-                                  clipPath: `polygon(50% 50%, 50% 0%, ${50 + 50 * Math.cos((stat.percentage * 3.6 * Math.PI) / 180)}% ${50 - 50 * Math.sin((stat.percentage * 3.6 * Math.PI) / 180)}%)`,
+                                  transform: `rotate(${
+                                    cumulativePercentage * 3.6
+                                  }deg)`,
+                                  clipPath: `polygon(50% 50%, 50% 0%, ${
+                                    50 +
+                                    50 *
+                                      Math.cos(
+                                        (stat.percentage * 3.6 * Math.PI) / 180
+                                      )
+                                  }% ${
+                                    50 -
+                                    50 *
+                                      Math.sin(
+                                        (stat.percentage * 3.6 * Math.PI) / 180
+                                      )
+                                  }%)`,
                                 }}
-                                title={`${stat.name}: ${stat.percentage.toFixed(1)}%`}
+                                title={`${stat.name}: ${stat.percentage.toFixed(
+                                  1
+                                )}%`}
                               />
                             );
                           })}
@@ -290,8 +343,11 @@ export function StatisticsPage() {
 
                       {/* Legend and details */}
                       <div className="space-y-3">
-                        {categoryStats.map(stat => (
-                          <div key={stat.name} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                        {categoryStats.map((stat) => (
+                          <div
+                            key={stat.name}
+                            className="flex items-center justify-between p-3 bg-slate-50 rounded-lg"
+                          >
                             <div className="flex items-center gap-3 flex-1">
                               <div
                                 className="w-4 h-4 rounded"
@@ -352,12 +408,16 @@ export function StatisticsPage() {
                       $
                       {monthlyTrends.length > 0
                         ? (
-                            monthlyTrends.reduce((sum, t) => sum + t.income, 0) /
-                            monthlyTrends.length
+                            monthlyTrends.reduce(
+                              (sum, t) => sum + t.income,
+                              0
+                            ) / monthlyTrends.length
                           ).toFixed(2)
                         : "0.00"}
                     </p>
-                    <p className="text-sm text-slate-500 mt-1">Ingresos promedio</p>
+                    <p className="text-sm text-slate-500 mt-1">
+                      Ingresos promedio
+                    </p>
                   </CardContent>
                 </Card>
 

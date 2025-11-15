@@ -148,9 +148,15 @@ export function Footer() {
       </div>
 
       {/* Overlays Legales */}
-      <PrivacyPolicy isOpen={showPrivacy} onClose={() => setShowPrivacy(false)} />
+      <PrivacyPolicy
+        isOpen={showPrivacy}
+        onClose={() => setShowPrivacy(false)}
+      />
       <TermsOfService isOpen={showTerms} onClose={() => setShowTerms(false)} />
-      <CookiePolicy isOpen={showCookies} onClose={() => setShowCookies(false)} />
+      <CookiePolicy
+        isOpen={showCookies}
+        onClose={() => setShowCookies(false)}
+      />
       <Licenses isOpen={showLicenses} onClose={() => setShowLicenses(false)} />
     </footer>
   );

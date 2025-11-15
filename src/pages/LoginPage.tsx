@@ -19,6 +19,7 @@ import {
   Loader2,
   CheckCircle2,
 } from "lucide-react";
+import { Footer } from "../components/Footer";
 import React from "react";
 import { toast } from "sonner";
 import { validateEmail, validateRequired } from "../lib/validations";
@@ -171,7 +172,10 @@ export function LoginPage() {
     }
   };
 
+  console.log("🔐 [LoginPage] Componente montado");
+
   return (
+    <>
     <section className="min-h-screen px-4 py-12 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center">
       <div className="max-w-6xl w-full mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -308,12 +312,12 @@ export function LoginPage() {
                         Recordarme
                       </label>
                     </div>
-                    <a
-                      href="#"
+                    <Link
+                      to="/forgot-password"
                       className="text-sm text-blue-600 hover:underline"
                     >
                       ¿Olvidaste tu contraseña?
-                    </a>
+                    </Link>
                   </div>
 
                   <Button
@@ -400,5 +404,7 @@ export function LoginPage() {
         </div>
       </div>
     </section>
+    <Footer />
+    </>
   );
 }

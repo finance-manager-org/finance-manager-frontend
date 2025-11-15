@@ -51,6 +51,7 @@ const TAG_COLORS = [
 ];
 
 export function TagsPage() {
+  console.log("🏷️ [TagsPage] Componente montado");
   const [tags, setTags] = useState<Tag[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);

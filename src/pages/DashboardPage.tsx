@@ -67,6 +67,7 @@ const stats = [
 ];
 
 export function DashboardPage() {
+  console.log("📊 [DashboardPage] Componente montado");
   const { goToHome } = useRedirect();
   return (
     <div className="flex min-h-screen bg-slate-50">

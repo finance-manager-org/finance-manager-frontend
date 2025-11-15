@@ -30,6 +30,7 @@ import {
   getPasswordErrors,
 } from "../lib/validations";
 import { authApi, ApiError } from "../lib/api";
+import { Footer } from "../components/Footer";
 
 const benefits = [
   "Acceso inmediato a todas las funciones",
@@ -41,6 +42,8 @@ const benefits = [
 export function RegisterPage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log("📝 [RegisterPage] Componente montado");
 
   const [formData, setFormData] = useState({
     nickname: "",
@@ -220,6 +223,7 @@ export function RegisterPage() {
   };
 
   return (
+    <>
     <section className="min-h-screen px-4 py-12 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       <div className="max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -500,5 +504,7 @@ export function RegisterPage() {
         </div>
       </div>
     </section>
+    <Footer />
+    </>
   );
 }

@@ -20,9 +20,12 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
       } catch (error) {
         setIsAuthenticated(false);
         // Mostrar notificación solo si no estamos ya en login o registro
-        if (location.pathname !== '/login' && location.pathname !== '/register') {
-          toast.error('Debes iniciar sesión para acceder a esta página', {
-            description: 'Por favor, inicia sesión o regístrate para continuar',
+        if (
+          location.pathname !== "/login" &&
+          location.pathname !== "/register"
+        ) {
+          toast.error("Debes iniciar sesión para acceder a esta página", {
+            description: "Por favor, inicia sesión o regístrate para continuar",
             duration: 4000,
           });
         }

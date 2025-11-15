@@ -1,10 +1,33 @@
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/ui/button';
-import { Card } from '../components/ui/card';
-import { Home, ArrowLeft } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import { Home, ArrowLeft, LogIn, LayoutDashboard } from "lucide-react";
+import { useState, useEffect } from "react";
+import { authApi } from "../lib/api";
 
 export function NotFoundPage() {
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    console.log("🔍 [NotFoundPage] Verificando autenticación");
+    const checkAuth = async () => {
+      try {
+        await authApi.getProfile();
+        console.log("✅ [NotFoundPage] Usuario autenticado");
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.log("❌ [NotFoundPage] Usuario no autenticado");
+        setIsAuthenticated(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  const handleMainAction = () => {
+    console.log("🔄 [NotFoundPage] Redirigiendo a:", isAuthenticated ? "/dashboard" : "/login");
+    navigate(isAuthenticated ? "/dashboard" : "/login");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -21,20 +44,34 @@ export function NotFoundPage() {
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              console.log("⬅️ [NotFoundPage] Regresando a página anterior");
+              navigate(-1);
+            }}
             variant="outline"
             className="flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Regresar
           </Button>
-          <Button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2"
-          >
-            <Home className="w-4 h-4" />
-            Ir al inicio
-          </Button>
+          {isAuthenticated !== null && (
+            <Button
+              onClick={handleMainAction}
+              className="flex items-center gap-2"
+            >
+              {isAuthenticated ? (
+                <>
+                  <LayoutDashboard className="w-4 h-4" />
+                  Ir al Dashboard
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-4 h-4" />
+                  Iniciar Sesión
+                </>
+              )}
+            </Button>
+          )}
         </div>
 
         <div className="pt-4 border-t">

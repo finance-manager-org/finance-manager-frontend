@@ -68,16 +68,21 @@ import { es } from "date-fns/locale";
 import { Badge } from "../components/ui/badge";
 
 export function TransactionsPage() {
+  console.log("💰 [TransactionsPage] Componente montado");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    Transaction[]
+  >([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
-  const [deletingTransaction, setDeletingTransaction] = useState<Transaction | null>(null);
+  const [editingTransaction, setEditingTransaction] =
+    useState<Transaction | null>(null);
+  const [deletingTransaction, setDeletingTransaction] =
+    useState<Transaction | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -135,33 +140,37 @@ export function TransactionsPage() {
       if (!isDialogOpen) return;
 
       // Ctrl+Enter to submit
-      if (e.ctrlKey && e.key === 'Enter') {
+      if (e.ctrlKey && e.key === "Enter") {
         e.preventDefault();
-        const form = document.querySelector('form') as HTMLFormElement;
+        const form = document.querySelector("form") as HTMLFormElement;
         if (form) {
           form.requestSubmit();
         }
       }
 
       // ESC to cancel (with confirmation if there are changes)
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         e.preventDefault();
         handleCancelWithConfirmation();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isDialogOpen, formData]);
 
   const handleCancelWithConfirmation = () => {
-    const hasChanges = 
-      formData.amount !== '' ||
-      formData.description !== '' ||
-      formData.tagId !== '';
+    const hasChanges =
+      formData.amount !== "" ||
+      formData.description !== "" ||
+      formData.tagId !== "";
 
     if (hasChanges && !editingTransaction) {
-      if (window.confirm('¿Estás seguro de cancelar? Se perderán los cambios sin guardar.')) {
+      if (
+        window.confirm(
+          "¿Estás seguro de cancelar? Se perderán los cambios sin guardar."
+        )
+      ) {
         setIsDialogOpen(false);
         resetForm();
       }
@@ -203,9 +212,7 @@ export function TransactionsPage() {
     // Aplicar filtros de API
     if (filters.accountId || filters.tagId || filters.isIncome !== undefined) {
       if (filters.accountId) {
-        result = result.filter(
-          (t) => t.tag?.accountId === filters.accountId
-        );
+        result = result.filter((t) => t.tag?.accountId === filters.accountId);
       }
       if (filters.tagId) {
         result = result.filter((t) => t.tagId === filters.tagId);
@@ -310,7 +317,7 @@ export function TransactionsPage() {
       today.setHours(0, 0, 0, 0);
       const selectedDate = new Date(formData.transactionDate);
       selectedDate.setHours(0, 0, 0, 0);
-      
+
       if (selectedDate > today) {
         newErrors.transactionDate = "La fecha no puede ser futura";
       }
@@ -414,9 +421,7 @@ export function TransactionsPage() {
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
           Transacciones
         </h1>
-        <p className="text-slate-600">
-          Gestiona todos tus ingresos y gastos
-        </p>
+        <p className="text-slate-600">Gestiona todos tus ingresos y gastos</p>
       </div>
 
       {/* Stats Cards */}
@@ -481,9 +486,11 @@ export function TransactionsPage() {
               Filtros
               {hasActiveFilters && (
                 <Badge variant="secondary" className="ml-1">
-                  {[filterAccount, filterTag, filterType].filter(
-                    (f) => f !== "all"
-                  ).length}
+                  {
+                    [filterAccount, filterTag, filterType].filter(
+                      (f) => f !== "all"
+                    ).length
+                  }
                 </Badge>
               )}
             </Button>
@@ -491,7 +498,7 @@ export function TransactionsPage() {
           <PopoverContent className="w-80">
             <div className="space-y-4">
               <h4 className="font-medium">Filtrar por</h4>
-              
+
               <div className="space-y-2">
                 <Label>Cuenta</Label>
                 <Select value={filterAccount} onValueChange={setFilterAccount}>
@@ -501,7 +508,10 @@ export function TransactionsPage() {
                   <SelectContent>
                     <SelectItem value="all">Todas las cuentas</SelectItem>
                     {accounts.map((account) => (
-                      <SelectItem key={account.id} value={account.id.toString()}>
+                      <SelectItem
+                        key={account.id}
+                        value={account.id.toString()}
+                      >
                         {account.name || `Cuenta ${account.id}`}
                       </SelectItem>
                     ))}
@@ -615,7 +625,9 @@ export function TransactionsPage() {
                           {transaction.description || "Sin descripción"}
                         </div>
                         <div className="text-sm text-slate-500 flex items-center gap-2">
-                          <Badge variant="outline">{transaction.tag?.name}</Badge>
+                          <Badge variant="outline">
+                            {transaction.tag?.name}
+                          </Badge>
                           <span>•</span>
                           <span>
                             {format(
@@ -678,7 +690,9 @@ export function TransactionsPage() {
           <form onSubmit={handleSubmit}>
             <DialogHeader>
               <DialogTitle>
-                {editingTransaction ? "Editar Transacción" : "Nueva Transacción"}
+                {editingTransaction
+                  ? "Editar Transacción"
+                  : "Nueva Transacción"}
               </DialogTitle>
               <DialogDescription>
                 {editingTransaction
@@ -704,7 +718,9 @@ export function TransactionsPage() {
                     type="button"
                     variant={!formData.isIncome ? "default" : "outline"}
                     className="flex-1"
-                    onClick={() => setFormData({ ...formData, isIncome: false })}
+                    onClick={() =>
+                      setFormData({ ...formData, isIncome: false })
+                    }
                   >
                     <ArrowDownCircle className="w-4 h-4 mr-2" />
                     Gasto
@@ -768,7 +784,9 @@ export function TransactionsPage() {
                   </PopoverContent>
                 </Popover>
                 {errors.transactionDate && (
-                  <p className="text-sm text-red-500">{errors.transactionDate}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.transactionDate}
+                  </p>
                 )}
               </div>
 

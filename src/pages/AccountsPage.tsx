@@ -48,6 +48,7 @@ import { Sidebar } from "../components/Sidebar";
 import React from "react";
 
 export function AccountsPage() {
+  console.log("🏦 [AccountsPage] Componente montado");
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);

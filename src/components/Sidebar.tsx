@@ -9,6 +9,7 @@ import {
   User,
   Tag,
   ArrowRightLeft,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import React, { useEffect, useState } from "react";
@@ -22,6 +23,7 @@ const menuItems = [
   { icon: FolderKanban, label: "Categorías", path: "/categories" },
   { icon: Wallet, label: "Cuentas", path: "/accounts" },
   { icon: Tag, label: "Etiquetas", path: "/tags" },
+  { icon: BarChart3, label: "Estadísticas", path: "/statistics" },
   { icon: TrendingUp, label: "Reportes", path: "/reports" },
   { icon: User, label: "Gestión de Cuenta", path: "/profile" },
 ];

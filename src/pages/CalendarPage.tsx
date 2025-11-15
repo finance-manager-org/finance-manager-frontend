@@ -1,77 +1,168 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sidebar } from "../components/Sidebar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Calendar } from "../components/ui/calendar";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Plus, Bell, DollarSign, Calendar as CalendarIcon, Trash2 } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, TrendingUp, Wallet, ArrowRight } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import React from "react";
+import { transactionApi, accountApi, authApi, type Transaction, type Account } from "../lib/api";
+import { format, startOfMonth, endOfMonth, isSameDay, parseISO, subMonths } from "date-fns";
+import { es } from "date-fns/locale";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
-// Datos de ejemplo de pagos programados
-const scheduledPayments = [
-  { id: 1, title: "Renta", amount: 1200, date: new Date(2025, 10, 15), category: "Servicios", recurring: "monthly" },
-  { id: 2, title: "Netflix", amount: 12.99, date: new Date(2025, 10, 10), category: "Entretenimiento", recurring: "monthly" },
-  { id: 3, title: "Seguro Auto", amount: 150, date: new Date(2025, 10, 20), category: "Seguros", recurring: "monthly" },
-  { id: 4, title: "Internet", amount: 45, date: new Date(2025, 10, 5), category: "Servicios", recurring: "monthly" },
-  { id: 5, title: "Gym", amount: 30, date: new Date(2025, 10, 1), category: "Salud", recurring: "monthly" },
-];
+interface MonthlyStats {
+  balance: number;
+  income: number;
+  expenses: number;
+  savings: number;
+  balanceChange: number;
+  incomeChange: number;
+  expensesChange: number;
+  savingsChange: number;
+}
 
 export function CalendarPage() {
+  const navigate = useNavigate();
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [payments, setPayments] = useState(scheduledPayments);
-  const [isOpen, setIsOpen] = useState(false);
-  const [newPayment, setNewPayment] = useState({
-    title: "",
-    amount: "",
-    date: new Date(),
-    category: "",
-    recurring: "once"
+  const [selectedAccount, setSelectedAccount] = useState<string>("all");
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
+  const [stats, setStats] = useState<MonthlyStats>({
+    balance: 0,
+    income: 0,
+    expenses: 0,
+    savings: 0,
+    balanceChange: 0,
+    incomeChange: 0,
+    expensesChange: 0,
+    savingsChange: 0,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAddPayment = () => {
-    const payment = {
-      id: payments.length + 1,
-      title: newPayment.title,
-      amount: parseFloat(newPayment.amount),
-      date: newPayment.date,
-      category: newPayment.category,
-      recurring: newPayment.recurring
-    };
-    setPayments([...payments, payment]);
-    setIsOpen(false);
-    setNewPayment({
-      title: "",
-      amount: "",
-      date: new Date(),
-      category: "",
-      recurring: "once"
+  // Load data
+  useEffect(() => {
+    loadData();
+  }, [selectedAccount]);
+
+  const loadData = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Get user profile first to get userId
+      const profileResponse = await authApi.getProfile();
+      const userId = profileResponse.user.id;
+      
+      // Load accounts
+      const accountsData = await accountApi.getAll(userId);
+      setAccounts(accountsData);
+
+      // Load transactions
+      const filters: any = {};
+      if (selectedAccount !== "all") {
+        filters.accountId = parseInt(selectedAccount);
+      }
+      
+      const transactionsData = await transactionApi.getAll(filters);
+      setTransactions(transactionsData);
+
+      // Calculate monthly stats
+      calculateMonthlyStats(transactionsData, accountsData);
+
+      // Get recent transactions (last 5)
+      const sorted = [...transactionsData].sort((a, b) => 
+        new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime()
+      );
+      setRecentTransactions(sorted.slice(0, 5));
+
+    } catch (error) {
+      console.error("Error loading data:", error);
+      toast.error("Error al cargar los datos");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const calculateMonthlyStats = (transactions: Transaction[], accounts: Account[]) => {
+    const now = new Date();
+    const currentMonthStart = startOfMonth(now);
+    const currentMonthEnd = endOfMonth(now);
+    const lastMonthStart = startOfMonth(subMonths(now, 1));
+    const lastMonthEnd = endOfMonth(subMonths(now, 1));
+
+    // Current month
+    const currentMonthTransactions = transactions.filter(t => {
+      const date = parseISO(t.transactionDate);
+      return date >= currentMonthStart && date <= currentMonthEnd;
+    });
+
+    const currentIncome = currentMonthTransactions
+      .filter(t => t.isIncome)
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    const currentExpenses = currentMonthTransactions
+      .filter(t => !t.isIncome)
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    // Last month
+    const lastMonthTransactions = transactions.filter(t => {
+      const date = parseISO(t.transactionDate);
+      return date >= lastMonthStart && date <= lastMonthEnd;
+    });
+
+    const lastIncome = lastMonthTransactions
+      .filter(t => t.isIncome)
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    const lastExpenses = lastMonthTransactions
+      .filter(t => !t.isIncome)
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    // Calculate balance from accounts
+    let totalBalance = 0;
+    if (selectedAccount === "all") {
+      totalBalance = accounts.reduce((sum, acc) => sum + acc.money, 0);
+    } else {
+      const account = accounts.find(acc => acc.id === parseInt(selectedAccount));
+      totalBalance = account?.money || 0;
+    }
+
+    const currentSavings = currentIncome - currentExpenses;
+    const lastSavings = lastIncome - lastExpenses;
+
+    // Calculate percentage changes
+    const incomeChange = lastIncome > 0 ? ((currentIncome - lastIncome) / lastIncome) * 100 : 0;
+    const expensesChange = lastExpenses > 0 ? ((currentExpenses - lastExpenses) / lastExpenses) * 100 : 0;
+    const savingsChange = lastSavings > 0 ? ((currentSavings - lastSavings) / lastSavings) * 100 : 0;
+    const balanceChange = lastIncome > 0 ? ((totalBalance - (totalBalance - currentSavings + lastSavings)) / (totalBalance - currentSavings + lastSavings)) * 100 : 0;
+
+    setStats({
+      balance: totalBalance,
+      income: currentIncome,
+      expenses: currentExpenses,
+      savings: currentSavings,
+      balanceChange,
+      incomeChange,
+      expensesChange,
+      savingsChange,
     });
   };
 
-  const handleDeletePayment = (id: number) => {
-    setPayments(payments.filter(p => p.id !== id));
+  // Get transactions for a specific day
+  const getTransactionsForDay = (day: Date): Transaction[] => {
+    return transactions.filter(t => {
+      const transactionDate = parseISO(t.transactionDate);
+      return isSameDay(transactionDate, day);
+    });
   };
 
-  // Obtener pagos del mes seleccionado
-  const selectedMonth = date?.getMonth() ?? new Date().getMonth();
-  const selectedYear = date?.getFullYear() ?? new Date().getFullYear();
-  const monthPayments = payments.filter(p => 
-    p.date.getMonth() === selectedMonth && p.date.getFullYear() === selectedYear
-  );
-
-  // Calcular total de pagos del mes
-  const totalPayments = monthPayments.reduce((sum, p) => sum + p.amount, 0);
-
-  // Obtener próximos pagos (siguientes 7 días)
-  const today = new Date();
-  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-  const upcomingPayments = payments
-    .filter(p => p.date >= today && p.date <= nextWeek)
-    .sort((a, b) => a.date.getTime() - b.date.getTime());
+  // Handle "Ver más..." click
+  const handleViewMore = (day: Date) => {
+    const dateStr = format(day, "yyyy-MM-dd");
+    navigate(`/transactions?date=${dateStr}`);
+  };
 
   return (
     <div className="flex min-h-screen bg-slate-50">
@@ -82,191 +173,266 @@ export function CalendarPage() {
         <div className="bg-white border-b border-slate-200 px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-slate-900 mb-2">Calendario de Pagos</h1>
-              <p className="text-slate-600">Programa y gestiona tus pagos importantes</p>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">Calendario Financiero</h1>
+              <p className="text-slate-600">Visualiza tus transacciones y rendimiento mensual</p>
             </div>
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <Button className="gap-2">
-                  <Plus className="w-4 h-4" />
-                  Nuevo Pago
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Programar Nuevo Pago</DialogTitle>
-                  <DialogDescription>
-                    Agrega un pago programado para no olvidar fechas importantes
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="title">Nombre del pago</Label>
-                    <Input
-                      id="title"
-                      placeholder="Ej: Renta, Netflix, Seguro..."
-                      value={newPayment.title}
-                      onChange={(e) => setNewPayment({...newPayment, title: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="amount">Monto</Label>
-                    <Input
-                      id="amount"
-                      type="number"
-                      placeholder="0.00"
-                      value={newPayment.amount}
-                      onChange={(e) => setNewPayment({...newPayment, amount: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="category">Categoría</Label>
-                    <Select
-                      value={newPayment.category}
-                      onValueChange={(value) => setNewPayment({...newPayment, category: value})}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona una categoría" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Servicios">Servicios</SelectItem>
-                        <SelectItem value="Entretenimiento">Entretenimiento</SelectItem>
-                        <SelectItem value="Seguros">Seguros</SelectItem>
-                        <SelectItem value="Salud">Salud</SelectItem>
-                        <SelectItem value="Educación">Educación</SelectItem>
-                        <SelectItem value="Otros">Otros</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="recurring">Frecuencia</Label>
-                    <Select
-                      value={newPayment.recurring}
-                      onValueChange={(value) => setNewPayment({...newPayment, recurring: value})}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="once">Una vez</SelectItem>
-                        <SelectItem value="monthly">Mensual</SelectItem>
-                        <SelectItem value="yearly">Anual</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <Button onClick={handleAddPayment} className="w-full">
-                  Agregar Pago
-                </Button>
-              </DialogContent>
-            </Dialog>
+            <div className="w-64">
+              <Select value={selectedAccount} onValueChange={setSelectedAccount}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todas las cuentas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas las cuentas</SelectItem>
+                  {accounts.map(account => (
+                    <SelectItem key={account.id} value={account.id.toString()}>
+                      {account.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-8 space-y-8">
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm text-slate-600">Total del Mes</CardTitle>
-                <DollarSign className="w-4 h-4 text-blue-600" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-slate-900">${totalPayments.toFixed(2)}</div>
-                <p className="text-xs text-slate-500">{monthPayments.length} pagos programados</p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm text-slate-600">Próximos 7 Días</CardTitle>
-                <Bell className="w-4 h-4 text-orange-600" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-slate-900">{upcomingPayments.length} pagos</div>
-                <p className="text-xs text-slate-500">
-                  ${upcomingPayments.reduce((sum, p) => sum + p.amount, 0).toFixed(2)} total
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm text-slate-600">Pagos Recurrentes</CardTitle>
-                <CalendarIcon className="w-4 h-4 text-green-600" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-slate-900">
-                  {payments.filter(p => p.recurring !== "once").length} activos
+        <div className="p-8 space-y-6">
+          {/* KPI Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Balance Total */}
+            <Card className="border-l-4 border-l-blue-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Balance Total
+                  </CardTitle>
+                  <Wallet className="w-5 h-5 text-blue-500" />
                 </div>
-                <p className="text-xs text-slate-500">Automatizados mensualmente</p>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-slate-900">
+                    ${stats.balance.toFixed(2)}
+                  </p>
+                  <div className={`flex items-center text-sm ${stats.balanceChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {stats.balanceChange >= 0 ? (
+                      <ArrowUpRight className="w-4 h-4 mr-1" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4 mr-1" />
+                    )}
+                    <span className="font-medium">
+                      {Math.abs(stats.balanceChange).toFixed(1)}%
+                    </span>
+                    <span className="ml-1 text-slate-500">vs mes anterior</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ingresos del Mes */}
+            <Card className="border-l-4 border-l-green-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Ingresos del Mes
+                  </CardTitle>
+                  <ArrowUpRight className="w-5 h-5 text-green-500" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-slate-900">
+                    ${stats.income.toFixed(2)}
+                  </p>
+                  <div className={`flex items-center text-sm ${stats.incomeChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {stats.incomeChange >= 0 ? (
+                      <ArrowUpRight className="w-4 h-4 mr-1" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4 mr-1" />
+                    )}
+                    <span className="font-medium">
+                      {Math.abs(stats.incomeChange).toFixed(1)}%
+                    </span>
+                    <span className="ml-1 text-slate-500">vs mes anterior</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Gastos del Mes */}
+            <Card className="border-l-4 border-l-red-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Gastos del Mes
+                  </CardTitle>
+                  <ArrowDownRight className="w-5 h-5 text-red-500" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-slate-900">
+                    ${stats.expenses.toFixed(2)}
+                  </p>
+                  <div className={`flex items-center text-sm ${stats.expensesChange <= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {stats.expensesChange <= 0 ? (
+                      <ArrowDownRight className="w-4 h-4 mr-1" />
+                    ) : (
+                      <ArrowUpRight className="w-4 h-4 mr-1" />
+                    )}
+                    <span className="font-medium">
+                      {Math.abs(stats.expensesChange).toFixed(1)}%
+                    </span>
+                    <span className="ml-1 text-slate-500">vs mes anterior</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ahorro */}
+            <Card className="border-l-4 border-l-purple-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Ahorro
+                  </CardTitle>
+                  <TrendingUp className="w-5 h-5 text-purple-500" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-slate-900">
+                    ${stats.savings.toFixed(2)}
+                  </p>
+                  <div className={`flex items-center text-sm ${stats.savingsChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {stats.savingsChange >= 0 ? (
+                      <ArrowUpRight className="w-4 h-4 mr-1" />
+                    ) : (
+                      <ArrowDownRight className="w-4 h-4 mr-1" />
+                    )}
+                    <span className="font-medium">
+                      {Math.abs(stats.savingsChange).toFixed(1)}%
+                    </span>
+                    <span className="ml-1 text-slate-500">vs mes anterior</span>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Calendar */}
+            {/* Calendar - Takes 2 columns */}
             <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle className="text-slate-900">Calendario</CardTitle>
-                <CardDescription>Visualiza tus pagos programados</CardDescription>
+                <CardTitle className="text-xl font-bold text-slate-900">Calendario de Transacciones</CardTitle>
+                <p className="text-sm text-slate-600 mt-1">Haz clic en un día para ver las transacciones</p>
               </CardHeader>
-              <CardContent className="flex justify-center">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  className="rounded-md border"
-                  modifiers={{
-                    payment: monthPayments.map(p => p.date)
-                  }}
-                  modifiersStyles={{
-                    payment: {
-                      backgroundColor: "#dbeafe",
-                      color: "#1e40af",
-                      fontWeight: "bold"
-                    }
-                  }}
-                />
+              <CardContent>
+                <div className="flex flex-col items-center">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    className="rounded-md border w-full"
+                    locale={es}
+                  />
+                  
+                  {/* Transactions for selected day */}
+                  {date && (
+                    <div className="w-full mt-6 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold text-slate-900">
+                          {format(date, "d 'de' MMMM, yyyy", { locale: es })}
+                        </h3>
+                        <Badge variant="secondary">
+                          {getTransactionsForDay(date).length} transacciones
+                        </Badge>
+                      </div>
+                      
+                      {getTransactionsForDay(date).length === 0 ? (
+                        <p className="text-sm text-slate-500 text-center py-8">
+                          No hay transacciones en este día
+                        </p>
+                      ) : (
+                        <>
+                          {getTransactionsForDay(date).slice(0, 5).map(transaction => (
+                            <div
+                              key={transaction.id}
+                              className={`p-3 bg-slate-50 rounded-lg border-l-4 ${
+                                transaction.isIncome ? 'border-l-green-500' : 'border-l-red-500'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                  <p className="font-medium text-slate-900">
+                                    {transaction.description}
+                                  </p>
+                                  <p className="text-xs text-slate-500 mt-1">
+                                    {transaction.tag?.account?.name || "Sin cuenta"} • {transaction.tag?.name || "Sin etiqueta"}
+                                  </p>
+                                </div>
+                                <div className={`text-right ${transaction.isIncome ? 'text-green-600' : 'text-red-600'}`}>
+                                  <p className="font-bold">
+                                    {transaction.isIncome ? '+' : '-'}${transaction.amount.toFixed(2)}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          
+                          {getTransactionsForDay(date).length > 5 && (
+                            <button
+                              onClick={() => handleViewMore(date)}
+                              className="w-full py-2 text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center justify-center gap-1 hover:bg-blue-50 rounded-lg transition-colors"
+                            >
+                              Ver más...
+                              <ArrowRight className="w-4 h-4" />
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
 
-            {/* Upcoming Payments */}
+            {/* Recent Transactions - Takes 1 column */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-slate-900">Próximos Pagos</CardTitle>
-                <CardDescription>Siguientes 7 días</CardDescription>
+                <CardTitle className="text-xl font-bold text-slate-900">Transacciones Recientes</CardTitle>
+                <p className="text-sm text-slate-600 mt-1">Últimos 5 movimientos</p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {upcomingPayments.length === 0 ? (
-                    <p className="text-sm text-slate-500 text-center py-4">
-                      No hay pagos programados
+                  {isLoading ? (
+                    <p className="text-sm text-slate-500 text-center py-8">Cargando...</p>
+                  ) : recentTransactions.length === 0 ? (
+                    <p className="text-sm text-slate-500 text-center py-8">
+                      No hay transacciones recientes
                     </p>
                   ) : (
-                    upcomingPayments.map((payment) => (
+                    recentTransactions.map(transaction => (
                       <div
-                        key={payment.id}
-                        className="p-3 bg-slate-50 rounded-lg space-y-2"
+                        key={transaction.id}
+                        className={`p-3 bg-slate-50 rounded-lg border-l-4 ${
+                          transaction.isIncome ? 'border-l-green-500' : 'border-l-red-500'
+                        }`}
                       >
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <div className="text-sm text-slate-900">{payment.title}</div>
-                            <div className="text-xs text-slate-500">
-                              {payment.date.toLocaleDateString('es-ES', { 
-                                day: 'numeric', 
-                                month: 'short' 
-                              })}
-                            </div>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-slate-900 truncate">
+                              {transaction.description}
+                            </p>
+                            <p className="text-xs text-slate-500 mt-1">
+                              {format(parseISO(transaction.transactionDate), "d MMM", { locale: es })} • {transaction.tag?.name || "Sin etiqueta"}
+                            </p>
                           </div>
-                          <div className="text-sm text-slate-900">
-                            ${payment.amount.toFixed(2)}
+                          <div className={`text-right font-bold whitespace-nowrap ${
+                            transaction.isIncome ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {transaction.isIncome ? '+' : '-'}${transaction.amount.toFixed(2)}
                           </div>
                         </div>
-                        <Badge variant="secondary" className="text-xs">
-                          {payment.category}
-                        </Badge>
                       </div>
                     ))
                   )}
@@ -274,60 +440,6 @@ export function CalendarPage() {
               </CardContent>
             </Card>
           </div>
-
-          {/* All Payments List */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-slate-900">Todos los Pagos Programados</CardTitle>
-              <CardDescription>Gestiona tus pagos recurrentes y únicos</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {monthPayments.map((payment) => (
-                  <div
-                    key={payment.id}
-                    className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <DollarSign className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <div className="text-slate-900">{payment.title}</div>
-                        <div className="flex items-center gap-2 text-sm text-slate-500">
-                          <span>{payment.category}</span>
-                          <span>•</span>
-                          <span>
-                            {payment.date.toLocaleDateString('es-ES', {
-                              day: 'numeric',
-                              month: 'long',
-                              year: 'numeric'
-                            })}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <div className="text-slate-900">${payment.amount.toFixed(2)}</div>
-                        <Badge variant="outline" className="text-xs">
-                          {payment.recurring === "monthly" ? "Mensual" : 
-                           payment.recurring === "yearly" ? "Anual" : "Una vez"}
-                        </Badge>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeletePayment(payment.id)}
-                      >
-                        <Trash2 className="w-4 h-4 text-red-600" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </main>
     </div>

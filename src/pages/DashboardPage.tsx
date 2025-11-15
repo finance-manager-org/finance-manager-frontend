@@ -103,7 +103,7 @@ export function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-slate-900 mb-1">{stat.value}</div>
-                    <div className="flex items-center gap-1 text-sm">
+                    <div className="flex items-center gap-3 text-sm">
                       {stat.trend === "up" ? (
                         <ArrowUpRight className="w-4 h-4 text-green-600" />
                       ) : (

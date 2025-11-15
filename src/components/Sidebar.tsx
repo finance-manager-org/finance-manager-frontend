@@ -7,6 +7,7 @@ import {
   Wallet,
   FolderKanban,
   User,
+  Tag,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import React, { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ const menuItems = [
   { icon: Calendar, label: "Calendario", path: "/calendar" },
   { icon: FolderKanban, label: "Categorías", path: "/categories" },
   { icon: Wallet, label: "Cuentas", path: "/accounts" },
+  { icon: Tag, label: "Etiquetas", path: "/tags" },
   { icon: TrendingUp, label: "Reportes", path: "/reports" },
   { icon: User, label: "Gestión de Cuenta", path: "/profile" },
 ];

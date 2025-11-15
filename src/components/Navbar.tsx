@@ -47,9 +47,13 @@ export function Navbar() {
   };
 
   // Mostrar en landing page, login, register y articles pages
-  const shouldShowNavbar = ["/", "/login", "/register", "/signup", "/articles"].includes(
-    location.pathname
-  );
+  const shouldShowNavbar = [
+    "/",
+    "/login",
+    "/register",
+    "/signup",
+    "/articles",
+  ].includes(location.pathname);
 
   if (!shouldShowNavbar) {
     return null;

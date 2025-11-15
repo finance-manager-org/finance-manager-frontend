@@ -419,4 +419,94 @@ export const accountApi = {
   },
 };
 
+/**
+ * Tag interfaces
+ */
+export interface Tag {
+  id: number;
+  name: string;
+  description: string | null;
+  accountId: number;
+  account?: {
+    id: number;
+    name: string | null;
+  };
+  transactions?: Array<{
+    id: number;
+  }>;
+}
+
+export interface CreateTagRequest {
+  name: string;
+  description?: string;
+  accountId: number;
+}
+
+export interface UpdateTagRequest {
+  name?: string;
+  description?: string;
+}
+
+/**
+ * Tag API endpoints
+ */
+export const tagApi = {
+  /**
+   * POST /api/tag
+   * Create a new tag
+   */
+  create: async (
+    data: CreateTagRequest
+  ): Promise<{ message: string; tag: Tag }> => {
+    return apiRequest<{ message: string; tag: Tag }>("/api/tag", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * GET /api/tag
+   * Get all tags for the authenticated user
+   */
+  getAll: async (): Promise<Tag[]> => {
+    return apiRequest<Tag[]>("/api/tag", {
+      method: "GET",
+    });
+  },
+
+  /**
+   * GET /api/tag/account/:accountId
+   * Get all tags for a specific account
+   */
+  getByAccount: async (accountId: number): Promise<Tag[]> => {
+    return apiRequest<Tag[]>(`/api/tag/account/${accountId}`, {
+      method: "GET",
+    });
+  },
+
+  /**
+   * PUT /api/tag/:id
+   * Update tag
+   */
+  update: async (
+    id: number,
+    data: UpdateTagRequest
+  ): Promise<{ message: string; tag: Tag }> => {
+    return apiRequest<{ message: string; tag: Tag }>(`/api/tag/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * DELETE /api/tag/:id
+   * Delete tag
+   */
+  delete: async (id: number): Promise<{ message: string }> => {
+    return apiRequest<{ message: string }>(`/api/tag/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
 export { API_BASE_URL };

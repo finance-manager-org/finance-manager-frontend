@@ -509,4 +509,151 @@ export const tagApi = {
   },
 };
 
+/**
+ * Transaction interfaces
+ */
+export interface Transaction {
+  id: number;
+  amount: number;
+  isIncome: boolean;
+  transactionDate: string;
+  description: string | null;
+  tagId: number;
+  tag?: Tag;
+}
+
+export interface CreateTransactionRequest {
+  amount: number;
+  isIncome: boolean;
+  transactionDate: string;
+  description?: string;
+  tagId: number;
+}
+
+export interface UpdateTransactionRequest {
+  amount?: number;
+  isIncome?: boolean;
+  transactionDate?: string;
+  description?: string;
+  tagId?: number;
+}
+
+export interface TransactionFilters {
+  accountId?: number;
+  tagId?: number;
+  isIncome?: boolean;
+  startDate?: string;
+  endDate?: string;
+}
+
+/**
+ * Transaction API endpoints
+ */
+export const transactionApi = {
+  /**
+   * POST /api/transaction
+   * Create a new transaction
+   */
+  create: async (
+    data: CreateTransactionRequest
+  ): Promise<{ message: string; transaction: Transaction }> => {
+    return apiRequest<{ message: string; transaction: Transaction }>(
+      "/api/transaction",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    );
+  },
+
+  /**
+   * GET /api/transaction
+   * Get all transactions with optional filters
+   */
+  getAll: async (filters?: TransactionFilters): Promise<Transaction[]> => {
+    const params = new URLSearchParams();
+
+    if (filters) {
+      if (filters.accountId !== undefined)
+        params.append("accountId", filters.accountId.toString());
+      if (filters.tagId !== undefined)
+        params.append("tagId", filters.tagId.toString());
+      if (filters.isIncome !== undefined)
+        params.append("isIncome", filters.isIncome.toString());
+      if (filters.startDate) params.append("startDate", filters.startDate);
+      if (filters.endDate) params.append("endDate", filters.endDate);
+    }
+
+    const queryString = params.toString();
+    const url = queryString ? `/api/transaction?${queryString}` : "/api/transaction";
+
+    return apiRequest<Transaction[]>(url, {
+      method: "GET",
+    });
+  },
+
+  /**
+   * GET /api/transaction/:id
+   * Get a transaction by ID
+   */
+  getById: async (id: number): Promise<Transaction> => {
+    return apiRequest<Transaction>(`/api/transaction/${id}`, {
+      method: "GET",
+    });
+  },
+
+  /**
+   * GET /api/transaction/date/:date
+   * Get transactions by specific date
+   */
+  getByDate: async (date: string): Promise<Transaction[]> => {
+    return apiRequest<Transaction[]>(`/api/transaction/date/${date}`, {
+      method: "GET",
+    });
+  },
+
+  /**
+   * GET /api/transaction/type/:type/date/:date
+   * Get transactions by type (income/expense) and date
+   */
+  getByTypeAndDate: async (
+    type: "income" | "expense",
+    date: string
+  ): Promise<Transaction[]> => {
+    return apiRequest<Transaction[]>(
+      `/api/transaction/type/${type}/date/${date}`,
+      {
+        method: "GET",
+      }
+    );
+  },
+
+  /**
+   * PUT /api/transaction/:id
+   * Update transaction
+   */
+  update: async (
+    id: number,
+    data: UpdateTransactionRequest
+  ): Promise<{ message: string; transaction: Transaction }> => {
+    return apiRequest<{ message: string; transaction: Transaction }>(
+      `/api/transaction/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }
+    );
+  },
+
+  /**
+   * DELETE /api/transaction/:id
+   * Delete transaction
+   */
+  delete: async (id: number): Promise<{ message: string }> => {
+    return apiRequest<{ message: string }>(`/api/transaction/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
 export { API_BASE_URL };

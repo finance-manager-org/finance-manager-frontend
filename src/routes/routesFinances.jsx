@@ -6,6 +6,7 @@ import RegisterPage from '../pages/RegisterPage';
 import CalendarPage from '../pages/CalendarPage';
 import DashboardPage from '../pages/DashboardPage';
 import { TagsPage } from '../pages/TagsPage';
+import { TransactionsPage } from '../pages/TransactionsPage';
 
 const RoutesPages = () => {
     return(
@@ -17,6 +18,7 @@ const RoutesPages = () => {
                 <Route path='/calendar' element={<CalendarPage/>}/>
                 <Route path='/dashboard' element={<DashboardPage/>}/>
                 <Route path='/tags' element={<TagsPage/>}/>
+                <Route path='/transactions' element={<TransactionsPage/>}/>
             </Routes>
         </BrowserRouter>
     )

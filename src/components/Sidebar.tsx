@@ -8,6 +8,7 @@ import {
   FolderKanban,
   User,
   Tag,
+  ArrowRightLeft,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ import { toast } from "sonner";
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: Calendar, label: "Calendario", path: "/calendar" },
+  { icon: ArrowRightLeft, label: "Transacciones", path: "/transactions" },
   { icon: FolderKanban, label: "Categorías", path: "/categories" },
   { icon: Wallet, label: "Cuentas", path: "/accounts" },
   { icon: Tag, label: "Etiquetas", path: "/tags" },

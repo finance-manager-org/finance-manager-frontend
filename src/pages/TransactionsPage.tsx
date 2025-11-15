@@ -103,6 +103,23 @@ export function TransactionsPage() {
     tagId: "",
   });
 
+  const resetForm = () => {
+    setFormData({
+      amount: "",
+      isIncome: true,
+      transactionDate: new Date(),
+      description: "",
+      tagId: "",
+    });
+    setErrors({
+      amount: "",
+      transactionDate: "",
+      description: "",
+      tagId: "",
+    });
+    setEditingTransaction(null);
+  };
+
   useEffect(() => {
     loadData();
   }, []);
@@ -110,6 +127,49 @@ export function TransactionsPage() {
   useEffect(() => {
     applyFilters();
   }, [transactions, filters, searchQuery]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle shortcuts when dialog is open
+      if (!isDialogOpen) return;
+
+      // Ctrl+Enter to submit
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        const form = document.querySelector('form') as HTMLFormElement;
+        if (form) {
+          form.requestSubmit();
+        }
+      }
+
+      // ESC to cancel (with confirmation if there are changes)
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        handleCancelWithConfirmation();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDialogOpen, formData]);
+
+  const handleCancelWithConfirmation = () => {
+    const hasChanges = 
+      formData.amount !== '' ||
+      formData.description !== '' ||
+      formData.tagId !== '';
+
+    if (hasChanges && !editingTransaction) {
+      if (window.confirm('¿Estás seguro de cancelar? Se perderán los cambios sin guardar.')) {
+        setIsDialogOpen(false);
+        resetForm();
+      }
+    } else {
+      setIsDialogOpen(false);
+      resetForm();
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -245,8 +305,15 @@ export function TransactionsPage() {
 
     if (!formData.transactionDate) {
       newErrors.transactionDate = "La fecha es requerida";
-    } else if (formData.transactionDate > new Date()) {
-      newErrors.transactionDate = "La fecha no puede ser futura";
+    } else {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(formData.transactionDate);
+      selectedDate.setHours(0, 0, 0, 0);
+      
+      if (selectedDate > today) {
+        newErrors.transactionDate = "La fecha no puede ser futura";
+      }
     }
 
     if (amount > 1000 && !formData.description.trim()) {
@@ -765,7 +832,7 @@ export function TransactionsPage() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setIsDialogOpen(false)}
+                onClick={handleCancelWithConfirmation}
                 disabled={submitting}
               >
                 Cancelar

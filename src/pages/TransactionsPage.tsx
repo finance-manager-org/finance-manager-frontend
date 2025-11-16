@@ -49,6 +49,7 @@ import {
   transactionApi,
   tagApi,
   accountApi,
+  authApi,
   Transaction,
   Tag,
   Account,
@@ -185,28 +186,28 @@ export function TransactionsPage() {
     console.log("💰 [TransactionsPage] Iniciando carga de datos");
     try {
       setLoading(true);
-      const [transactionsData, tagsData, profileData] = await Promise.all([
+      
+      // Load profile first to get userId
+      const profileData = await authApi.getProfile();
+      console.log("💰 [TransactionsPage] Perfil cargado:", profileData.user);
+
+      // Load other data in parallel
+      const [transactionsData, tagsData, accountsData] = await Promise.all([
         transactionApi.getAll(),
         tagApi.getAll(),
-        fetch("/api/auth/profile", { credentials: "include" }).then((r) =>
-          r.json()
-        ),
+        accountApi.getAll(profileData.user.id),
       ]);
 
       console.log("💰 [TransactionsPage] Tags cargadas:", tagsData.length, tagsData);
       console.log("💰 [TransactionsPage] Transacciones cargadas:", transactionsData.length);
-
-      if (profileData.user) {
-        const userAccounts = await accountApi.getAll(profileData.user.id);
-        console.log("💰 [TransactionsPage] Cuentas cargadas:", userAccounts.length, userAccounts);
-        setAccounts(userAccounts);
-      }
+      console.log("💰 [TransactionsPage] Cuentas cargadas:", accountsData.length, accountsData);
 
       setTransactions(transactionsData);
       setTags(tagsData);
+      setAccounts(accountsData);
     } catch (error) {
-      console.error("Error loading data:", error);
-      toast.error("Error al cargar los datos");
+      console.error("💰 [TransactionsPage] Error loading data:", error);
+      toast.error("Error al cargar los datos. Por favor, verifica tu conexión.");
     } finally {
       setLoading(false);
     }
@@ -433,51 +434,51 @@ export function TransactionsPage() {
   return (
     <>
       <Navbar />
-      <div className="pt-16">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 pt-16">
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+        <h1 className="text-4xl font-bold text-slate-900 mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
           Transacciones
         </h1>
-        <p className="text-slate-600">Gestiona todos tus ingresos y gastos</p>
+        <p className="text-slate-600 text-lg">Gestiona todos tus ingresos y gastos</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-300">
           <CardHeader className="pb-3">
-            <CardDescription>Total Transacciones</CardDescription>
-            <CardTitle className="text-3xl">{stats.total}</CardTitle>
+            <CardDescription className="text-slate-600">Total Transacciones</CardDescription>
+            <CardTitle className="text-4xl font-bold text-slate-900">{stats.total}</CardTitle>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-300 border-green-100 bg-gradient-to-br from-green-50 to-white">
           <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-1">
+            <CardDescription className="flex items-center gap-1 text-green-700">
               <ArrowUpCircle className="w-4 h-4 text-green-600" />
               Ingresos
             </CardDescription>
-            <CardTitle className="text-3xl text-green-600">
+            <CardTitle className="text-4xl font-bold text-green-600">
               ${stats.income.toFixed(2)}
             </CardTitle>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-300 border-red-100 bg-gradient-to-br from-red-50 to-white">
           <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-1">
+            <CardDescription className="flex items-center gap-1 text-red-700">
               <ArrowDownCircle className="w-4 h-4 text-red-600" />
               Gastos
             </CardDescription>
-            <CardTitle className="text-3xl text-red-600">
+            <CardTitle className="text-4xl font-bold text-red-600">
               ${stats.expense.toFixed(2)}
             </CardTitle>
           </CardHeader>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-300 border-blue-100 bg-gradient-to-br from-blue-50 to-white">
           <CardHeader className="pb-3">
-            <CardDescription>Balance</CardDescription>
+            <CardDescription className="text-slate-600">Balance</CardDescription>
             <CardTitle
-              className={`text-3xl ${
+              className={`text-4xl font-bold ${
                 stats.balance >= 0 ? "text-blue-600" : "text-red-600"
               }`}
             >
@@ -490,21 +491,21 @@ export function TransactionsPage() {
       {/* Filters and Search */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
           <Input
             placeholder="Buscar por descripción, etiqueta o monto..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="pl-11 h-11 text-base shadow-sm hover:shadow-md transition-shadow"
           />
         </div>
         <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="gap-2">
-              <Filter className="w-4 h-4" />
+            <Button variant="outline" className="gap-2 h-11 px-6 shadow-sm hover:shadow-md transition-all">
+              <Filter className="w-5 h-5" />
               Filtros
               {hasActiveFilters && (
-                <Badge variant="secondary" className="ml-1">
+                <Badge variant="secondary" className="ml-1 bg-blue-100 text-blue-700">
                   {
                     [filterAccount, filterTag, filterType].filter(
                       (f) => f !== "all"
@@ -514,57 +515,79 @@ export function TransactionsPage() {
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-80">
+          <PopoverContent className="w-80 shadow-xl">
             <div className="space-y-4">
-              <h4 className="font-medium">Filtrar por</h4>
+              <h4 className="font-semibold text-lg text-slate-900">Filtrar por</h4>
 
               <div className="space-y-2">
-                <Label>Cuenta</Label>
+                <Label className="text-sm font-semibold text-slate-700">Cuenta</Label>
                 <Select value={filterAccount} onValueChange={setFilterAccount}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue placeholder="Todas las cuentas" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todas las cuentas</SelectItem>
-                    {accounts.map((account) => (
-                      <SelectItem
-                        key={account.id}
-                        value={account.id.toString()}
-                      >
-                        {account.name || `Cuenta ${account.id}`}
+                    {accounts.length > 0 ? (
+                      accounts.map((account) => (
+                        <SelectItem
+                          key={account.id}
+                          value={account.id.toString()}
+                        >
+                          {account.name || `Cuenta ${account.id}`}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no-accounts" disabled>
+                        No hay cuentas disponibles
                       </SelectItem>
-                    ))}
+                    )}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label>Etiqueta</Label>
+                <Label className="text-sm font-semibold text-slate-700">Etiqueta</Label>
                 <Select value={filterTag} onValueChange={setFilterTag}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue placeholder="Todas las etiquetas" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todas las etiquetas</SelectItem>
-                    {tags.map((tag) => (
-                      <SelectItem key={tag.id} value={tag.id.toString()}>
-                        {tag.name} - {tag.account?.name || 'Sin cuenta'}
+                    {tags.length > 0 ? (
+                      tags.map((tag) => (
+                        <SelectItem key={tag.id} value={tag.id.toString()}>
+                          {tag.name} {tag.account?.name ? `- ${tag.account.name}` : ''}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no-tags" disabled>
+                        No hay etiquetas disponibles
                       </SelectItem>
-                    ))}
+                    )}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label>Tipo</Label>
+                <Label className="text-sm font-semibold text-slate-700">Tipo</Label>
                 <Select value={filterType} onValueChange={setFilterType}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue placeholder="Todos" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="income">Ingresos</SelectItem>
-                    <SelectItem value="expense">Gastos</SelectItem>
+                    <SelectItem value="income">
+                      <span className="flex items-center gap-2">
+                        <ArrowUpCircle className="w-4 h-4 text-green-600" />
+                        Ingresos
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="expense">
+                      <span className="flex items-center gap-2">
+                        <ArrowDownCircle className="w-4 h-4 text-red-600" />
+                        Gastos
+                      </span>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -620,33 +643,43 @@ export function TransactionsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {filteredTransactions.map((transaction) => (
             <Card
               key={transaction.id}
-              className={`hover:shadow-md transition-shadow ${
+              className={`hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 ${
                 transaction.isIncome
-                  ? "border-l-4 border-l-green-500"
-                  : "border-l-4 border-l-red-500"
+                  ? "border-l-4 border-l-green-500 hover:border-l-green-600"
+                  : "border-l-4 border-l-red-500 hover:border-l-red-600"
               }`}
             >
-              <CardContent className="p-4">
+              <CardContent className="p-5">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      {transaction.isIncome ? (
-                        <ArrowUpCircle className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <ArrowDownCircle className="w-5 h-5 text-red-600" />
-                      )}
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`p-2 rounded-lg ${
+                        transaction.isIncome ? "bg-green-50" : "bg-red-50"
+                      }`}>
+                        {transaction.isIncome ? (
+                          <ArrowUpCircle className="w-5 h-5 text-green-600" />
+                        ) : (
+                          <ArrowDownCircle className="w-5 h-5 text-red-600" />
+                        )}
+                      </div>
                       <div>
-                        <div className="font-semibold text-slate-900">
+                        <div className="font-semibold text-slate-900 text-lg">
                           {transaction.description || "Sin descripción"}
                         </div>
-                        <div className="text-sm text-slate-500 flex items-center gap-2">
-                          <Badge variant="outline">
+                        <div className="text-sm text-slate-500 flex items-center gap-2 mt-1">
+                          <Badge variant="outline" className="font-medium">
                             {transaction.tag?.name}
                           </Badge>
+                          {transaction.tag?.account?.name && (
+                            <>
+                              <span>•</span>
+                              <span className="text-xs">{transaction.tag.account.name}</span>
+                            </>
+                          )}
                           <span>•</span>
                           <span>
                             {format(
@@ -661,7 +694,7 @@ export function TransactionsPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div
-                      className={`text-2xl font-bold ${
+                      className={`text-3xl font-bold ${
                         transaction.isIncome ? "text-green-600" : "text-red-600"
                       }`}
                     >
@@ -672,7 +705,7 @@ export function TransactionsPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-9 w-9 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                         onClick={() => openEditDialog(transaction)}
                       >
                         <Edit2 className="w-4 h-4" />
@@ -680,7 +713,7 @@ export function TransactionsPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="h-9 w-9 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
                         onClick={() => openDeleteDialog(transaction)}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -697,11 +730,11 @@ export function TransactionsPage() {
       {/* Floating Action Button - Mejorado para mobile */}
       <Button
         onClick={openCreateDialog}
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 h-14 w-14 rounded-full shadow-2xl hover:shadow-3xl transition-all z-50"
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 h-16 w-16 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 active:scale-95 z-50 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
         size="icon"
         aria-label="Agregar transacción"
       >
-        <Plus className="w-6 h-6" />
+        <Plus className="w-7 h-7" />
       </Button>
 
       {/* Create/Edit Dialog */}

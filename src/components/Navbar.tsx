@@ -166,55 +166,36 @@ export function Navbar() {
               to="/dashboard"
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center shadow-md">
-                <Wallet className="w-5 h-5 text-white" />
-              </div>
+              {/* Cargamos el favicon.svg */}
+              <img src="../../favicon.svg" alt="Finanz logo" className="w-6 h-6" />
+
               <span className="hidden sm:block text-base font-semibold text-slate-900">
-                FinanzasApp
+                Finanz
               </span>
             </Link>
           </div>
 
-          {/* Desktop Navigation - Solo visible en lg */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {dashboardMenuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
-                    isActive
-                      ? "bg-blue-50 text-blue-700 font-medium"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
+         
 
           {/* Right Section */}
           <div className="flex items-center gap-2">
-            {/* Hamburger Button - Solo visible en mobile/tablet */}
-            <button
-              onClick={() => {
-                console.log("🍔 [Navbar] Toggle menú móvil:", !isMenuOpen);
-                setIsMenuOpen(!isMenuOpen);
-              }}
-              className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
-              aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5 text-slate-700" />
-              ) : (
-                <Menu className="w-5 h-5 text-slate-700" />
-              )}
-            </button>
+            {/* Hamburger Button - Solo visible en mobile/tablet y cuando está autenticado */}
+            {isAuthenticated && (
+              <button
+                onClick={() => {
+                  console.log("🍔 [Navbar] Toggle menú móvil:", !isMenuOpen);
+                  setIsMenuOpen(!isMenuOpen);
+                }}
+                className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+                aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+              >
+                {isMenuOpen ? (
+                  <X className="w-5 h-5 text-slate-700" />
+                ) : (
+                  <Menu className="w-5 h-5 text-slate-700" />
+                )}
+              </button>
+            )}
 
             {/* User Profile */}
             {isLoading ? (
@@ -276,7 +257,7 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu - Solo se muestra cuando isMenuOpen es true Y en mobile/tablet */}
+        {/* Mobile Menu - Aparece desde la derecha como el user menu */}
         {isMenuOpen && (
           <>
             <div
@@ -286,8 +267,8 @@ export function Navbar() {
                 setIsMenuOpen(false);
               }}
             />
-            <div className="lg:hidden fixed top-16 left-0 right-0 bg-white border-b border-slate-200 shadow-xl z-40 max-h-[calc(100vh-4rem)] overflow-y-auto">
-              <div className="p-4 space-y-1">
+            <div className="lg:hidden fixed top-16 right-4 w-72 bg-white rounded-lg shadow-xl border border-slate-200 z-50 max-h-[calc(100vh-5rem)] overflow-y-auto">
+              <div className="p-3 space-y-1">
                 {dashboardMenuItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.path;
@@ -331,16 +312,24 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Link
+              to="/"
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
               <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center shadow-md">
                 <TrendingUp className="w-5 h-5 text-white" />
               </div>
-              <span className="text-lg font-semibold text-slate-900">Finance Manager</span>
+              <span className="text-lg font-semibold text-slate-900">
+                Finance Manager
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6">
-              <Link to="/articles" className="text-slate-600 hover:text-slate-900 transition-colors">
+              <Link
+                to="/articles"
+                className="text-slate-600 hover:text-slate-900 transition-colors"
+              >
                 Artículos
               </Link>
               <button
@@ -390,7 +379,11 @@ export function Navbar() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
 
@@ -416,7 +409,10 @@ export function Navbar() {
                   <>
                     {isAuthenticated ? (
                       <>
-                        <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                        <Link
+                          to="/dashboard"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
                           <Button
                             variant="ghost"
                             size="sm"
@@ -447,7 +443,10 @@ export function Navbar() {
                             Iniciar Sesión
                           </Button>
                         </Link>
-                        <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                        <Link
+                          to="/register"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
                           <Button size="sm" className="w-full">
                             Registrarse
                           </Button>

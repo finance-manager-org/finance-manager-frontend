@@ -158,167 +158,161 @@ export function Navbar() {
   // DASHBOARD NAVBAR
   if (isDashboardRoute && isAuthenticated) {
     return (
-      <>
-        {/* Navbar Container */}
-        <nav className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 shadow-sm z-40">
-          <div className="h-full px-4 flex items-center justify-between max-w-full">
-            {/* Left Section - Logo & Brand */}
-            <div className="flex items-center gap-3">
-              {/* Hamburger Button */}
-              <button
-                onClick={() => {
-                  console.log("🍔 [Navbar] Toggle menú móvil:", !isMenuOpen);
-                  setIsMenuOpen(!isMenuOpen);
-                }}
-                className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
-                aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-              >
-                {isMenuOpen ? (
-                  <X className="w-6 h-6 text-slate-700" />
-                ) : (
-                  <Menu className="w-6 h-6 text-slate-700" />
-                )}
-              </button>
+      <header className="fixed top-0 left-0 right-0 w-full bg-white border-b border-slate-200 shadow-sm z-50">
+        <div className="max-w-full mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center shadow-md">
+                <Wallet className="w-5 h-5 text-white" />
+              </div>
+              <span className="hidden sm:block text-base font-semibold text-slate-900">
+                FinanzasApp
+              </span>
+            </Link>
+          </div>
 
-              {/* Logo & Brand */}
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-              >
-                <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center shadow-md">
-                  <Wallet className="w-5 h-5 text-white" />
-                </div>
-                <div className="hidden sm:block">
-                  <div className="text-base font-semibold text-slate-900">
-                    FinanzasApp
+          {/* Desktop Navigation - Solo visible en lg */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {dashboardMenuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                    isActive
+                      ? "bg-blue-50 text-blue-700 font-medium"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right Section */}
+          <div className="flex items-center gap-2">
+            {/* Hamburger Button - Solo visible en mobile/tablet */}
+            <button
+              onClick={() => {
+                console.log("🍔 [Navbar] Toggle menú móvil:", !isMenuOpen);
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            >
+              {isMenuOpen ? (
+                <X className="w-5 h-5 text-slate-700" />
+              ) : (
+                <Menu className="w-5 h-5 text-slate-700" />
+              )}
+            </button>
+
+            {/* User Profile */}
+            {isLoading ? (
+              <div className="w-8 h-8 bg-slate-200 rounded-full animate-pulse" />
+            ) : user ? (
+              <div className="user-menu-container relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md">
+                    {getInitials(user.nickname)}
                   </div>
-                </div>
-              </Link>
-            </div>
-
-            {/* Right Section - User Profile */}
-            <div className="flex items-center gap-3">
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-slate-200 rounded-full animate-pulse" />
-                </div>
-              ) : user ? (
-                <div className="user-menu-container relative">
-                  <button
-                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors"
-                  >
-                    <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-                      {getInitials(user.nickname)}
+                  <div className="hidden md:block text-left">
+                    <div className="text-sm font-medium text-slate-900 truncate max-w-[120px]">
+                      {user.nickname}
                     </div>
-                    <div className="hidden md:block text-left">
-                      <div className="text-sm font-medium text-slate-900 truncate max-w-[150px]">
+                    <div className="text-xs text-slate-500 truncate max-w-[120px]">
+                      {user.email}
+                    </div>
+                  </div>
+                  <ChevronDown
+                    className={`hidden md:block w-4 h-4 text-slate-500 transition-transform duration-200 ${
+                      isUserMenuOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* User Dropdown */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-2 overflow-hidden z-50">
+                    <div className="md:hidden px-4 py-3 border-b border-slate-100">
+                      <div className="text-sm font-medium text-slate-900 truncate">
                         {user.nickname}
                       </div>
-                      <div className="text-xs text-slate-500 truncate max-w-[150px]">
+                      <div className="text-xs text-slate-500 truncate">
                         {user.email}
                       </div>
                     </div>
-                    <ChevronDown
-                      className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${
-                        isUserMenuOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {/* User Dropdown Menu */}
-                  {isUserMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-2 overflow-hidden">
-                      {/* User Info en móvil */}
-                      <div className="md:hidden px-4 py-3 border-b border-slate-100">
-                        <div className="text-sm font-medium text-slate-900 truncate">
-                          {user.nickname}
-                        </div>
-                        <div className="text-xs text-slate-500 truncate">
-                          {user.email}
-                        </div>
-                      </div>
-
-                      <Link
-                        to="/profile"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
-                      >
-                        <User className="w-4 h-4" />
-                        <span>Mi Perfil</span>
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Cerrar sesión</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </nav>
-
-        {/* Mobile Menu Backdrop */}
-        {isMenuOpen && (
-          <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 mt-16"
-            onClick={() => {
-              console.log("📱 [Navbar] Cerrando menú por backdrop");
-              setIsMenuOpen(false);
-            }}
-            aria-hidden="true"
-          />
-        )}
-
-        {/* Mobile Menu Dropdown */}
-        <div
-          className={`
-            fixed top-16 left-0 right-0 bg-white border-b border-slate-200 shadow-lg z-30
-            transition-all duration-300 ease-in-out overflow-hidden
-            ${
-              isMenuOpen
-                ? "max-h-[calc(100vh-4rem)] opacity-100"
-                : "max-h-0 opacity-0"
-            }
-          `}
-        >
-          <div className="overflow-y-auto max-h-[calc(100vh-4rem)] p-4">
-            <nav className="space-y-1">
-              {dashboardMenuItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={handleMenuItemClick}
-                    className={`
-                      flex items-center gap-3 px-4 py-3 rounded-lg
-                      transition-all duration-200
-                      ${
-                        isActive
-                          ? "bg-blue-50 text-blue-700 font-medium shadow-sm"
-                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                      }
-                    `}
-                  >
-                    <Icon className="w-5 h-5 flex-shrink-0" />
-                    <span className="text-sm">{item.label}</span>
-                  </Link>
-                );
-              })}
-            </nav>
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                    >
+                      <User className="w-4 h-4" />
+                      <span>Mi Perfil</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Cerrar sesión</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : null}
           </div>
         </div>
 
-        {/* Spacer for fixed navbar */}
-        <div className="h-16" />
-      </>
+        {/* Mobile Menu - Solo se muestra cuando isMenuOpen es true Y en mobile/tablet */}
+        {isMenuOpen && (
+          <>
+            <div
+              className="lg:hidden fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40"
+              onClick={() => {
+                console.log("📱 [Navbar] Cerrando menú por backdrop");
+                setIsMenuOpen(false);
+              }}
+            />
+            <div className="lg:hidden fixed top-16 left-0 right-0 bg-white border-b border-slate-200 shadow-xl z-40 max-h-[calc(100vh-4rem)] overflow-y-auto">
+              <div className="p-4 space-y-1">
+                {dashboardMenuItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = location.pathname === item.path;
+
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={handleMenuItemClick}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                        isActive
+                          ? "bg-blue-50 text-blue-700 font-medium shadow-sm"
+                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      }`}
+                    >
+                      <Icon className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-sm">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
+      </header>
     );
   }
 

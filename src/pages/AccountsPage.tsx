@@ -429,7 +429,6 @@ export function AccountsPage() {
             </div>
           )}
         </div>
-      </main>
 
       {/* Edit Dialog */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>

@@ -268,16 +268,23 @@ export function TransactionsPage() {
   };
 
   const openCreateDialog = () => {
-    console.log("💰 [TransactionsPage] Abriendo di\u00e1logo de creaci\u00f3n");
+    console.log("💰 [TransactionsPage] Abriendo diálogo de creación");
     console.log("💰 [TransactionsPage] Tags disponibles:", tags.length, tags);
     console.log("💰 [TransactionsPage] Cuentas disponibles:", accounts.length, accounts);
+    
+    // Si no hay tags, mostrar error y no abrir el diálogo
+    if (tags.length === 0) {
+      toast.error("Debes crear al menos una etiqueta antes de crear una transacción");
+      return;
+    }
+    
     setEditingTransaction(null);
     setFormData({
       amount: "",
       isIncome: true,
       transactionDate: new Date(),
       description: "",
-      tagId: tags[0]?.id.toString() || "",
+      tagId: "",
     });
     setErrors({ amount: "", transactionDate: "", description: "", tagId: "" });
     setIsDialogOpen(true);
@@ -513,7 +520,7 @@ export function TransactionsPage() {
                 <Label>Cuenta</Label>
                 <Select value={filterAccount} onValueChange={setFilterAccount}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Todas las cuentas" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todas las cuentas</SelectItem>
@@ -533,13 +540,13 @@ export function TransactionsPage() {
                 <Label>Etiqueta</Label>
                 <Select value={filterTag} onValueChange={setFilterTag}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Todas las etiquetas" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todas las etiquetas</SelectItem>
                     {tags.map((tag) => (
                       <SelectItem key={tag.id} value={tag.id.toString()}>
-                        {tag.name}
+                        {tag.name} - {tag.account?.name || 'Sin cuenta'}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -550,7 +557,7 @@ export function TransactionsPage() {
                 <Label>Tipo</Label>
                 <Select value={filterType} onValueChange={setFilterType}>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Todos" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todos</SelectItem>

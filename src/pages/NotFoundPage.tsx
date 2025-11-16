@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Navbar } from "../components/Navbar";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Home, ArrowLeft, LogIn, LayoutDashboard } from "lucide-react";
@@ -30,8 +31,10 @@ export function NotFoundPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="max-w-md w-full p-8 text-center space-y-6">
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+        <Card className="max-w-md w-full p-8 text-center space-y-6">
         <div className="space-y-2">
           <h1 className="text-9xl font-bold text-indigo-600">404</h1>
           <h2 className="text-2xl font-semibold text-gray-800">
@@ -80,6 +83,7 @@ export function NotFoundPage() {
           </p>
         </div>
       </Card>
+      </div>
     </div>
   );
 }

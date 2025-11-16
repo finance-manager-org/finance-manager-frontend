@@ -1,8 +1,35 @@
 import { DashboardLayout } from "../components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { TrendingUp, TrendingDown, DollarSign, Wallet, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import useRedirect from "../BasicFuntions/funtions";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Wallet,
+  ArrowUpRight,
+  ArrowDownRight,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import useRedirect from "../basicFuntions/funtions";
 import React from "react";
 
 // Datos de ejemplo
@@ -24,11 +51,46 @@ const categoryData = [
 ];
 
 const recentTransactions = [
-  { id: 1, description: "Supermercado", category: "Alimentación", amount: -85.50, date: "2025-11-08", type: "expense" },
-  { id: 2, description: "Salario", category: "Ingreso", amount: 3500, date: "2025-11-05", type: "income" },
-  { id: 3, description: "Netflix", category: "Entretenimiento", amount: -12.99, date: "2025-11-04", type: "expense" },
-  { id: 4, description: "Gasolina", category: "Transporte", amount: -45.00, date: "2025-11-03", type: "expense" },
-  { id: 5, description: "Freelance", category: "Ingreso", amount: 500, date: "2025-11-02", type: "income" },
+  {
+    id: 1,
+    description: "Supermercado",
+    category: "Alimentación",
+    amount: -85.5,
+    date: "2025-11-08",
+    type: "expense",
+  },
+  {
+    id: 2,
+    description: "Salario",
+    category: "Ingreso",
+    amount: 3500,
+    date: "2025-11-05",
+    type: "income",
+  },
+  {
+    id: 3,
+    description: "Netflix",
+    category: "Entretenimiento",
+    amount: -12.99,
+    date: "2025-11-04",
+    type: "expense",
+  },
+  {
+    id: 4,
+    description: "Gasolina",
+    category: "Transporte",
+    amount: -45.0,
+    date: "2025-11-03",
+    type: "expense",
+  },
+  {
+    id: 5,
+    description: "Freelance",
+    category: "Ingreso",
+    amount: 500,
+    date: "2025-11-02",
+    type: "income",
+  },
 ];
 
 const stats = [
@@ -72,18 +134,20 @@ export function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
+        {/* Header */}
+        <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
           <div>
             <h1 className="text-slate-900 mb-2">Dashboard</h1>
             <p className="text-slate-600">
               Bienvenido de nuevo, aquí está tu resumen financiero
             </p>
-            <button onClick = {goToHome}className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button
+              onClick={goToHome}
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
               Go to home
             </button>
           </div>
-
         </div>
 
         {/* Content */}
@@ -95,8 +159,12 @@ export function DashboardPage() {
               return (
                 <Card key={stat.title}>
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm text-slate-600">{stat.title}</CardTitle>
-                    <div className={`w-8 h-8 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}>
+                    <CardTitle className="text-sm text-slate-600">
+                      {stat.title}
+                    </CardTitle>
+                    <div
+                      className={`w-8 h-8 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}
+                    >
                       <Icon className={`w-4 h-4 text-${stat.color}-600`} />
                     </div>
                   </CardHeader>
@@ -108,7 +176,13 @@ export function DashboardPage() {
                       ) : (
                         <ArrowDownRight className="w-4 h-4 text-red-600" />
                       )}
-                      <span className={stat.trend === "up" ? "text-green-600" : "text-red-600"}>
+                      <span
+                        className={
+                          stat.trend === "up"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }
+                      >
                         {stat.change}
                       </span>
                       <span className="text-slate-500">vs mes anterior</span>
@@ -123,8 +197,12 @@ export function DashboardPage() {
             {/* Line Chart - Ingresos vs Gastos */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-slate-900">Ingresos vs Gastos</CardTitle>
-                <CardDescription>Comparación mensual de los últimos 6 meses</CardDescription>
+                <CardTitle className="text-slate-900">
+                  Ingresos vs Gastos
+                </CardTitle>
+                <CardDescription>
+                  Comparación mensual de los últimos 6 meses
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -136,12 +214,22 @@ export function DashboardPage() {
                       contentStyle={{
                         backgroundColor: "white",
                         border: "1px solid #e2e8f0",
-                        borderRadius: "8px"
+                        borderRadius: "8px",
                       }}
                     />
                     <Legend />
-                    <Line type="monotone" dataKey="ingresos" stroke="#10b981" strokeWidth={2} />
-                    <Line type="monotone" dataKey="gastos" stroke="#ef4444" strokeWidth={2} />
+                    <Line
+                      type="monotone"
+                      dataKey="ingresos"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="gastos"
+                      stroke="#ef4444"
+                      strokeWidth={2}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -150,8 +238,12 @@ export function DashboardPage() {
             {/* Pie Chart - Gastos por Categoría */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-slate-900">Gastos por Categoría</CardTitle>
-                <CardDescription>Distribución de gastos este mes</CardDescription>
+                <CardTitle className="text-slate-900">
+                  Gastos por Categoría
+                </CardTitle>
+                <CardDescription>
+                  Distribución de gastos este mes
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -161,7 +253,9 @@ export function DashboardPage() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(0)}%`
+                      }
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -180,8 +274,12 @@ export function DashboardPage() {
           {/* Recent Transactions */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-slate-900">Transacciones Recientes</CardTitle>
-              <CardDescription>Últimos movimientos en tu cuenta</CardDescription>
+              <CardTitle className="text-slate-900">
+                Transacciones Recientes
+              </CardTitle>
+              <CardDescription>
+                Últimos movimientos en tu cuenta
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -191,8 +289,13 @@ export function DashboardPage() {
                     className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${transaction.type === "income" ? "bg-green-100" : "bg-red-100"
-                        }`}>
+                      <div
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          transaction.type === "income"
+                            ? "bg-green-100"
+                            : "bg-red-100"
+                        }`}
+                      >
                         {transaction.type === "income" ? (
                           <ArrowUpRight className="w-5 h-5 text-green-600" />
                         ) : (
@@ -200,19 +303,32 @@ export function DashboardPage() {
                         )}
                       </div>
                       <div>
-                        <div className="text-slate-900">{transaction.description}</div>
-                        <div className="text-sm text-slate-500">{transaction.category}</div>
+                        <div className="text-slate-900">
+                          {transaction.description}
+                        </div>
+                        <div className="text-sm text-slate-500">
+                          {transaction.category}
+                        </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className={`${transaction.type === "income" ? "text-green-600" : "text-red-600"
-                        }`}>
-                        {transaction.type === "income" ? "+" : ""}${Math.abs(transaction.amount).toFixed(2)}
+                      <div
+                        className={`${
+                          transaction.type === "income"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {transaction.type === "income" ? "+" : ""}$
+                        {Math.abs(transaction.amount).toFixed(2)}
                       </div>
-                      <div className="text-sm text-slate-500">{transaction.date}</div>
+                      <div className="text-sm text-slate-500">
+                        {transaction.date}
+                      </div>
                     </div>
                   </div>
-                ))}              </div>
+                ))}{" "}
+              </div>
             </CardContent>
           </Card>
         </div>

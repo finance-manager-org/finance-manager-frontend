@@ -24,7 +24,6 @@ export default function App() {
   
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
         {/* Rutas públicas */}
         <Route path="/" element={<LandingPage />} />

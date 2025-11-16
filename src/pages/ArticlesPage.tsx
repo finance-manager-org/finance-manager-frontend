@@ -1,5 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Navbar } from '../components/Navbar';
 import {
   ArrowLeft,
   Calendar,
@@ -161,6 +162,7 @@ export function ArticlesPage() {
     const IconComponent = article.icon;
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <Navbar />
         {/* Header con espacio para navbar */}
         <div className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200">
           <div className="max-w-4xl mx-auto">
@@ -249,6 +251,7 @@ export function ArticlesPage() {
   // Lista de artículos
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      <Navbar />
       {/* Hero Section con espacio para navbar */}
       <section className="px-4 pt-32 pb-20 py-12 md:py-20">
         <div className="max-w-6xl mx-auto text-center">

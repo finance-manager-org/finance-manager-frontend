@@ -198,19 +198,17 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="flex-1 flex items-center justify-center">
+      <DashboardLayout>
+        <div className="flex min-h-screen items-center justify-center">
           <div className="text-slate-600">Cargando perfil...</div>
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 overflow-auto bg-slate-50">
+    <DashboardLayout>
+      <div className="min-h-screen bg-slate-50">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-4 sm:py-6">
           <div className="max-w-4xl mx-auto">
@@ -551,6 +549,6 @@ export default function ProfilePage() {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

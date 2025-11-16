@@ -37,7 +37,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { categoryApi, Category, ApiError } from "../lib/api";
-import { Sidebar } from "../components/Sidebar";
 import React from "react";
 import { DashboardLayout } from "../components/DashboardLayout";
 
@@ -167,7 +166,6 @@ export function CategoriesPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
 
       <main className="flex-1 overflow-auto">
         {/* Header */}

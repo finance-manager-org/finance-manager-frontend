@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sidebar } from "../components/Sidebar";
+import { DashboardLayout } from "../components/DashboardLayout";
 import {
   Card,
   CardContent,
@@ -32,7 +32,6 @@ import {
 } from "date-fns";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
-import { DashboardLayout } from "../components/DashboardLayout";
 
 interface CategoryStats {
   name: string;

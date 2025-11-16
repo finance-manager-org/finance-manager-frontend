@@ -44,7 +44,7 @@ import {
   Category,
   ApiError,
 } from "../lib/api";
-import { Sidebar } from "../components/Sidebar";
+import { DashboardLayout } from "../components/DashboardLayout";
 import React from "react";
 
 export function AccountsPage() {
@@ -220,10 +220,8 @@ export function AccountsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-
-      <main className="flex-1 overflow-auto">
+    <DashboardLayout>
+      <div className="min-h-screen bg-slate-50">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-8 py-6">
           <div className="flex items-center justify-between">
@@ -552,6 +550,7 @@ export function AccountsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

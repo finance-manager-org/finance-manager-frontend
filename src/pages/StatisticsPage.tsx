@@ -32,6 +32,7 @@ import {
 } from "date-fns";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
+import { DashboardLayout } from "../components/DashboardLayout";
 
 interface CategoryStats {
   name: string;
@@ -166,12 +167,10 @@ export function StatisticsPage() {
   );
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-
-      <main className="flex-1 overflow-auto">
+    <DashboardLayout>
+      <main className="flex-1 overflow-auto w-full">
         {/* Header */}
-        <div className="bg-white border-b border-slate-200 px-8 py-6">
+        <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-slate-900 mb-2">
@@ -444,6 +443,6 @@ export function StatisticsPage() {
           )}
         </div>
       </main>
-    </div>
+    </DashboardLayout>
   );
 }

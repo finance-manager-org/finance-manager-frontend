@@ -92,13 +92,14 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button - Solo visible en mobile */}
       <button
         onClick={() => {
           console.log("🍔 [Sidebar] Toggle menú móvil:", !isMobileMenuOpen);
           setIsMobileMenuOpen(!isMobileMenuOpen);
         }}
-        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center border border-slate-200"
+        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-white rounded-lg shadow-lg flex items-center justify-center border border-slate-200 hover:bg-slate-50 transition-colors"
+        aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
       >
         {isMobileMenuOpen ? (
           <X className="w-6 h-6 text-slate-700" />
@@ -107,10 +108,10 @@ export function Sidebar() {
         )}
       </button>
 
-      {/* Overlay for mobile */}
+      {/* Overlay for mobile - Solo visible cuando el menú está abierto */}
       {isMobileMenuOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
           onClick={() => {
             console.log("📱 [Sidebar] Cerrando menú por overlay");
             setIsMobileMenuOpen(false);
@@ -118,13 +119,14 @@ export function Sidebar() {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Desktop: siempre visible, Mobile: controlado por isMobileMenuOpen */}
       <aside
         className={`
           fixed lg:static inset-y-0 left-0 z-40
           w-64 bg-white border-r border-slate-200 min-h-screen flex flex-col
           transition-transform duration-300 ease-in-out
-          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
         `}
       >
       {/* Logo */}

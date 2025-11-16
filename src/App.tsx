@@ -8,8 +8,12 @@ import { CategoriesPage } from "./pages/CategoriesPage";
 import { AccountsPage } from "./pages/AccountsPage";
 import ProfilePage from "./pages/ProfilePage";
 import { ArticlesPage } from "./pages/ArticlesPage";
+import { TagsPage } from "./pages/TagsPage";
+import { TransactionsPage } from "./pages/TransactionsPage";
+import { StatisticsPage } from "./pages/StatisticsPage";
 import { Navbar } from "./components/Navbar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { NotFoundPage } from "./pages/NotFoundPage";
 import React from "react";
 
 export default function App() {
@@ -46,10 +50,43 @@ export default function App() {
           }
         />
         <Route
+          path="/transactions"
+          element={
+            <ProtectedRoute>
+              <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/accounts"
           element={
             <ProtectedRoute>
               <AccountsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route></Route>
+        <Route
+          path="/accounts"
+          element={
+            <ProtectedRoute>
+              <AccountsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tags"
+          element={
+            <ProtectedRoute>
+              <TagsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/statistics"
+          element={
+            <ProtectedRoute>
+              <StatisticsPage />
             </ProtectedRoute>
           }
         />
@@ -61,6 +98,9 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Ruta 404 - debe ir al final */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

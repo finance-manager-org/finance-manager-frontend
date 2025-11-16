@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Tag as TagIcon, Loader2 } from "lucide-react";
+import { DashboardLayout } from "../components/DashboardLayout";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -82,21 +83,22 @@ export function TagsPage() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [tagsData, accountsData, profileData] = await Promise.all([
+      console.log("📥 [TagsPage] Cargando datos: tags y cuentas");
+      
+      // Primero obtener el perfil del usuario
+      const { authApi } = await import("../lib/api");
+      const profileData = await authApi.getProfile();
+      console.log("✅ [TagsPage] Perfil obtenido, userId:", profileData.user.id);
+      
+      // Luego cargar tags y cuentas del usuario
+      const [tagsData, accountsData] = await Promise.all([
         tagApi.getAll(),
-        tagApi.getAll().then(() => accountApi.getAll(1)), // Temporal: usar ID real del usuario
-        fetch("/api/auth/profile", { credentials: "include" }).then((r) =>
-          r.json()
-        ),
+        accountApi.getAll(profileData.user.id),
       ]);
-
-      // Obtener cuentas del usuario actual
-      if (profileData.user) {
-        const userAccounts = await accountApi.getAll(profileData.user.id);
-        setAccounts(userAccounts);
-      }
-
+      
+      console.log("✅ [TagsPage] Datos cargados - Tags:", tagsData.length, "Cuentas:", accountsData.length);
       setTags(tagsData);
+      setAccounts(accountsData);
     } catch (error) {
       console.error("Error loading data:", error);
       toast.error("Error al cargar los datos");
@@ -229,6 +231,7 @@ export function TagsPage() {
   }
 
   return (
+    <DashboardLayout>
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-8">
@@ -499,6 +502,23 @@ export function TagsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      
+      {/* Floating Action Button - Mejorado para mobile */}
+      <Button
+        onClick={() => {
+          console.log("➕ [TagsPage] Abriendo diálogo de creación");
+          setFormData({ name: "", description: "", accountId: "" });
+          setErrors({ name: "", accountId: "" });
+          setEditingTag(null);
+          setIsDialogOpen(true);
+        }}
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 h-14 w-14 rounded-full shadow-2xl hover:shadow-3xl transition-all z-50"
+        size="icon"
+        aria-label="Agregar etiqueta"
+      >
+        <Plus className="w-6 h-6" />
+      </Button>
     </div>
+    </DashboardLayout>
   );
 }

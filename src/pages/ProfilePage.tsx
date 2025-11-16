@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { authApi } from "../lib/api";
 import { toast } from "sonner";
 import { Button } from "../components/ui/button";
-import { Sidebar } from "../components/Sidebar";
+import { DashboardLayout } from "../components/DashboardLayout";
 import {
   Dialog,
   DialogContent,

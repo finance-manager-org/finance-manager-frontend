@@ -1,4 +1,4 @@
-import { Sidebar } from "../components/Sidebar";
+import { DashboardLayout } from "../components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, Wallet, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
@@ -70,12 +70,10 @@ export function DashboardPage() {
   console.log("📊 [DashboardPage] Componente montado");
   const { goToHome } = useRedirect();
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-
-      <main className="flex-1 overflow-auto">
-        {/* Header */}
-        <div className="bg-white border-b border-slate-200 px-8 py-6">
+    <DashboardLayout>
+      <div className="min-h-screen bg-slate-50">
+      {/* Header */}
+      <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
           <div>
             <h1 className="text-slate-900 mb-2">Dashboard</h1>
             <p className="text-slate-600">
@@ -217,9 +215,9 @@ export function DashboardPage() {
                 ))}
               </div>
             </CardContent>
-          </Card>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

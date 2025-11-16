@@ -39,6 +39,7 @@ import { toast } from "sonner";
 import { categoryApi, Category, ApiError } from "../lib/api";
 import { Sidebar } from "../components/Sidebar";
 import React from "react";
+import { DashboardLayout } from "../components/DashboardLayout";
 
 export function CategoriesPage() {
   console.log("📁 [CategoriesPage] Componente montado");

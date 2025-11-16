@@ -11,6 +11,7 @@ import {
   Calendar as CalendarIcon,
   Search,
 } from "lucide-react";
+import { DashboardLayout } from "../components/DashboardLayout";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -415,6 +416,7 @@ export function TransactionsPage() {
   }
 
   return (
+    <DashboardLayout>
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-8">
@@ -675,11 +677,12 @@ export function TransactionsPage() {
         </div>
       )}
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button - Mejorado para mobile */}
       <Button
         onClick={openCreateDialog}
-        className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg"
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 h-14 w-14 rounded-full shadow-2xl hover:shadow-3xl transition-all z-50"
         size="icon"
+        aria-label="Agregar transacción"
       >
         <Plus className="w-6 h-6" />
       </Button>
@@ -898,5 +901,6 @@ export function TransactionsPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </DashboardLayout>
   );
 }

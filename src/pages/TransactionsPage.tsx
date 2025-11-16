@@ -11,7 +11,7 @@ import {
   Calendar as CalendarIcon,
   Search,
 } from "lucide-react";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -431,7 +431,9 @@ export function TransactionsPage() {
   }
 
   return (
-    <DashboardLayout>
+    <>
+      <Navbar />
+      <div className="pt-16">
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-8">
@@ -916,6 +918,7 @@ export function TransactionsPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-    </DashboardLayout>
+    </div>
+    </>
   );
 }

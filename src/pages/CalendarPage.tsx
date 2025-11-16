@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Calendar } from "../components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
@@ -166,7 +166,9 @@ export function CalendarPage() {
   };
 
   return (
-    <DashboardLayout>
+    <>
+      <Navbar />
+      <div className="pt-16">
       <main className="flex-1 overflow-auto w-full">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
@@ -441,6 +443,7 @@ export function CalendarPage() {
           </div>
         </div>
       </main>
-    </DashboardLayout>
+      </div>
+    </>
   );
 }

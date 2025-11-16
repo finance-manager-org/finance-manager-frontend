@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 import {
   Card,
   CardContent,
@@ -166,7 +166,9 @@ export function StatisticsPage() {
   );
 
   return (
-    <DashboardLayout>
+    <>
+      <Navbar />
+      <div className="pt-16">
       <main className="flex-1 overflow-auto w-full">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
@@ -442,6 +444,7 @@ export function StatisticsPage() {
           )}
         </div>
       </main>
-    </DashboardLayout>
+      </div>
+    </>
   );
 }

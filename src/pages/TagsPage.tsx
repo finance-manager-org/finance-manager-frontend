@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Tag as TagIcon, Loader2 } from "lucide-react";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -231,7 +231,9 @@ export function TagsPage() {
   }
 
   return (
-    <DashboardLayout>
+    <>
+      <Navbar />
+      <div className="pt-16">
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-8">
@@ -519,6 +521,7 @@ export function TagsPage() {
         <Plus className="w-6 h-6" />
       </Button>
     </div>
-    </DashboardLayout>
+    </div>
+    </>
   );
 }

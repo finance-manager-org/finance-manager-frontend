@@ -38,7 +38,7 @@ import {
 import { toast } from "sonner";
 import { categoryApi, Category, ApiError } from "../lib/api";
 import React from "react";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 
 export function CategoriesPage() {
   console.log("📁 [CategoriesPage] Componente montado");
@@ -165,6 +165,9 @@ export function CategoriesPage() {
   };
 
   return (
+    <>
+      <Navbar />
+      <div className="pt-16">
     <div className="flex min-h-screen bg-slate-50">
 
       <main className="flex-1 overflow-auto">
@@ -389,5 +392,7 @@ export function CategoriesPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </div>
+    </>
   );
 }

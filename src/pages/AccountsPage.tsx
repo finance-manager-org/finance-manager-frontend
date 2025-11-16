@@ -44,7 +44,7 @@ import {
   Category,
   ApiError,
 } from "../lib/api";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 import React from "react";
 
 export function AccountsPage() {
@@ -220,7 +220,9 @@ export function AccountsPage() {
   };
 
   return (
-    <DashboardLayout>
+    <>
+      <Navbar />
+      <div className="pt-16">
       <div className="min-h-screen bg-slate-50">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-8 py-6">
@@ -549,7 +551,8 @@ export function AccountsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      </div>
-    </DashboardLayout>
+    </div>
+    </div>
+    </>
   );
 }

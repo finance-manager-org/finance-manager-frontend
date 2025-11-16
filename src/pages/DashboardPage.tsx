@@ -1,4 +1,4 @@
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 import {
   Card,
   CardContent,
@@ -132,7 +132,9 @@ export function DashboardPage() {
   console.log("📊 [DashboardPage] Componente montado");
   const { goToHome } = useRedirect();
   return (
-    <DashboardLayout>
+    <>
+      <Navbar />
+      <div className="pt-16">
       <div className="min-h-screen bg-slate-50">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
@@ -333,6 +335,7 @@ export function DashboardPage() {
           </Card>
         </div>
       </div>
-    </DashboardLayout>
+      </div>
+    </>
   );
 }

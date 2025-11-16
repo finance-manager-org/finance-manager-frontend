@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { authApi } from "../lib/api";
 import { toast } from "sonner";
 import { Button } from "../components/ui/button";
-import { DashboardLayout } from "../components/DashboardLayout";
+import { Navbar } from "../components/Navbar";
 import {
   Dialog,
   DialogContent,
@@ -198,16 +198,21 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <DashboardLayout>
+      <>
+        <Navbar />
+        <div className="pt-16">
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-slate-600">Cargando perfil...</div>
         </div>
-      </DashboardLayout>
+        </div>
+      </>
     );
   }
 
   return (
-    <DashboardLayout>
+    <>
+      <Navbar />
+      <div className="pt-16">
       <div className="min-h-screen bg-slate-50">
         {/* Header */}
         <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-4 sm:py-6">
@@ -549,6 +554,7 @@ export default function ProfilePage() {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </DashboardLayout>
+      </div>
+    </>
   );
 }

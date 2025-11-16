@@ -212,10 +212,9 @@ export function DashboardPage() {
                       <div className="text-sm text-slate-500">{transaction.date}</div>
                     </div>
                   </div>
-                ))}
-              </div>
+                ))}              </div>
             </CardContent>
-          </div>
+          </Card>
         </div>
       </div>
     </DashboardLayout>

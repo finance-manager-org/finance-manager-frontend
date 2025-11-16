@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sidebar } from "../components/Sidebar";
+import { DashboardLayout } from "../components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Calendar } from "../components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";

@@ -44,7 +44,7 @@ import {
   PopoverTrigger,
 } from "../components/ui/popover";
 import { Calendar } from "../components/ui/calendar";
-import { toast } from "sonner";
+import { toast } from "../utils/toast";
 import {
   transactionApi,
   tagApi,
@@ -182,6 +182,7 @@ export function TransactionsPage() {
   };
 
   const loadData = async () => {
+    console.log("💰 [TransactionsPage] Iniciando carga de datos");
     try {
       setLoading(true);
       const [transactionsData, tagsData, profileData] = await Promise.all([
@@ -192,8 +193,12 @@ export function TransactionsPage() {
         ),
       ]);
 
+      console.log("💰 [TransactionsPage] Tags cargadas:", tagsData.length, tagsData);
+      console.log("💰 [TransactionsPage] Transacciones cargadas:", transactionsData.length);
+
       if (profileData.user) {
         const userAccounts = await accountApi.getAll(profileData.user.id);
+        console.log("💰 [TransactionsPage] Cuentas cargadas:", userAccounts.length, userAccounts);
         setAccounts(userAccounts);
       }
 
@@ -263,6 +268,9 @@ export function TransactionsPage() {
   };
 
   const openCreateDialog = () => {
+    console.log("💰 [TransactionsPage] Abriendo di\u00e1logo de creaci\u00f3n");
+    console.log("💰 [TransactionsPage] Tags disponibles:", tags.length, tags);
+    console.log("💰 [TransactionsPage] Cuentas disponibles:", accounts.length, accounts);
     setEditingTransaction(null);
     setFormData({
       amount: "",
@@ -775,13 +783,13 @@ export function TransactionsPage() {
                     <Calendar
                       mode="single"
                       selected={formData.transactionDate}
-                      onSelect={(date) =>
+                      onSelect={(date: Date | undefined) =>
                         setFormData({
                           ...formData,
                           transactionDate: date || new Date(),
                         })
                       }
-                      disabled={(date) => date > new Date()}
+                      disabled={(date: Date) => date > new Date()}
                       initialFocus
                     />
                   </PopoverContent>
@@ -799,7 +807,7 @@ export function TransactionsPage() {
                 </Label>
                 <Select
                   value={formData.tagId}
-                  onValueChange={(value) =>
+                  onValueChange={(value: string) =>
                     setFormData({ ...formData, tagId: value })
                   }
                 >

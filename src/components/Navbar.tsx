@@ -16,9 +16,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import styles from "./Navbar.module.scss";
 import { authApi } from "../lib/api";
-import { toast } from "sonner";
+import { toast } from "../utils/toast";
 
 const dashboardMenuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
@@ -52,7 +51,12 @@ export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log("🧭 [Navbar] Ruta actual:", location.pathname, "Auth:", isAuthenticated);
+  console.log(
+    "🧭 [Navbar] Ruta actual:",
+    location.pathname,
+    "Auth:",
+    isAuthenticated
+  );
 
   // Determinar si estamos en dashboard o landing
   const isDashboardRoute = [
@@ -328,41 +332,33 @@ export function Navbar() {
       }
     };
 
-    const scrollToSection = (sectionId: string) => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-        setIsMenuOpen(false);
-      }
-    };
-
     return (
-      <nav className={styles.navbar}>
-        <div className={styles.container}>
-          <div className={styles.header}>
+      <nav className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className={styles.logo}>
-              <div className={styles.logoIcon}>
-                <TrendingUp />
+            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center shadow-md">
+                <TrendingUp className="w-5 h-5 text-white" />
               </div>
-              <span className={styles.logoText}>Finance Manager</span>
+              <span className="text-lg font-semibold text-slate-900">Finance Manager</span>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className={styles.desktopNav}>
-              <Link to="/articles" className={styles.navLink}>
+            <div className="hidden md:flex items-center gap-6">
+              <Link to="/articles" className="text-slate-600 hover:text-slate-900 transition-colors">
                 Artículos
               </Link>
               <button
                 onClick={() => scrollToSection("how-it-works")}
-                className={styles.navLink}
+                className="text-slate-600 hover:text-slate-900 transition-colors"
               >
                 Cómo funciona
               </button>
             </div>
 
             {/* Auth Buttons - Desktop */}
-            <div className={styles.authButtons}>
+            <div className="hidden md:flex items-center gap-3">
               {!isLoading && (
                 <>
                   {isAuthenticated ? (
@@ -396,41 +392,41 @@ export function Navbar() {
 
             {/* Mobile Menu Button */}
             <button
-              className={styles.mobileMenuButton}
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
             >
-              {isMenuOpen ? <X /> : <Menu />}
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className={styles.mobileMenu}>
+            <div className="md:hidden border-t border-slate-200 py-4 space-y-2">
               <Link
                 to="/articles"
-                className={styles.mobileNavLink}
+                className="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Artículos
               </Link>
               <button
                 onClick={() => scrollToSection("how-it-works")}
-                className={styles.mobileNavLink}
+                className="w-full text-left px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
               >
                 Cómo funciona
               </button>
 
-              <div className={styles.mobileAuthSection}>
+              <div className="pt-4 border-t border-slate-200 space-y-2">
                 {!isLoading && (
                   <>
                     {isAuthenticated ? (
                       <>
-                        <Link to="/dashboard">
+                        <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className={styles.mobileAuthButton}
+                            className="w-full justify-start"
                           >
                             <User className="w-4 h-4 mr-2" />
                             Mi Cuenta
@@ -439,7 +435,7 @@ export function Navbar() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className={styles.mobileAuthButton}
+                          className="w-full justify-start"
                           onClick={handleLogout}
                         >
                           <LogOut className="w-4 h-4 mr-2" />
@@ -448,17 +444,17 @@ export function Navbar() {
                       </>
                     ) : (
                       <>
-                        <Link to="/login">
+                        <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                           <Button
                             variant="ghost"
                             size="sm"
-                            className={styles.mobileAuthButton}
+                            className="w-full justify-start"
                           >
                             Iniciar Sesión
                           </Button>
                         </Link>
-                        <Link to="/register">
-                          <Button size="sm" className={styles.mobileAuthButton}>
+                        <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                          <Button size="sm" className="w-full">
                             Registrarse
                           </Button>
                         </Link>

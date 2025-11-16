@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LandingPage } from "./pages/LandingPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { LoginPage } from "./pages/LoginPage";
+import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { PasswordResetSuccessPage } from "./pages/PasswordResetSuccessPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { CalendarPage } from "./pages/CalendarPage";
 import { CategoriesPage } from "./pages/CategoriesPage";
@@ -17,14 +20,22 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import React from "react";
 
 export default function App() {
+  console.log("🚀 [App] Aplicación iniciada");
+  
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
+        {/* Rutas públicas */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/articles" element={<ArticlesPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/password-reset-success" element={<PasswordResetSuccessPage />} />
+
+        {/* Rutas protegidas */}
         <Route
           path="/dashboard"
           element={
@@ -57,15 +68,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/accounts"
-          element={
-            <ProtectedRoute>
-              <AccountsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route></Route>
         <Route
           path="/accounts"
           element={

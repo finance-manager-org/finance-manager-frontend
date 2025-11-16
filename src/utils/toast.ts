@@ -18,7 +18,7 @@ const cleanupToast = (id: string) => {
 export const toast = {
   success: (message: string, options?: any) => {
     const id = getToastId(message, "success");
-    
+
     // Si ya existe un toast con este mensaje, no mostrar otro
     if (activeToasts.has(id)) {
       console.log("🔕 [Toast] Toast duplicado bloqueado:", message);
@@ -27,7 +27,7 @@ export const toast = {
 
     console.log("✅ [Toast] Mostrando success:", message);
     activeToasts.add(id);
-    
+
     sonnerToast.success(message, {
       ...options,
       onDismiss: () => {
@@ -43,7 +43,7 @@ export const toast = {
 
   error: (message: string, options?: any) => {
     const id = getToastId(message, "error");
-    
+
     // Si ya existe un toast con este mensaje, no mostrar otro
     if (activeToasts.has(id)) {
       console.log("🔕 [Toast] Toast duplicado bloqueado:", message);
@@ -52,7 +52,7 @@ export const toast = {
 
     console.log("❌ [Toast] Mostrando error:", message);
     activeToasts.add(id);
-    
+
     sonnerToast.error(message, {
       ...options,
       onDismiss: () => {
@@ -68,7 +68,7 @@ export const toast = {
 
   info: (message: string, options?: any) => {
     const id = getToastId(message, "info");
-    
+
     if (activeToasts.has(id)) {
       console.log("🔕 [Toast] Toast duplicado bloqueado:", message);
       return;
@@ -76,7 +76,7 @@ export const toast = {
 
     console.log("ℹ️ [Toast] Mostrando info:", message);
     activeToasts.add(id);
-    
+
     sonnerToast.info(message, {
       ...options,
       onDismiss: () => {
@@ -92,7 +92,7 @@ export const toast = {
 
   warning: (message: string, options?: any) => {
     const id = getToastId(message, "warning");
-    
+
     if (activeToasts.has(id)) {
       console.log("🔕 [Toast] Toast duplicado bloqueado:", message);
       return;
@@ -100,7 +100,7 @@ export const toast = {
 
     console.log("⚠️ [Toast] Mostrando warning:", message);
     activeToasts.add(id);
-    
+
     sonnerToast.warning(message, {
       ...options,
       onDismiss: () => {

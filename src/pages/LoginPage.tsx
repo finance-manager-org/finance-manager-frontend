@@ -182,56 +182,6 @@ export function LoginPage() {
         <div className="max-w-6xl w-full mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Columna izquierda - Información */}
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full border border-blue-200">
-                <Wallet className="w-4 h-4" />
-                <span className="text-sm">Bienvenido de nuevo</span>
-              </div>
-
-              <div>
-                <h1 className="text-slate-900 mb-4">
-                  Continúa gestionando tus finanzas
-                </h1>
-                <p className="text-slate-600 text-lg">
-                  Accede a tu cuenta para ver tus ingresos, gastos y el progreso
-                  hacia tus metas financieras.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-xl p-6 border border-slate-200 space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">📊</span>
-                  </div>
-                  <div>
-                    <div className="text-slate-900 mb-1">
-                      Tu información te espera
-                    </div>
-                    <p className="text-slate-600 text-sm">
-                      Accede a tus reportes, gráficos y análisis financieros
-                      actualizados.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 p-6 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl text-white">
-                <div>
-                  <div className="mb-1">10,000+</div>
-                  <div className="text-xs text-blue-100">Usuarios</div>
-                </div>
-                <div>
-                  <div className="mb-1">$2M+</div>
-                  <div className="text-xs text-blue-100">Ahorrados</div>
-                </div>
-                <div>
-                  <div className="mb-1">4.8★</div>
-                  <div className="text-xs text-blue-100">Valoración</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Columna derecha - Formulario */}
             <div>
               <Card className="border-slate-200 shadow-xl">
                 <CardHeader className="space-y-1">
@@ -406,6 +356,56 @@ export function LoginPage() {
                 Tus credenciales están protegidas con encriptación de nivel
                 bancario
               </p>
+            </div>
+
+            {/* Columna derecha - Formulario */}
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full border border-blue-200">
+                <Wallet className="w-4 h-4" />
+                <span className="text-sm">Bienvenido de nuevo</span>
+              </div>
+
+              <div>
+                <h1 className="text-slate-900 mb-4">
+                  Continúa gestionando tus finanzas
+                </h1>
+                <p className="text-slate-600 text-lg">
+                  Accede a tu cuenta para ver tus ingresos, gastos y el progreso
+                  hacia tus metas financieras.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 border border-slate-200 space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-xl">📊</span>
+                  </div>
+                  <div>
+                    <div className="text-slate-900 mb-1">
+                      Tu información te espera
+                    </div>
+                    <p className="text-slate-600 text-sm">
+                      Accede a tus reportes, gráficos y análisis financieros
+                      actualizados.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4 p-6 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl text-white">
+                <div>
+                  <div className="mb-1">10,000+</div>
+                  <div className="text-xs text-blue-100">Usuarios</div>
+                </div>
+                <div>
+                  <div className="mb-1">$2M+</div>
+                  <div className="text-xs text-blue-100">Ahorrados</div>
+                </div>
+                <div>
+                  <div className="mb-1">4.8★</div>
+                  <div className="text-xs text-blue-100">Valoración</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

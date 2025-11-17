@@ -263,35 +263,33 @@ export function Navbar() {
         {isMenuOpen && (
           <>
             <div
-              className="lg:hidden fixed inset-0 top-16 bg-black/60 backdrop-blur-sm z-40"
+              className="lg:hidden fixed inset-0 top-16 bg-black/20 z-40"
               onClick={() => {
                 console.log("📱 [Navbar] Cerrando menú por backdrop");
                 setIsMenuOpen(false);
               }}
             />
-            <div className="lg:hidden fixed top-16 right-4 w-72 bg-white rounded-lg shadow-xl border border-slate-200 z-50 max-h-[calc(100vh-5rem)] overflow-y-auto">
-              <div className="p-3 space-y-1">
-                {dashboardMenuItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = location.pathname === item.path;
+            <div className="lg:hidden fixed top-16 right-4 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-2 overflow-hidden z-50 max-h-[calc(100vh-5rem)] overflow-y-auto">
+              {dashboardMenuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
 
-                  return (
-                    <Link
-                      key={item.path}
-                      to={item.path}
-                      onClick={handleMenuItemClick}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                        isActive
-                          ? "bg-blue-50 text-blue-700 font-medium shadow-sm"
-                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5 flex-shrink-0" />
-                      <span className="text-sm">{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={handleMenuItemClick}
+                    className={`flex items-center gap-2 px-4 py-2 text-sm transition-colors ${
+                      isActive
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "text-slate-700 hover:bg-slate-50"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
             </div>
           </>
         )}
@@ -326,24 +324,8 @@ export function Navbar() {
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-6">
-              <Link
-                to="/articles"
-                className="text-slate-600 hover:text-slate-900 transition-colors"
-              >
-                Artículos
-              </Link>
-              <button
-                onClick={() => scrollToSection("how-it-works")}
-                className="text-slate-600 hover:text-slate-900 transition-colors"
-              >
-                Cómo funciona
-              </button>
-            </div>
-
-            {/* Auth Buttons - Desktop */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* Auth Buttons - Hide on mobile (<480px), show from 480px+ */}
+            <div className="hidden min-[480px]:flex items-center gap-3">
               {!isLoading && (
                 <>
                   {isAuthenticated ? (
@@ -378,7 +360,7 @@ export function Navbar() {
             {/* Mobile Menu Button - Solo mostrar si hay algo que mostrar en el menú */}
             {!isLoading && (
               <button
-                className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+                className="min-[480px]:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
               >
@@ -393,7 +375,7 @@ export function Navbar() {
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden border-t border-slate-200 py-4 space-y-2">
+            <div className="min-[480px]:hidden border-t border-slate-200 py-4 space-y-2">
               <Link
                 to="/articles"
                 className="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"

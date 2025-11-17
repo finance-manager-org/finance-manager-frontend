@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, Tag as TagIcon, Loader2, Search } from "lucide-react";
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Tag as TagIcon,
+  Loader2,
+  Search,
+} from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -241,8 +248,8 @@ export function TagsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-slate-50 pt-20">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="min-h-screen py-12 bg-gradient-to-br from-slate-50 via-purple-50/30 to-slate-50">
+        <div className="container mx-auto px-4 py-8 max-w-7xl mt-20">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-slate-900 mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -277,7 +284,10 @@ export function TagsPage() {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={openCreateDialog} className="gap-2 h-11 px-6 shadow-sm hover:shadow-md bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Button
+              onClick={openCreateDialog}
+              className="gap-2 h-11 px-6 shadow-sm hover:shadow-md bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+            >
               <Plus className="w-5 h-5" />
               Nueva Etiqueta
             </Button>
@@ -287,13 +297,19 @@ export function TagsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <Card className="hover:shadow-lg transition-shadow duration-300 border-purple-100 bg-gradient-to-br from-purple-50 to-white">
               <CardHeader className="pb-6">
-                <CardDescription className="text-purple-700 mb-2">Total de Etiquetas</CardDescription>
-                <CardTitle className="text-4xl font-bold text-purple-600">{tags.length}</CardTitle>
+                <CardDescription className="text-purple-700 mb-2">
+                  Total de Etiquetas
+                </CardDescription>
+                <CardTitle className="text-4xl font-bold text-purple-600">
+                  {tags.length}
+                </CardTitle>
               </CardHeader>
             </Card>
             <Card className="hover:shadow-lg transition-shadow duration-300 border-blue-100 bg-gradient-to-br from-blue-50 to-white">
               <CardHeader className="pb-6">
-                <CardDescription className="text-blue-700 mb-2">Etiquetas con Transacciones</CardDescription>
+                <CardDescription className="text-blue-700 mb-2">
+                  Etiquetas con Transacciones
+                </CardDescription>
                 <CardTitle className="text-4xl font-bold text-blue-600">
                   {
                     tags.filter(
@@ -305,7 +321,9 @@ export function TagsPage() {
             </Card>
             <Card className="hover:shadow-lg transition-shadow duration-300 border-green-100 bg-gradient-to-br from-green-50 to-white">
               <CardHeader className="pb-6">
-                <CardDescription className="text-green-700 mb-2">Cuentas con Etiquetas</CardDescription>
+                <CardDescription className="text-green-700 mb-2">
+                  Cuentas con Etiquetas
+                </CardDescription>
                 <CardTitle className="text-4xl font-bold text-green-600">
                   {new Set(tags.map((t) => t.accountId)).size}
                 </CardTitle>
@@ -440,7 +458,7 @@ export function TagsPage() {
                       </Label>
                       <Select
                         value={formData.accountId}
-                        onValueChange={(value) =>
+                        onValueChange={(value: string) =>
                           setFormData({ ...formData, accountId: value })
                         }
                       >

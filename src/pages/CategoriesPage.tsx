@@ -167,8 +167,7 @@ export function CategoriesPage() {
   return (
     <>
       <Navbar />
-      <div className="pt-20">
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex py-12 min-h-screen bg-slate-50">
           <main className="flex-1 overflow-auto">
             {/* Header */}
             <div className="bg-white border-b border-slate-200 px-8 py-6">
@@ -397,7 +396,6 @@ export function CategoriesPage() {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-      </div>
     </>
   );
 }

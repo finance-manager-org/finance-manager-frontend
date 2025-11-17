@@ -222,8 +222,7 @@ export function AccountsPage() {
   return (
     <>
       <Navbar />
-      <div className="pt-20">
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen py-12 bg-slate-50">
           {/* Header */}
           <div className="bg-white border-b border-slate-200 px-8 py-6">
             <div className="flex items-center justify-between">
@@ -551,7 +550,6 @@ export function AccountsPage() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </div>
       </div>
     </>
   );

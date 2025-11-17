@@ -34,7 +34,7 @@ export function NotFoundPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen py-12 flex flex-col">
       <Navbar />
       <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
         <Card className="max-w-md w-full p-8 text-center space-y-6">

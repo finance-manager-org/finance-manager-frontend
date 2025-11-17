@@ -453,86 +453,120 @@ export function TransactionsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 pt-20">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-slate-900 mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Transacciones
-            </h1>
-            <p className="text-slate-600 text-lg">
-              Gestiona todos tus ingresos y gastos
-            </p>
+      <main className="flex-1 py-12 overflow-auto w-full mt-16">
+        {/* Header */}
+        <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 mb-2">
+                Transacciones
+              </h1>
+              <p className="text-slate-600">
+                Gestiona todos tus ingresos y gastos
+              </p>
+            </div>
+            <Button 
+              onClick={openCreateDialog}
+              className="gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Nueva Transacción
+            </Button>
           </div>
+        </div>
 
+        {/* Content */}
+        <div className="p-8 space-y-6">
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <Card className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader className="pb-6">
-                <CardDescription className="text-slate-600 mb-2">
-                  Total Transacciones
-                </CardDescription>
-                <CardTitle className="text-4xl font-bold text-slate-900">
-                  {stats.total}
-                </CardTitle>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="border-l-4 border-l-slate-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Total Transacciones
+                  </CardTitle>
+                </div>
               </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-slate-900">
+                    {stats.total}
+                  </p>
+                </div>
+              </CardContent>
             </Card>
-            <Card className="hover:shadow-lg transition-shadow duration-300 border-green-100 bg-gradient-to-br from-green-50 to-white">
-              <CardHeader className="pb-6">
-                <CardDescription className="flex items-center gap-1 text-green-700 mb-2">
-                  <ArrowUpCircle className="w-4 h-4 text-green-600" />
-                  Ingresos
-                </CardDescription>
-                <CardTitle className="text-4xl font-bold text-green-600">
-                  ${stats.income.toFixed(2)}
-                </CardTitle>
+
+            <Card className="border-l-4 border-l-green-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Ingresos Totales
+                  </CardTitle>
+                  <ArrowUpCircle className="w-5 h-5 text-green-500" />
+                </div>
               </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-slate-900">
+                    ${stats.income.toFixed(2)}
+                  </p>
+                </div>
+              </CardContent>
             </Card>
-            <Card className="hover:shadow-lg transition-shadow duration-300 border-red-100 bg-gradient-to-br from-red-50 to-white">
-              <CardHeader className="pb-6">
-                <CardDescription className="flex items-center gap-1 text-red-700 mb-2">
-                  <ArrowDownCircle className="w-4 h-4 text-red-600" />
-                  Gastos
-                </CardDescription>
-                <CardTitle className="text-4xl font-bold text-red-600">
-                  ${stats.expense.toFixed(2)}
-                </CardTitle>
+
+            <Card className="border-l-4 border-l-red-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Gastos Totales
+                  </CardTitle>
+                  <ArrowDownCircle className="w-5 h-5 text-red-500" />
+                </div>
               </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-slate-900">
+                    ${stats.expense.toFixed(2)}
+                  </p>
+                </div>
+              </CardContent>
             </Card>
-            <Card className="hover:shadow-lg transition-shadow duration-300 border-blue-100 bg-gradient-to-br from-blue-50 to-white">
-              <CardHeader className="pb-6">
-                <CardDescription className="text-slate-600 mb-2">
-                  Balance
-                </CardDescription>
-                <CardTitle
-                  className={`text-4xl font-bold ${
-                    stats.balance >= 0 ? "text-blue-600" : "text-red-600"
-                  }`}
-                >
-                  ${stats.balance.toFixed(2)}
-                </CardTitle>
+
+            <Card className="border-l-4 border-l-blue-500">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-slate-600">
+                    Balance
+                  </CardTitle>
+                </div>
               </CardHeader>
+              <CardContent>
+                <div className="space-y-1">
+                  <p className={`text-3xl font-bold ${
+                    stats.balance >= 0 ? "text-green-600" : "text-red-600"
+                  }`}>
+                    ${stats.balance.toFixed(2)}
+                  </p>
+                </div>
+              </CardContent>
             </Card>
           </div>
 
           {/* Filters and Search */}
-          <div className="mb-6 flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
               <Input
                 placeholder="Buscar por descripción, etiqueta o monto..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-11 h-11 text-base shadow-sm hover:shadow-md transition-shadow"
+                className="pl-10"
               />
             </div>
             <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="gap-2 h-11 px-6 shadow-sm hover:shadow-md transition-all"
-                >
-                  <Filter className="w-5 h-5" />
+                <Button variant="outline" className="gap-2">
+                  <Filter className="w-4 h-4" />
                   Filtros
                   {hasActiveFilters && (
                     <Badge
@@ -692,58 +726,56 @@ export function TransactionsPage() {
               {filteredTransactions.map((transaction) => (
                 <Card
                   key={transaction.id}
-                  className={`hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 ${
+                  className={`hover:shadow-md transition-shadow ${
                     transaction.isIncome
-                      ? "border-l-4 border-l-green-500 hover:border-l-green-600"
-                      : "border-l-4 border-l-red-500 hover:border-l-red-600"
+                      ? "border-l-4 border-l-green-500"
+                      : "border-l-4 border-l-red-500"
                   }`}
                 >
-                  <CardContent className="p-5">
+                  <CardContent className="p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div
-                            className={`p-2 rounded-lg ${
-                              transaction.isIncome ? "bg-green-50" : "bg-red-50"
-                            }`}
-                          >
-                            {transaction.isIncome ? (
-                              <ArrowUpCircle className="w-5 h-5 text-green-600" />
-                            ) : (
-                              <ArrowDownCircle className="w-5 h-5 text-red-600" />
-                            )}
-                          </div>
-                          <div>
-                            <div className="font-semibold text-slate-900 text-lg">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div
+                          className={`p-3 rounded-lg ${
+                            transaction.isIncome ? "bg-green-50" : "bg-red-50"
+                          }`}
+                        >
+                          {transaction.isIncome ? (
+                            <ArrowUpCircle className="w-5 h-5 text-green-500" />
+                          ) : (
+                            <ArrowDownCircle className="w-5 h-5 text-red-500" />
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-slate-900">
                               {transaction.description || "Sin descripción"}
-                            </div>
-                            <div className="text-sm text-slate-500 flex items-center gap-2 mt-1">
-                              <Badge variant="outline" className="font-medium">
-                                {transaction.tag?.name}
-                              </Badge>
-                              {transaction.tag?.account?.name && (
-                                <>
-                                  <span>•</span>
-                                  <span className="text-xs">
-                                    {transaction.tag.account.name}
-                                  </span>
-                                </>
+                            </h3>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-slate-500">
+                            <Badge variant="outline" className="font-medium">
+                              {transaction.tag?.name}
+                            </Badge>
+                            {transaction.tag?.account?.name && (
+                              <>
+                                <span>•</span>
+                                <span>{transaction.tag.account.name}</span>
+                              </>
+                            )}
+                            <span>•</span>
+                            <span>
+                              {format(
+                                new Date(transaction.transactionDate),
+                                "dd MMM yyyy, HH:mm",
+                                { locale: es }
                               )}
-                              <span>•</span>
-                              <span>
-                                {format(
-                                  new Date(transaction.transactionDate),
-                                  "dd MMM yyyy, HH:mm",
-                                  { locale: es }
-                                )}
-                              </span>
-                            </div>
+                            </span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div
-                          className={`text-3xl font-bold ${
+                          className={`text-2xl font-bold ${
                             transaction.isIncome
                               ? "text-green-600"
                               : "text-red-600"
@@ -752,11 +784,11 @@ export function TransactionsPage() {
                           {transaction.isIncome ? "+" : "-"}$
                           {transaction.amount.toFixed(2)}
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-2">
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-9 w-9 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                            className="hover:bg-blue-50 hover:text-blue-600"
                             onClick={() => openEditDialog(transaction)}
                           >
                             <Edit2 className="w-4 h-4" />
@@ -764,7 +796,7 @@ export function TransactionsPage() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-9 w-9 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
                             onClick={() => openDeleteDialog(transaction)}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -1003,17 +1035,7 @@ export function TransactionsPage() {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-      </div>
-
-      {/* Floating Action Button - Fuera del container para que siempre esté visible */}
-      <Button
-        onClick={openCreateDialog}
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 h-16 w-16 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 active:scale-95 z-50 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-        size="icon"
-        aria-label="Agregar transacción"
-      >
-        <Plus className="w-7 h-7" />
-      </Button>
+      </main>
     </>
   );
 }

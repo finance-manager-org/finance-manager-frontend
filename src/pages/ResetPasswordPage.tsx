@@ -20,11 +20,11 @@ export function ResetPasswordPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -139,7 +139,10 @@ export function ResetPasswordPage() {
         navigate("/login");
       }, 1500);
     } catch (error) {
-      console.error("❌ [ResetPassword] Error al actualizar contraseña:", error);
+      console.error(
+        "❌ [ResetPassword] Error al actualizar contraseña:",
+        error
+      );
       toast.error("Error al actualizar contraseña", {
         description: "Por favor, intenta de nuevo más tarde",
       });
@@ -226,7 +229,9 @@ export function ResetPasswordPage() {
                     />
                     <button
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                     >
                       {showConfirmPassword ? (
@@ -264,9 +269,7 @@ export function ResetPasswordPage() {
                       Actualizando...
                     </>
                   ) : (
-                    <>
-                      Restablecer contraseña
-                    </>
+                    <>Restablecer contraseña</>
                   )}
                 </Button>
 

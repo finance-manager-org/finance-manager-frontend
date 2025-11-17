@@ -71,7 +71,8 @@ export function ForgotPasswordPage() {
 
       console.log("✅ [ForgotPassword] Correo enviado exitosamente");
       toast.success("Correo enviado", {
-        description: "Revisa tu bandeja de entrada para restablecer tu contraseña",
+        description:
+          "Revisa tu bandeja de entrada para restablecer tu contraseña",
         icon: <CheckCircle2 />,
       });
 
@@ -139,9 +140,7 @@ export function ForgotPasswordPage() {
                       Enviando...
                     </>
                   ) : (
-                    <>
-                      Enviar instrucciones
-                    </>
+                    <>Enviar instrucciones</>
                   )}
                 </Button>
 

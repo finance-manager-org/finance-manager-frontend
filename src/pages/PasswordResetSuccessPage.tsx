@@ -25,7 +25,8 @@ export function PasswordResetSuccessPage() {
                 ¡Correo enviado!
               </h1>
               <p className="text-slate-600">
-                Hemos enviado las instrucciones para restablecer tu contraseña a:
+                Hemos enviado las instrucciones para restablecer tu contraseña
+                a:
               </p>
               {email && (
                 <div className="flex items-center justify-center gap-2 text-blue-600 font-medium">
@@ -54,7 +55,10 @@ export function PasswordResetSuccessPage() {
 
               <p className="text-xs text-slate-500">
                 ¿No recibiste el correo? Revisa tu carpeta de spam o{" "}
-                <Link to="/forgot-password" className="text-blue-600 hover:underline">
+                <Link
+                  to="/forgot-password"
+                  className="text-blue-600 hover:underline"
+                >
                   reenvía el correo
                 </Link>
               </p>

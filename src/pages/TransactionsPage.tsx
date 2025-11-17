@@ -186,7 +186,7 @@ export function TransactionsPage() {
     console.log("💰 [TransactionsPage] Iniciando carga de datos");
     try {
       setLoading(true);
-      
+
       // Load profile first to get userId
       const profileData = await authApi.getProfile();
       console.log("💰 [TransactionsPage] Perfil cargado:", profileData.user);
@@ -198,16 +198,29 @@ export function TransactionsPage() {
         accountApi.getAll(profileData.user.id),
       ]);
 
-      console.log("💰 [TransactionsPage] Tags cargadas:", tagsData.length, tagsData);
-      console.log("💰 [TransactionsPage] Transacciones cargadas:", transactionsData.length);
-      console.log("💰 [TransactionsPage] Cuentas cargadas:", accountsData.length, accountsData);
+      console.log(
+        "💰 [TransactionsPage] Tags cargadas:",
+        tagsData.length,
+        tagsData
+      );
+      console.log(
+        "💰 [TransactionsPage] Transacciones cargadas:",
+        transactionsData.length
+      );
+      console.log(
+        "💰 [TransactionsPage] Cuentas cargadas:",
+        accountsData.length,
+        accountsData
+      );
 
       setTransactions(transactionsData);
       setTags(tagsData);
       setAccounts(accountsData);
     } catch (error) {
       console.error("💰 [TransactionsPage] Error loading data:", error);
-      toast.error("Error al cargar los datos. Por favor, verifica tu conexión.");
+      toast.error(
+        "Error al cargar los datos. Por favor, verifica tu conexión."
+      );
     } finally {
       setLoading(false);
     }
@@ -271,14 +284,20 @@ export function TransactionsPage() {
   const openCreateDialog = () => {
     console.log("💰 [TransactionsPage] Abriendo diálogo de creación");
     console.log("💰 [TransactionsPage] Tags disponibles:", tags.length, tags);
-    console.log("💰 [TransactionsPage] Cuentas disponibles:", accounts.length, accounts);
-    
+    console.log(
+      "💰 [TransactionsPage] Cuentas disponibles:",
+      accounts.length,
+      accounts
+    );
+
     // Si no hay tags, mostrar error y no abrir el diálogo
     if (tags.length === 0) {
-      toast.error("Debes crear al menos una etiqueta antes de crear una transacción");
+      toast.error(
+        "Debes crear al menos una etiqueta antes de crear una transacción"
+      );
       return;
     }
-    
+
     setEditingTransaction(null);
     setFormData({
       amount: "",
@@ -434,300 +453,559 @@ export function TransactionsPage() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 pt-16">
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          Transacciones
-        </h1>
-        <p className="text-slate-600 text-lg">Gestiona todos tus ingresos y gastos</p>
-      </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 pt-20">
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-slate-900 mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Transacciones
+            </h1>
+            <p className="text-slate-600 text-lg">
+              Gestiona todos tus ingresos y gastos
+            </p>
+          </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <Card className="hover:shadow-lg transition-shadow duration-300">
-          <CardHeader className="pb-3">
-            <CardDescription className="text-slate-600">Total Transacciones</CardDescription>
-            <CardTitle className="text-4xl font-bold text-slate-900">{stats.total}</CardTitle>
-          </CardHeader>
-        </Card>
-        <Card className="hover:shadow-lg transition-shadow duration-300 border-green-100 bg-gradient-to-br from-green-50 to-white">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-1 text-green-700">
-              <ArrowUpCircle className="w-4 h-4 text-green-600" />
-              Ingresos
-            </CardDescription>
-            <CardTitle className="text-4xl font-bold text-green-600">
-              ${stats.income.toFixed(2)}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card className="hover:shadow-lg transition-shadow duration-300 border-red-100 bg-gradient-to-br from-red-50 to-white">
-          <CardHeader className="pb-3">
-            <CardDescription className="flex items-center gap-1 text-red-700">
-              <ArrowDownCircle className="w-4 h-4 text-red-600" />
-              Gastos
-            </CardDescription>
-            <CardTitle className="text-4xl font-bold text-red-600">
-              ${stats.expense.toFixed(2)}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card className="hover:shadow-lg transition-shadow duration-300 border-blue-100 bg-gradient-to-br from-blue-50 to-white">
-          <CardHeader className="pb-3">
-            <CardDescription className="text-slate-600">Balance</CardDescription>
-            <CardTitle
-              className={`text-4xl font-bold ${
-                stats.balance >= 0 ? "text-blue-600" : "text-red-600"
-              }`}
-            >
-              ${stats.balance.toFixed(2)}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-      </div>
-
-      {/* Filters and Search */}
-      <div className="mb-6 flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-          <Input
-            placeholder="Buscar por descripción, etiqueta o monto..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-11 h-11 text-base shadow-sm hover:shadow-md transition-shadow"
-          />
-        </div>
-        <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="gap-2 h-11 px-6 shadow-sm hover:shadow-md transition-all">
-              <Filter className="w-5 h-5" />
-              Filtros
-              {hasActiveFilters && (
-                <Badge variant="secondary" className="ml-1 bg-blue-100 text-blue-700">
-                  {
-                    [filterAccount, filterTag, filterType].filter(
-                      (f) => f !== "all"
-                    ).length
-                  }
-                </Badge>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-80 shadow-xl">
-            <div className="space-y-4">
-              <h4 className="font-semibold text-lg text-slate-900">Filtrar por</h4>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-semibold text-slate-700">Cuenta</Label>
-                <Select value={filterAccount} onValueChange={setFilterAccount}>
-                  <SelectTrigger className="h-10">
-                    <SelectValue placeholder="Todas las cuentas" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todas las cuentas</SelectItem>
-                    {accounts.length > 0 ? (
-                      accounts.map((account) => (
-                        <SelectItem
-                          key={account.id}
-                          value={account.id.toString()}
-                        >
-                          {account.name || `Cuenta ${account.id}`}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="no-accounts" disabled>
-                        No hay cuentas disponibles
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-semibold text-slate-700">Etiqueta</Label>
-                <Select value={filterTag} onValueChange={setFilterTag}>
-                  <SelectTrigger className="h-10">
-                    <SelectValue placeholder="Todas las etiquetas" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todas las etiquetas</SelectItem>
-                    {tags.length > 0 ? (
-                      tags.map((tag) => (
-                        <SelectItem key={tag.id} value={tag.id.toString()}>
-                          {tag.name} {tag.account?.name ? `- ${tag.account.name}` : ''}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="no-tags" disabled>
-                        No hay etiquetas disponibles
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-semibold text-slate-700">Tipo</Label>
-                <Select value={filterType} onValueChange={setFilterType}>
-                  <SelectTrigger className="h-10">
-                    <SelectValue placeholder="Todos" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="income">
-                      <span className="flex items-center gap-2">
-                        <ArrowUpCircle className="w-4 h-4 text-green-600" />
-                        Ingresos
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="expense">
-                      <span className="flex items-center gap-2">
-                        <ArrowDownCircle className="w-4 h-4 text-red-600" />
-                        Gastos
-                      </span>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleFilterChange}
-                  className="flex-1"
-                  size="sm"
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="pb-6">
+                <CardDescription className="text-slate-600 mb-2">
+                  Total Transacciones
+                </CardDescription>
+                <CardTitle className="text-4xl font-bold text-slate-900">
+                  {stats.total}
+                </CardTitle>
+              </CardHeader>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow duration-300 border-green-100 bg-gradient-to-br from-green-50 to-white">
+              <CardHeader className="pb-6">
+                <CardDescription className="flex items-center gap-1 text-green-700 mb-2">
+                  <ArrowUpCircle className="w-4 h-4 text-green-600" />
+                  Ingresos
+                </CardDescription>
+                <CardTitle className="text-4xl font-bold text-green-600">
+                  ${stats.income.toFixed(2)}
+                </CardTitle>
+              </CardHeader>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow duration-300 border-red-100 bg-gradient-to-br from-red-50 to-white">
+              <CardHeader className="pb-6">
+                <CardDescription className="flex items-center gap-1 text-red-700 mb-2">
+                  <ArrowDownCircle className="w-4 h-4 text-red-600" />
+                  Gastos
+                </CardDescription>
+                <CardTitle className="text-4xl font-bold text-red-600">
+                  ${stats.expense.toFixed(2)}
+                </CardTitle>
+              </CardHeader>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow duration-300 border-blue-100 bg-gradient-to-br from-blue-50 to-white">
+              <CardHeader className="pb-6">
+                <CardDescription className="text-slate-600 mb-2">
+                  Balance
+                </CardDescription>
+                <CardTitle
+                  className={`text-4xl font-bold ${
+                    stats.balance >= 0 ? "text-blue-600" : "text-red-600"
+                  }`}
                 >
-                  Aplicar
-                </Button>
-                <Button
-                  onClick={clearFilters}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                >
-                  Limpiar
-                </Button>
-              </div>
+                  ${stats.balance.toFixed(2)}
+                </CardTitle>
+              </CardHeader>
+            </Card>
+          </div>
+
+          {/* Filters and Search */}
+          <div className="mb-6 flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+              <Input
+                placeholder="Buscar por descripción, etiqueta o monto..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-11 h-11 text-base shadow-sm hover:shadow-md transition-shadow"
+              />
             </div>
-          </PopoverContent>
-        </Popover>
-      </div>
-
-      {/* Transactions List */}
-      {filteredTransactions.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            {hasActiveFilters ? (
-              <>
-                <Filter className="w-16 h-16 text-slate-300 mb-4" />
-                <p className="text-slate-500 text-center mb-4">
-                  No se encontraron transacciones con los filtros aplicados
-                </p>
-                <Button onClick={clearFilters} variant="outline">
-                  Limpiar filtros
-                </Button>
-              </>
-            ) : (
-              <>
-                <ArrowUpCircle className="w-16 h-16 text-slate-300 mb-4" />
-                <p className="text-slate-500 text-center mb-4">
-                  No tienes transacciones registradas aún
-                </p>
-                <Button onClick={openCreateDialog} className="gap-2">
-                  <Plus className="w-4 h-4" />
-                  Crear Primera Transacción
-                </Button>
-              </>
-            )}
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="space-y-3">
-          {filteredTransactions.map((transaction) => (
-            <Card
-              key={transaction.id}
-              className={`hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 ${
-                transaction.isIncome
-                  ? "border-l-4 border-l-green-500 hover:border-l-green-600"
-                  : "border-l-4 border-l-red-500 hover:border-l-red-600"
-              }`}
-            >
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className={`p-2 rounded-lg ${
-                        transaction.isIncome ? "bg-green-50" : "bg-red-50"
-                      }`}>
-                        {transaction.isIncome ? (
-                          <ArrowUpCircle className="w-5 h-5 text-green-600" />
-                        ) : (
-                          <ArrowDownCircle className="w-5 h-5 text-red-600" />
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-slate-900 text-lg">
-                          {transaction.description || "Sin descripción"}
-                        </div>
-                        <div className="text-sm text-slate-500 flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="font-medium">
-                            {transaction.tag?.name}
-                          </Badge>
-                          {transaction.tag?.account?.name && (
-                            <>
-                              <span>•</span>
-                              <span className="text-xs">{transaction.tag.account.name}</span>
-                            </>
-                          )}
-                          <span>•</span>
-                          <span>
-                            {format(
-                              new Date(transaction.transactionDate),
-                              "dd MMM yyyy, HH:mm",
-                              { locale: es }
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div
-                      className={`text-3xl font-bold ${
-                        transaction.isIncome ? "text-green-600" : "text-red-600"
-                      }`}
+            <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="gap-2 h-11 px-6 shadow-sm hover:shadow-md transition-all"
+                >
+                  <Filter className="w-5 h-5" />
+                  Filtros
+                  {hasActiveFilters && (
+                    <Badge
+                      variant="secondary"
+                      className="ml-1 bg-blue-100 text-blue-700"
                     >
-                      {transaction.isIncome ? "+" : "-"}$
-                      {transaction.amount.toFixed(2)}
-                    </div>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                        onClick={() => openEditDialog(transaction)}
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
-                        onClick={() => openDeleteDialog(transaction)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
+                      {
+                        [filterAccount, filterTag, filterType].filter(
+                          (f) => f !== "all"
+                        ).length
+                      }
+                    </Badge>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 shadow-xl">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-lg text-slate-900">
+                    Filtrar por
+                  </h4>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">
+                      Cuenta
+                    </Label>
+                    <Select
+                      value={filterAccount}
+                      onValueChange={setFilterAccount}
+                    >
+                      <SelectTrigger className="h-10">
+                        <SelectValue placeholder="Todas las cuentas" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todas las cuentas</SelectItem>
+                        {accounts.length > 0 ? (
+                          accounts.map((account) => (
+                            <SelectItem
+                              key={account.id}
+                              value={account.id.toString()}
+                            >
+                              {account.name || `Cuenta ${account.id}`}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem value="no-accounts" disabled>
+                            No hay cuentas disponibles
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">
+                      Etiqueta
+                    </Label>
+                    <Select value={filterTag} onValueChange={setFilterTag}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue placeholder="Todas las etiquetas" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todas las etiquetas</SelectItem>
+                        {tags.length > 0 ? (
+                          tags.map((tag) => (
+                            <SelectItem key={tag.id} value={tag.id.toString()}>
+                              {tag.name}{" "}
+                              {tag.account?.name ? `- ${tag.account.name}` : ""}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem value="no-tags" disabled>
+                            No hay etiquetas disponibles
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700">
+                      Tipo
+                    </Label>
+                    <Select value={filterType} onValueChange={setFilterType}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue placeholder="Todos" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos</SelectItem>
+                        <SelectItem value="income">
+                          <span className="flex items-center gap-2">
+                            <ArrowUpCircle className="w-4 h-4 text-green-600" />
+                            Ingresos
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="expense">
+                          <span className="flex items-center gap-2">
+                            <ArrowDownCircle className="w-4 h-4 text-red-600" />
+                            Gastos
+                          </span>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleFilterChange}
+                      className="flex-1"
+                      size="sm"
+                    >
+                      Aplicar
+                    </Button>
+                    <Button
+                      onClick={clearFilters}
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                    >
+                      Limpiar
+                    </Button>
                   </div>
                 </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {/* Transactions List */}
+          {filteredTransactions.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                {hasActiveFilters ? (
+                  <>
+                    <Filter className="w-16 h-16 text-slate-300 mb-4" />
+                    <p className="text-slate-500 text-center mb-4">
+                      No se encontraron transacciones con los filtros aplicados
+                    </p>
+                    <Button onClick={clearFilters} variant="outline">
+                      Limpiar filtros
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <ArrowUpCircle className="w-16 h-16 text-slate-300 mb-4" />
+                    <p className="text-slate-500 text-center mb-4">
+                      No tienes transacciones registradas aún
+                    </p>
+                    <Button onClick={openCreateDialog} className="gap-2">
+                      <Plus className="w-4 h-4" />
+                      Crear Primera Transacción
+                    </Button>
+                  </>
+                )}
               </CardContent>
             </Card>
-          ))}
-        </div>
-      )}
+          ) : (
+            <div className="space-y-3">
+              {filteredTransactions.map((transaction) => (
+                <Card
+                  key={transaction.id}
+                  className={`hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 ${
+                    transaction.isIncome
+                      ? "border-l-4 border-l-green-500 hover:border-l-green-600"
+                      : "border-l-4 border-l-red-500 hover:border-l-red-600"
+                  }`}
+                >
+                  <CardContent className="p-5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div
+                            className={`p-2 rounded-lg ${
+                              transaction.isIncome ? "bg-green-50" : "bg-red-50"
+                            }`}
+                          >
+                            {transaction.isIncome ? (
+                              <ArrowUpCircle className="w-5 h-5 text-green-600" />
+                            ) : (
+                              <ArrowDownCircle className="w-5 h-5 text-red-600" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-slate-900 text-lg">
+                              {transaction.description || "Sin descripción"}
+                            </div>
+                            <div className="text-sm text-slate-500 flex items-center gap-2 mt-1">
+                              <Badge variant="outline" className="font-medium">
+                                {transaction.tag?.name}
+                              </Badge>
+                              {transaction.tag?.account?.name && (
+                                <>
+                                  <span>•</span>
+                                  <span className="text-xs">
+                                    {transaction.tag.account.name}
+                                  </span>
+                                </>
+                              )}
+                              <span>•</span>
+                              <span>
+                                {format(
+                                  new Date(transaction.transactionDate),
+                                  "dd MMM yyyy, HH:mm",
+                                  { locale: es }
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div
+                          className={`text-3xl font-bold ${
+                            transaction.isIncome
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {transaction.isIncome ? "+" : "-"}$
+                          {transaction.amount.toFixed(2)}
+                        </div>
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                            onClick={() => openEditDialog(transaction)}
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors"
+                            onClick={() => openDeleteDialog(transaction)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
 
-      {/* Floating Action Button - Mejorado para mobile */}
+          {/* Create/Edit Dialog */}
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="sm:max-w-[550px]">
+              <form onSubmit={handleSubmit}>
+                <DialogHeader>
+                  <DialogTitle>
+                    {editingTransaction
+                      ? "Editar Transacción"
+                      : "Nueva Transacción"}
+                  </DialogTitle>
+                  <DialogDescription>
+                    {editingTransaction
+                      ? "Modifica los datos de la transacción"
+                      : "Registra un nuevo ingreso o gasto"}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label>Tipo</Label>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant={formData.isIncome ? "default" : "outline"}
+                        className="flex-1"
+                        onClick={() =>
+                          setFormData({ ...formData, isIncome: true })
+                        }
+                      >
+                        <ArrowUpCircle className="w-4 h-4 mr-2" />
+                        Ingreso
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={!formData.isIncome ? "default" : "outline"}
+                        className="flex-1"
+                        onClick={() =>
+                          setFormData({ ...formData, isIncome: false })
+                        }
+                      >
+                        <ArrowDownCircle className="w-4 h-4 mr-2" />
+                        Gasto
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="amount">
+                      Monto <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="amount"
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      value={formData.amount}
+                      onChange={(e) =>
+                        setFormData({ ...formData, amount: e.target.value })
+                      }
+                      className={errors.amount ? "border-red-500" : ""}
+                    />
+                    {errors.amount && (
+                      <p className="text-sm text-red-500">{errors.amount}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="transactionDate">
+                      Fecha <span className="text-red-500">*</span>
+                    </Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={`w-full justify-start text-left font-normal ${
+                            errors.transactionDate ? "border-red-500" : ""
+                          }`}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {formData.transactionDate ? (
+                            format(formData.transactionDate, "PPP", {
+                              locale: es,
+                            })
+                          ) : (
+                            <span>Selecciona una fecha</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={formData.transactionDate}
+                          onSelect={(date: Date | undefined) =>
+                            setFormData({
+                              ...formData,
+                              transactionDate: date || new Date(),
+                            })
+                          }
+                          disabled={(date: Date) => date > new Date()}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    {errors.transactionDate && (
+                      <p className="text-sm text-red-500">
+                        {errors.transactionDate}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="tagId">
+                      Etiqueta <span className="text-red-500">*</span>
+                    </Label>
+                    <Select
+                      value={formData.tagId}
+                      onValueChange={(value: string) =>
+                        setFormData({ ...formData, tagId: value })
+                      }
+                    >
+                      <SelectTrigger
+                        className={errors.tagId ? "border-red-500" : ""}
+                      >
+                        <SelectValue placeholder="Selecciona una etiqueta" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {tags.map((tag) => (
+                          <SelectItem key={tag.id} value={tag.id.toString()}>
+                            {tag.name} - {tag.account?.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.tagId && (
+                      <p className="text-sm text-red-500">{errors.tagId}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="description">
+                      Descripción
+                      {parseFloat(formData.amount) > 1000 && (
+                        <span className="text-red-500"> *</span>
+                      )}
+                    </Label>
+                    <Textarea
+                      id="description"
+                      placeholder="Describe la transacción..."
+                      value={formData.description}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
+                      rows={3}
+                      className={errors.description ? "border-red-500" : ""}
+                    />
+                    {errors.description && (
+                      <p className="text-sm text-red-500">
+                        {errors.description}
+                      </p>
+                    )}
+                    {parseFloat(formData.amount) > 1000 && (
+                      <p className="text-xs text-slate-500">
+                        La descripción es obligatoria para montos mayores a
+                        $1,000
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleCancelWithConfirmation}
+                    disabled={submitting}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit" disabled={submitting}>
+                    {submitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Guardando...
+                      </>
+                    ) : editingTransaction ? (
+                      "Actualizar"
+                    ) : (
+                      "Crear Transacción"
+                    )}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+
+          {/* Delete Confirmation Dialog */}
+          <AlertDialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta acción eliminará la transacción de $
+                  {deletingTransaction?.amount.toFixed(2)} y ajustará el balance
+                  de la cuenta automáticamente. Esta acción no se puede
+                  deshacer.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Eliminar
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      </div>
+
+      {/* Floating Action Button - Fuera del container para que siempre esté visible */}
       <Button
         onClick={openCreateDialog}
         className="fixed bottom-6 right-6 md:bottom-8 md:right-8 h-16 w-16 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 active:scale-95 z-50 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
@@ -736,222 +1014,6 @@ export function TransactionsPage() {
       >
         <Plus className="w-7 h-7" />
       </Button>
-
-      {/* Create/Edit Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[550px]">
-          <form onSubmit={handleSubmit}>
-            <DialogHeader>
-              <DialogTitle>
-                {editingTransaction
-                  ? "Editar Transacción"
-                  : "Nueva Transacción"}
-              </DialogTitle>
-              <DialogDescription>
-                {editingTransaction
-                  ? "Modifica los datos de la transacción"
-                  : "Registra un nuevo ingreso o gasto"}
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label>Tipo</Label>
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant={formData.isIncome ? "default" : "outline"}
-                    className="flex-1"
-                    onClick={() => setFormData({ ...formData, isIncome: true })}
-                  >
-                    <ArrowUpCircle className="w-4 h-4 mr-2" />
-                    Ingreso
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={!formData.isIncome ? "default" : "outline"}
-                    className="flex-1"
-                    onClick={() =>
-                      setFormData({ ...formData, isIncome: false })
-                    }
-                  >
-                    <ArrowDownCircle className="w-4 h-4 mr-2" />
-                    Gasto
-                  </Button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="amount">
-                  Monto <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  step="0.01"
-                  placeholder="0.00"
-                  value={formData.amount}
-                  onChange={(e) =>
-                    setFormData({ ...formData, amount: e.target.value })
-                  }
-                  className={errors.amount ? "border-red-500" : ""}
-                />
-                {errors.amount && (
-                  <p className="text-sm text-red-500">{errors.amount}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="transactionDate">
-                  Fecha <span className="text-red-500">*</span>
-                </Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={`w-full justify-start text-left font-normal ${
-                        errors.transactionDate ? "border-red-500" : ""
-                      }`}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {formData.transactionDate ? (
-                        format(formData.transactionDate, "PPP", { locale: es })
-                      ) : (
-                        <span>Selecciona una fecha</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={formData.transactionDate}
-                      onSelect={(date: Date | undefined) =>
-                        setFormData({
-                          ...formData,
-                          transactionDate: date || new Date(),
-                        })
-                      }
-                      disabled={(date: Date) => date > new Date()}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                {errors.transactionDate && (
-                  <p className="text-sm text-red-500">
-                    {errors.transactionDate}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="tagId">
-                  Etiqueta <span className="text-red-500">*</span>
-                </Label>
-                <Select
-                  value={formData.tagId}
-                  onValueChange={(value: string) =>
-                    setFormData({ ...formData, tagId: value })
-                  }
-                >
-                  <SelectTrigger
-                    className={errors.tagId ? "border-red-500" : ""}
-                  >
-                    <SelectValue placeholder="Selecciona una etiqueta" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {tags.map((tag) => (
-                      <SelectItem key={tag.id} value={tag.id.toString()}>
-                        {tag.name} - {tag.account?.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.tagId && (
-                  <p className="text-sm text-red-500">{errors.tagId}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="description">
-                  Descripción
-                  {parseFloat(formData.amount) > 1000 && (
-                    <span className="text-red-500"> *</span>
-                  )}
-                </Label>
-                <Textarea
-                  id="description"
-                  placeholder="Describe la transacción..."
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  rows={3}
-                  className={errors.description ? "border-red-500" : ""}
-                />
-                {errors.description && (
-                  <p className="text-sm text-red-500">{errors.description}</p>
-                )}
-                {parseFloat(formData.amount) > 1000 && (
-                  <p className="text-xs text-slate-500">
-                    La descripción es obligatoria para montos mayores a $1,000
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCancelWithConfirmation}
-                disabled={submitting}
-              >
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={submitting}>
-                {submitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Guardando...
-                  </>
-                ) : editingTransaction ? (
-                  "Actualizar"
-                ) : (
-                  "Crear Transacción"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta acción eliminará la transacción de $
-              {deletingTransaction?.amount.toFixed(2)} y ajustará el balance de
-              la cuenta automáticamente. Esta acción no se puede deshacer.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              Eliminar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-    </div>
     </>
   );
 }

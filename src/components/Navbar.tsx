@@ -167,15 +167,17 @@ export function Navbar() {
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
               {/* Cargamos el favicon.svg */}
-              <img src="../../favicon.svg" alt="Finanz logo" className="w-6 h-6" />
+              <img
+                src="../../favicon.svg"
+                alt="Finanz logo"
+                className="w-6 h-6"
+              />
 
               <span className="hidden sm:block text-base font-semibold text-slate-900">
                 Finanz
               </span>
             </Link>
           </div>
-
-         
 
           {/* Right Section */}
           <div className="flex items-center gap-2">
@@ -373,18 +375,20 @@ export function Navbar() {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
-            </button>
+            {/* Mobile Menu Button - Solo mostrar si hay algo que mostrar en el menú */}
+            {!isLoading && (
+              <button
+                className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+              >
+                {isMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu */}

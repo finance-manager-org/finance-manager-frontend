@@ -1,35 +1,32 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LandingPage } from "./pages/LandingPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import { LoginPage } from "./pages/LoginPage";
-import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
-import { ResetPasswordPage } from "./pages/ResetPasswordPage";
-import { PasswordResetSuccessPage } from "./pages/PasswordResetSuccessPage";
-import { DashboardPage } from "./pages/DashboardPage";
-import { CalendarPage } from "./pages/CalendarPage";
-import { CategoriesPage } from "./pages/CategoriesPage";
-import { AccountsPage } from "./pages/AccountsPage";
-import ProfilePage from "./pages/ProfilePage";
-import { ArticlesPage } from "./pages/ArticlesPage";
-import { TagsPage } from "./pages/TagsPage";
-import { TransactionsPage } from "./pages/TransactionsPage";
-import { StatisticsPage } from "./pages/StatisticsPage";
-import { Navbar } from "./components/Navbar";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import { NotFoundPage } from "./pages/NotFoundPage";
 import React from "react";
+import LandingPage from "../pages/LandingPage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
+import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "../pages/ResetPasswordPage";
+import { PasswordResetSuccessPage } from "../pages/PasswordResetSuccessPage";
+import { CalendarPage } from "../pages/CalendarPage";
+import DashboardPage from "../pages/DashboardPage";
+import { TagsPage } from "../pages/TagsPage";
+import { TransactionsPage } from "../pages/TransactionsPage";
+import { StatisticsPage } from "../pages/StatisticsPage";
+import AccountsPage from "../pages/AccountsPage";
+import CategoriesPage from "../pages/CategoriesPage";
+import ProfilePage from "../pages/ProfilePage";
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import { NotFoundPage } from "../pages/NotFoundPage";
 
-export default function App() {
-  console.log("🚀 [App] Aplicación iniciada");
+const RoutesPages = () => {
+  console.log("🔀 [RoutesPages] Router inicializado");
 
   return (
     <BrowserRouter>
       <Routes>
         {/* Rutas públicas */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/articles" element={<ArticlesPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route
@@ -55,18 +52,18 @@ export default function App() {
           }
         />
         <Route
-          path="/categories"
-          element={
-            <ProtectedRoute>
-              <CategoriesPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/transactions"
           element={
             <ProtectedRoute>
               <TransactionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <CategoriesPage />
             </ProtectedRoute>
           }
         />
@@ -108,4 +105,6 @@ export default function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
+
+export default RoutesPages;

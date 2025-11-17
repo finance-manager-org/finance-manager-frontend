@@ -134,207 +134,207 @@ export function DashboardPage() {
   return (
     <>
       <Navbar />
-      <div className="pt-16">
+      <div className="pt-20">
       <div className="min-h-screen bg-slate-50">
-        {/* Header */}
-        <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
-          <div>
-            <h1 className="text-slate-900 mb-2">Dashboard</h1>
-            <p className="text-slate-600">
-              Bienvenido de nuevo, aquí está tu resumen financiero
-            </p>
-            <button
-              onClick={goToHome}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Go to home
-            </button>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="p-8 space-y-8">
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat) => {
-              const Icon = stat.icon;
-              return (
-                <Card key={stat.title}>
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm text-slate-600">
-                      {stat.title}
-                    </CardTitle>
-                    <div
-                      className={`w-8 h-8 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}
-                    >
-                      <Icon className={`w-4 h-4 text-${stat.color}-600`} />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-slate-900 mb-1">{stat.value}</div>
-                    <div className="flex items-center gap-3 text-sm">
-                      {stat.trend === "up" ? (
-                        <ArrowUpRight className="w-4 h-4 text-green-600" />
-                      ) : (
-                        <ArrowDownRight className="w-4 h-4 text-red-600" />
-                      )}
-                      <span
-                        className={
-                          stat.trend === "up"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }
-                      >
-                        {stat.change}
-                      </span>
-                      <span className="text-slate-500">vs mes anterior</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+          {/* Header */}
+          <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-6">
+            <div>
+              <h1 className="text-slate-900 mb-2">Dashboard</h1>
+              <p className="text-slate-600">
+                Bienvenido de nuevo, aquí está tu resumen financiero
+              </p>
+              <button
+                onClick={goToHome}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Go to home
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Line Chart - Ingresos vs Gastos */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-slate-900">
-                  Ingresos vs Gastos
-                </CardTitle>
-                <CardDescription>
-                  Comparación mensual de los últimos 6 meses
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={monthlyData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="name" stroke="#64748b" />
-                    <YAxis stroke="#64748b" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "white",
-                        border: "1px solid #e2e8f0",
-                        borderRadius: "8px",
-                      }}
-                    />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="ingresos"
-                      stroke="#10b981"
-                      strokeWidth={2}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="gastos"
-                      stroke="#ef4444"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            {/* Pie Chart - Gastos por Categoría */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-slate-900">
-                  Gastos por Categoría
-                </CardTitle>
-                <CardDescription>
-                  Distribución de gastos este mes
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={categoryData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) =>
-                        `${name} ${(percent * 100).toFixed(0)}%`
-                      }
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {categoryData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Recent Transactions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-slate-900">
-                Transacciones Recientes
-              </CardTitle>
-              <CardDescription>
-                Últimos movimientos en tu cuenta
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentTransactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
+          {/* Content */}
+          <div className="p-8 space-y-8">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+                return (
+                  <Card key={stat.title}>
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm text-slate-600">
+                        {stat.title}
+                      </CardTitle>
                       <div
-                        className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          transaction.type === "income"
-                            ? "bg-green-100"
-                            : "bg-red-100"
-                        }`}
+                        className={`w-8 h-8 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}
                       >
-                        {transaction.type === "income" ? (
-                          <ArrowUpRight className="w-5 h-5 text-green-600" />
-                        ) : (
-                          <ArrowDownRight className="w-5 h-5 text-red-600" />
-                        )}
+                        <Icon className={`w-4 h-4 text-${stat.color}-600`} />
                       </div>
-                      <div>
-                        <div className="text-slate-900">
-                          {transaction.description}
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-slate-900 mb-1">{stat.value}</div>
+                      <div className="flex items-center gap-3 text-sm">
+                        {stat.trend === "up" ? (
+                          <ArrowUpRight className="w-4 h-4 text-green-600" />
+                        ) : (
+                          <ArrowDownRight className="w-4 h-4 text-red-600" />
+                        )}
+                        <span
+                          className={
+                            stat.trend === "up"
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }
+                        >
+                          {stat.change}
+                        </span>
+                        <span className="text-slate-500">vs mes anterior</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Line Chart - Ingresos vs Gastos */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-slate-900">
+                    Ingresos vs Gastos
+                  </CardTitle>
+                  <CardDescription>
+                    Comparación mensual de los últimos 6 meses
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={monthlyData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                      <XAxis dataKey="name" stroke="#64748b" />
+                      <YAxis stroke="#64748b" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "white",
+                          border: "1px solid #e2e8f0",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="ingresos"
+                        stroke="#10b981"
+                        strokeWidth={2}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="gastos"
+                        stroke="#ef4444"
+                        strokeWidth={2}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* Pie Chart - Gastos por Categoría */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-slate-900">
+                    Gastos por Categoría
+                  </CardTitle>
+                  <CardDescription>
+                    Distribución de gastos este mes
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={categoryData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percent }) =>
+                          `${name} ${(percent * 100).toFixed(0)}%`
+                        }
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {categoryData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Recent Transactions */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-slate-900">
+                  Transacciones Recientes
+                </CardTitle>
+                <CardDescription>
+                  Últimos movimientos en tu cuenta
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentTransactions.map((transaction) => (
+                    <div
+                      key={transaction.id}
+                      className="flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            transaction.type === "income"
+                              ? "bg-green-100"
+                              : "bg-red-100"
+                          }`}
+                        >
+                          {transaction.type === "income" ? (
+                            <ArrowUpRight className="w-5 h-5 text-green-600" />
+                          ) : (
+                            <ArrowDownRight className="w-5 h-5 text-red-600" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="text-slate-900">
+                            {transaction.description}
+                          </div>
+                          <div className="text-sm text-slate-500">
+                            {transaction.category}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div
+                          className={`${
+                            transaction.type === "income"
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {transaction.type === "income" ? "+" : ""}$
+                          {Math.abs(transaction.amount).toFixed(2)}
                         </div>
                         <div className="text-sm text-slate-500">
-                          {transaction.category}
+                          {transaction.date}
                         </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div
-                        className={`${
-                          transaction.type === "income"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {transaction.type === "income" ? "+" : ""}$
-                        {Math.abs(transaction.amount).toFixed(2)}
-                      </div>
-                      <div className="text-sm text-slate-500">
-                        {transaction.date}
-                      </div>
-                    </div>
-                  </div>
-                ))}{" "}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}{" "}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
       </div>
     </>
   );

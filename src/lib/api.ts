@@ -550,14 +550,14 @@ export interface TransactionFilters {
  */
 export const transactionApi = {
   /**
-   * POST /api/transaction
+   * POST /api/transactions
    * Create a new transaction
    */
   create: async (
     data: CreateTransactionRequest
   ): Promise<{ message: string; transaction: Transaction }> => {
     return apiRequest<{ message: string; transaction: Transaction }>(
-      "/api/transaction",
+      "/api/transactions",
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -566,7 +566,7 @@ export const transactionApi = {
   },
 
   /**
-   * GET /api/transaction
+   * GET /api/transactions
    * Get all transactions with optional filters
    */
   getAll: async (filters?: TransactionFilters): Promise<Transaction[]> => {
@@ -585,8 +585,8 @@ export const transactionApi = {
 
     const queryString = params.toString();
     const url = queryString
-      ? `/api/transaction?${queryString}`
-      : "/api/transaction";
+      ? `/api/transactions?${queryString}`
+      : "/api/transactions";
 
     return apiRequest<Transaction[]>(url, {
       method: "GET",
@@ -594,27 +594,27 @@ export const transactionApi = {
   },
 
   /**
-   * GET /api/transaction/:id
+   * GET /api/transactions/:id
    * Get a transaction by ID
    */
   getById: async (id: number): Promise<Transaction> => {
-    return apiRequest<Transaction>(`/api/transaction/${id}`, {
+    return apiRequest<Transaction>(`/api/transactions/${id}`, {
       method: "GET",
     });
   },
 
   /**
-   * GET /api/transaction/date/:date
+   * GET /api/transactions/date/:date
    * Get transactions by specific date
    */
   getByDate: async (date: string): Promise<Transaction[]> => {
-    return apiRequest<Transaction[]>(`/api/transaction/date/${date}`, {
+    return apiRequest<Transaction[]>(`/api/transactions/date/${date}`, {
       method: "GET",
     });
   },
 
   /**
-   * GET /api/transaction/type/:type/date/:date
+   * GET /api/transactions/type/:type/date/:date
    * Get transactions by type (income/expense) and date
    */
   getByTypeAndDate: async (
@@ -622,7 +622,7 @@ export const transactionApi = {
     date: string
   ): Promise<Transaction[]> => {
     return apiRequest<Transaction[]>(
-      `/api/transaction/type/${type}/date/${date}`,
+      `/api/transactions/type/${type}/date/${date}`,
       {
         method: "GET",
       }
@@ -630,7 +630,7 @@ export const transactionApi = {
   },
 
   /**
-   * PUT /api/transaction/:id
+   * PUT /api/transactions/:id
    * Update transaction
    */
   update: async (
@@ -638,7 +638,7 @@ export const transactionApi = {
     data: UpdateTransactionRequest
   ): Promise<{ message: string; transaction: Transaction }> => {
     return apiRequest<{ message: string; transaction: Transaction }>(
-      `/api/transaction/${id}`,
+      `/api/transactions/${id}`,
       {
         method: "PUT",
         body: JSON.stringify(data),
@@ -647,11 +647,11 @@ export const transactionApi = {
   },
 
   /**
-   * DELETE /api/transaction/:id
+   * DELETE /api/transactions/:id
    * Delete transaction
    */
   delete: async (id: number): Promise<{ message: string }> => {
-    return apiRequest<{ message: string }>(`/api/transaction/${id}`, {
+    return apiRequest<{ message: string }>(`/api/transactions/${id}`, {
       method: "DELETE",
     });
   },

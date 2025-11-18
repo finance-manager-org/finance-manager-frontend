@@ -308,144 +308,144 @@ export function Navbar() {
     };
 
     return (
-      <nav className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link
-              to="/"
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-            >
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center shadow-md">
-                <TrendingUp className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-lg font-semibold text-slate-900">
-                Finance Manager
-              </span>
-            </Link>
+      <header className="fixed top-0 left-0 right-0 w-full bg-white border-b border-slate-200 shadow-sm z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
+            <img
+              src="../../favicon.svg"
+              alt="Finanz logo"
+              className="w-6 h-6"
+            />
+            <span className="text-base font-semibold text-slate-900">
+              Finanz
+            </span>
+          </Link>
 
-            {/* Auth Buttons - Hide on mobile (<480px), show from 480px+ */}
-            <div className="hidden min-[480px]:flex items-center gap-3">
-              {!isLoading && (
-                <>
-                  {isAuthenticated ? (
-                    <>
-                      <Link to="/dashboard">
-                        <Button variant="ghost" size="sm">
-                          <User className="w-4 h-4 mr-2" />
-                          Mi Cuenta
-                        </Button>
-                      </Link>
-                      <Button variant="ghost" size="sm" onClick={handleLogout}>
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Cerrar Sesión
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Link to="/login">
-                        <Button variant="ghost" size="sm">
-                          Iniciar Sesión
-                        </Button>
-                      </Link>
-                      <Link to="/register">
-                        <Button size="sm">Registrarse</Button>
-                      </Link>
-                    </>
-                  )}
-                </>
-              )}
-            </div>
+          {/* Desktop Navigation - Center aligned */}
+          <div className="hidden md:flex items-center gap-6">
+            
 
-            {/* Mobile Menu Button - Solo mostrar si hay algo que mostrar en el menú */}
-            {!isLoading && (
-              <button
-                className="min-[480px]:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-              >
-                {isMenuOpen ? (
-                  <X className="w-5 h-5" />
-                ) : (
-                  <Menu className="w-5 h-5" />
-                )}
-              </button>
-            )}
           </div>
 
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className="min-[480px]:hidden border-t border-slate-200 py-4 space-y-2">
+          {/* Right Section */}
+          <div className="flex items-center gap-2">
+            {/* Auth Buttons - Hidden on mobile */}
+            {!isLoading && (
+              <div className="hidden md:flex items-center gap-2">
+                {isAuthenticated ? (
+                  <>
+                    <Link to="/dashboard">
+                      <Button variant="ghost" size="sm">
+                        <User className="w-4 h-4 mr-2" />
+                        Mi Cuenta
+                      </Button>
+                    </Link>
+                    <Button variant="ghost" size="sm" onClick={handleLogout}>
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Cerrar Sesión
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login">
+                      <Button variant="ghost" size="sm">
+                        Iniciar Sesión
+                      </Button>
+                    </Link>
+                    <Link to="/register">
+                      <Button size="sm">Registrarse</Button>
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            >
+              {isMenuOpen ? (
+                <X className="w-5 h-5 text-slate-700" />
+              ) : (
+                <Menu className="w-5 h-5 text-slate-700" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu Overlay and Dropdown */}
+        {isMenuOpen && (
+          <>
+            <div
+              className="md:hidden fixed inset-0 top-16 bg-black/20 z-40"
+              onClick={() => setIsMenuOpen(false)}
+            />
+            <div className="md:hidden fixed top-16 right-4 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-2 overflow-hidden z-50">
               <Link
                 to="/articles"
-                className="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Artículos
               </Link>
               <button
                 onClick={() => scrollToSection("how-it-works")}
-                className="w-full text-left px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors text-left"
               >
                 Cómo funciona
               </button>
 
-              <div className="pt-4 border-t border-slate-200 space-y-2">
-                {!isLoading && (
-                  <>
-                    {isAuthenticated ? (
-                      <>
-                        <Link
-                          to="/dashboard"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="w-full justify-start"
-                          >
-                            <User className="w-4 h-4 mr-2" />
-                            Mi Cuenta
-                          </Button>
-                        </Link>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-start"
-                          onClick={handleLogout}
-                        >
-                          <LogOut className="w-4 h-4 mr-2" />
-                          Cerrar Sesión
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="w-full justify-start"
-                          >
-                            Iniciar Sesión
-                          </Button>
-                        </Link>
-                        <Link
-                          to="/register"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <Button size="sm" className="w-full">
-                            Registrarse
-                          </Button>
-                        </Link>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
+              <div className="border-t border-slate-100 my-2"></div>
+              {!isLoading && (
+                <>
+                  {isAuthenticated ? (
+                    <>
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                      >
+                        <User className="w-4 h-4" />
+                        Mi Cuenta
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Cerrar Sesión
+                      </button>
+                    </>  
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                      >
+                        Iniciar Sesión
+                      </Link>
+                      <Link
+                        to="/register"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 transition-colors font-medium"
+                      >
+                        Registrarse
+                      </Link>
+                    </>
+                  )}
+                </>
+              )}
             </div>
-          )}
-        </div>
-      </nav>
+          </>
+        )}
+      </header>
     );
   }
 

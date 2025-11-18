@@ -1,6 +1,6 @@
 import { Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import { PrivacyPolicy } from "./legal/PrivacyPolicy";
 import { TermsOfService } from "./legal/TermsOfService";
 import { CookiePolicy } from "./legal/CookiePolicy";

@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "./ui/button";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { authApi } from "../lib/api";
 import { toast } from "sonner";
 

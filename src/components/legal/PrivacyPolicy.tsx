@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { LegalOverlay } from "./LegalOverlay";
 
 interface PrivacyPolicyProps {
@@ -7,10 +6,7 @@ interface PrivacyPolicyProps {
 }
 
 export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
-  const [activeSection, setActiveSection] = useState<string>("");
-
   const scrollToSection = (id: string) => {
-    setActiveSection(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });

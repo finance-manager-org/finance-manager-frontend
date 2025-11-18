@@ -22,7 +22,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Badge } from "../components/ui/badge";
-import React from "react";
 import {
   transactionApi,
   accountApi,

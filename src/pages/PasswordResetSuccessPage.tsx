@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { CheckCircle2, Mail, ArrowRight } from "lucide-react";
-import React from "react";
 import { Footer } from "../components/Footer";
 
 export function PasswordResetSuccessPage() {

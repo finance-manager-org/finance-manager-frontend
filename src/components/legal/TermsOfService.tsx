@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { LegalOverlay } from "./LegalOverlay";
 
 interface TermsOfServiceProps {

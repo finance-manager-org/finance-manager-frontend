@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
-import { Home, ArrowLeft, LogIn, LayoutDashboard } from "lucide-react";
+import { ArrowLeft, LogIn, LayoutDashboard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { authApi } from "../lib/api";
 

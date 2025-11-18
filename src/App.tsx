@@ -14,10 +14,8 @@ import { ArticlesPage } from "./pages/ArticlesPage";
 import { TagsPage } from "./pages/TagsPage";
 import { TransactionsPage } from "./pages/TransactionsPage";
 import { StatisticsPage } from "./pages/StatisticsPage";
-import { Navbar } from "./components/Navbar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import React from "react";
 
 export default function App() {
   console.log("🚀 [App] Aplicación iniciada");

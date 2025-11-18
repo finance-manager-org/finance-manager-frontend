@@ -21,10 +21,8 @@ import {
   CheckCircle2,
   Loader2,
 } from "lucide-react";
-import React from "react";
 import { toast } from "sonner";
 import {
-  validatePassword,
   validateEmail,
   validateRequired,
   validateName,

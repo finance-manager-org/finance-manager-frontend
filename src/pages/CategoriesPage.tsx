@@ -37,7 +37,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { categoryApi, Category, ApiError } from "../lib/api";
-import React from "react";
 import { Navbar } from "../components/Navbar";
 
 export function CategoriesPage() {

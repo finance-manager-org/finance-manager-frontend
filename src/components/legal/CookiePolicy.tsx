@@ -1,4 +1,3 @@
-import React from "react";
 import { LegalOverlay } from "./LegalOverlay";
 
 interface CookiePolicyProps {

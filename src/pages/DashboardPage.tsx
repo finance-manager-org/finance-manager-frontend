@@ -17,8 +17,6 @@ import {
 import {
   LineChart,
   Line,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
@@ -29,19 +27,29 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import useRedirect from "../basicFuntions/funtions";
-import React, { useState, useEffect } from "react";
-import { accountApi, transactionApi, authApi, Transaction, Account } from "../lib/api";
-import { format, startOfMonth, endOfMonth, subMonths, startOfYear } from "date-fns";
+import useRedirect from "../basicFunctions/functions";
+import { useState, useEffect } from "react";
+import {
+  accountApi,
+  transactionApi,
+  authApi,
+  Transaction,
+  Account,
+} from "../lib/api";
+import { format, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import { es } from "date-fns/locale";
 
 export function DashboardPage() {
   console.log("📊 [DashboardPage] Componente montado");
   const { goToHome } = useRedirect();
-  
+
   const [loading, setLoading] = useState(true);
+  // Commented out unused state variables - may be used in future
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userId, setUserId] = useState<number | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [accounts, setAccounts] = useState<Account[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [stats, setStats] = useState({
     totalBalance: 0,
@@ -60,7 +68,7 @@ export function DashboardPage() {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      
+
       // Get user profile
       const profileResponse = await authApi.getProfile();
       const currentUserId = profileResponse.user.id;
@@ -71,7 +79,10 @@ export function DashboardPage() {
       setAccounts(accountsData);
 
       // Calculate total balance
-      const totalBalance = accountsData.reduce((sum, acc) => sum + acc.money, 0);
+      const totalBalance = accountsData.reduce(
+        (sum, acc) => sum + acc.money,
+        0
+      );
 
       // Fetch all transactions
       const transactionsData = await transactionApi.getAll();
@@ -134,13 +145,24 @@ export function DashboardPage() {
 
       // Generate category data for pie chart
       const categoryMap = new Map<string, number>();
-      const colors = ["#3b82f6", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#06b6d4", "#ef4444"];
-      
+      const colors = [
+        "#3b82f6",
+        "#8b5cf6",
+        "#ec4899",
+        "#f59e0b",
+        "#10b981",
+        "#06b6d4",
+        "#ef4444",
+      ];
+
       currentMonthTransactions
         .filter((t) => !t.isIncome)
         .forEach((t) => {
           const categoryName = t.tag?.name || "Sin categoría";
-          categoryMap.set(categoryName, (categoryMap.get(categoryName) || 0) + t.amount);
+          categoryMap.set(
+            categoryName,
+            (categoryMap.get(categoryName) || 0) + t.amount
+          );
         });
 
       const categoryDataArray = Array.from(categoryMap.entries())
@@ -156,7 +178,11 @@ export function DashboardPage() {
 
       // Get recent transactions (last 5)
       const recentTxs = transactionsData
-        .sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
+        .sort(
+          (a, b) =>
+            new Date(b.transactionDate).getTime() -
+            new Date(a.transactionDate).getTime()
+        )
         .slice(0, 5)
         .map((t) => ({
           id: t.id,
@@ -168,7 +194,6 @@ export function DashboardPage() {
         }));
 
       setRecentTransactions(recentTxs);
-
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     } finally {

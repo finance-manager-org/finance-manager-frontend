@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "@jest/globals";
 import {
   validateEmail,
   validatePassword,
@@ -166,7 +166,9 @@ describe("Validation Functions - Acceptance Criteria", () => {
       expect(validateAge(validSignupData.age)).toBe(true);
       expect(validateEmail(validSignupData.email)).toBe(true);
       expect(validatePassword(validSignupData.password)).toBe(true);
-      expect(validSignupData.password === validSignupData.confirmPassword).toBe(true);
+      expect(validSignupData.password === validSignupData.confirmPassword).toBe(
+        true
+      );
     });
 
     it("should validate complete login form data (HU11)", () => {

@@ -45,7 +45,6 @@ import {
   ApiError,
 } from "../lib/api";
 import { Navbar } from "../components/Navbar";
-import React from "react";
 
 export function AccountsPage() {
   console.log("🏦 [AccountsPage] Componente montado");

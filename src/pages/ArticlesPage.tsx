@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import {
@@ -149,7 +149,7 @@ const articles = [
 ];
 
 export function ArticlesPage() {
-  const [selectedArticle, setSelectedArticle] = React.useState<number | null>(
+  const [selectedArticle, setSelectedArticle] = useState<number | null>(
     null
   );
 

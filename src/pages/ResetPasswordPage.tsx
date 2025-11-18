@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { Lock, Loader2, CheckCircle2, Eye, EyeOff } from "lucide-react";
-import React from "react";
 import { toast } from "sonner";
 import { validateRequired } from "../lib/validations";
 import { Footer } from "../components/Footer";

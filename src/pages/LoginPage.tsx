@@ -21,7 +21,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Footer } from "../components/Footer";
-import React from "react";
 import { toast } from "sonner";
 import { validateEmail, validateRequired } from "../lib/validations";
 import { authApi, ApiError } from "../lib/api";

@@ -5,7 +5,6 @@ import { Benefits } from "../components/Benefits";
 import { CTA } from "../components/CTA";
 import { Footer } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
-import React from "react";
 
 export function LandingPage() {
   return (

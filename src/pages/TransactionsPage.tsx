@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Plus,
   Edit2,
@@ -465,10 +465,7 @@ export function TransactionsPage() {
                 Gestiona todos tus ingresos y gastos
               </p>
             </div>
-            <Button 
-              onClick={openCreateDialog}
-              className="gap-2"
-            >
+            <Button onClick={openCreateDialog} className="gap-2">
               <Plus className="w-4 h-4" />
               Nueva Transacción
             </Button>
@@ -542,9 +539,11 @@ export function TransactionsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-1">
-                  <p className={`text-3xl font-bold ${
-                    stats.balance >= 0 ? "text-green-600" : "text-red-600"
-                  }`}>
+                  <p
+                    className={`text-3xl font-bold ${
+                      stats.balance >= 0 ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
                     ${stats.balance.toFixed(2)}
                   </p>
                 </div>

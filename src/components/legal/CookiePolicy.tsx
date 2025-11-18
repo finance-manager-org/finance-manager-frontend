@@ -114,8 +114,8 @@ export function CookiePolicy({ isOpen, onClose }: CookiePolicyProps) {
             servicio y mejorarlo
           </li>
           <li>
-            <strong>Análisis:</strong> Para generar estadísticas sobre el uso del
-            sitio
+            <strong>Análisis:</strong> Para generar estadísticas sobre el uso
+            del sitio
           </li>
         </ul>
       </section>
@@ -174,8 +174,8 @@ export function CookiePolicy({ isOpen, onClose }: CookiePolicyProps) {
             </h4>
             <p className="text-slate-700 mb-3">
               Estas cookies permiten que el sitio recuerde las elecciones que
-              hace (como su idioma o región) y proporcionan funciones mejoradas y
-              más personales.
+              hace (como su idioma o región) y proporcionan funciones mejoradas
+              y más personales.
             </p>
             <div className="bg-white rounded p-3">
               <table className="w-full text-sm">
@@ -209,8 +209,9 @@ export function CookiePolicy({ isOpen, onClose }: CookiePolicyProps) {
               Cookies de Análisis
             </h4>
             <p className="text-slate-700 mb-3">
-              Estas cookies nos ayudan a entender cómo los visitantes interactúan
-              con el sitio, recopilando información de forma anónima.
+              Estas cookies nos ayudan a entender cómo los visitantes
+              interactúan con el sitio, recopilando información de forma
+              anónima.
             </p>
             <div className="bg-white rounded p-3">
               <table className="w-full text-sm">
@@ -252,7 +253,8 @@ export function CookiePolicy({ isOpen, onClose }: CookiePolicyProps) {
             carga
           </li>
           <li>
-            <strong>Servicios de seguridad:</strong> Para proteger contra ataques
+            <strong>Servicios de seguridad:</strong> Para proteger contra
+            ataques
           </li>
         </ul>
         <p className="text-slate-700">
@@ -288,16 +290,17 @@ export function CookiePolicy({ isOpen, onClose }: CookiePolicyProps) {
               <strong>Safari:</strong> Preferencias → Privacidad → Cookies
             </p>
             <p>
-              <strong>Edge:</strong> Configuración → Cookies y permisos del sitio
+              <strong>Edge:</strong> Configuración → Cookies y permisos del
+              sitio
             </p>
           </div>
         </div>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-800 text-sm">
-            <strong>⚠️ Importante:</strong> Si deshabilita las cookies esenciales,
-            algunas funciones del sitio pueden no funcionar correctamente,
-            incluyendo la capacidad de iniciar sesión.
+            <strong>⚠️ Importante:</strong> Si deshabilita las cookies
+            esenciales, algunas funciones del sitio pueden no funcionar
+            correctamente, incluyendo la capacidad de iniciar sesión.
           </p>
         </div>
       </section>
@@ -311,8 +314,8 @@ export function CookiePolicy({ isOpen, onClose }: CookiePolicyProps) {
         </p>
         <ul className="list-disc pl-6 mb-4 text-slate-700 space-y-2">
           <li>
-            <strong>Local Storage:</strong> Para almacenar datos de configuración
-            localmente
+            <strong>Local Storage:</strong> Para almacenar datos de
+            configuración localmente
           </li>
           <li>
             <strong>Session Storage:</strong> Para datos temporales durante su

@@ -82,7 +82,7 @@ export function StatisticsPage() {
       setAccounts(accountsData);
 
       // Load transactions
-      const filters: any = {};
+      const filters: { accountId?: number } = {};
       if (selectedAccount !== "all") {
         filters.accountId = parseInt(selectedAccount);
       }

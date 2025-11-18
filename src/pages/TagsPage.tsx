@@ -35,7 +35,8 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { toast } from "sonner";
-import { tagApi, accountApi, Tag, Account } from "../lib/api";
+import { tagApi, accountApi } from "../lib/api";
+import type { Tag, Account } from "../lib/api";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -187,14 +188,14 @@ export function TagsPage() {
     try {
       if (editingTag) {
         // Actualizar tag existente
-        const response = await tagApi.update(editingTag.id, {
+        await tagApi.update(editingTag.id, {
           name: formData.name,
           description: formData.description || undefined,
         });
         toast.success("Tag actualizada correctamente");
       } else {
         // Crear nueva tag
-        const response = await tagApi.create({
+        await tagApi.create({
           name: formData.name,
           description: formData.description || undefined,
           accountId: Number(formData.accountId),
@@ -204,9 +205,9 @@ export function TagsPage() {
 
       setIsDialogOpen(false);
       loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving tag:", error);
-      toast.error(error.message || "Error al guardar la tag");
+      toast.error((error as Error).message || "Error al guardar la tag");
     } finally {
       setSubmitting(false);
     }
@@ -221,9 +222,9 @@ export function TagsPage() {
       setIsDeleteDialogOpen(false);
       setDeletingTag(null);
       loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting tag:", error);
-      toast.error(error.message || "Error al eliminar la tag");
+      toast.error((error as Error).message || "Error al eliminar la tag");
     }
   };
 

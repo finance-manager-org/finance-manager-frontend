@@ -149,9 +149,7 @@ const articles = [
 ];
 
 export function ArticlesPage() {
-  const [selectedArticle, setSelectedArticle] = useState<number | null>(
-    null
-  );
+  const [selectedArticle, setSelectedArticle] = useState<number | null>(null);
 
   const article =
     selectedArticle !== null

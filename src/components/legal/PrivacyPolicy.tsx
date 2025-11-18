@@ -332,7 +332,9 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
           </h4>
           <ul className="list-disc pl-6 text-slate-700 space-y-1">
             <li>Base legal para el procesamiento: Contrato y consentimiento</li>
-            <li>Transferencias internacionales: Protegidas por cláusulas estándar</li>
+            <li>
+              Transferencias internacionales: Protegidas por cláusulas estándar
+            </li>
             <li>Delegado de Protección de Datos: dpo@finanzasapp.com</li>
             <li>
               Derecho a presentar queja ante autoridad de control supervisora
@@ -351,7 +353,8 @@ export function PrivacyPolicy({ isOpen, onClose }: PrivacyPolicyProps) {
               financiera, actividad en internet
             </li>
             <li>
-              Propósito del negocio: Proporcionar servicios de gestión financiera
+              Propósito del negocio: Proporcionar servicios de gestión
+              financiera
             </li>
             <li>Derecho a optar por no vender información (no aplicable)</li>
           </ul>

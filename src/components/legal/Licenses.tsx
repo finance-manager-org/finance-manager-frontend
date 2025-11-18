@@ -16,9 +16,9 @@ export function Licenses({ isOpen, onClose }: LicensesProps) {
       {/* Introducción */}
       <section className="mb-8">
         <p className="text-slate-700 mb-4">
-          FinanzasApp utiliza varias bibliotecas y componentes de código abierto.
-          Agradecemos a los autores y mantenedores de estos proyectos por su
-          invaluable contribución a la comunidad de desarrolladores.
+          FinanzasApp utiliza varias bibliotecas y componentes de código
+          abierto. Agradecemos a los autores y mantenedores de estos proyectos
+          por su invaluable contribución a la comunidad de desarrolladores.
         </p>
         <p className="text-slate-700">
           A continuación se encuentran las licencias y atribuciones de los
@@ -175,7 +175,8 @@ export function Licenses({ isOpen, onClose }: LicensesProps) {
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
             <h4 className="font-semibold text-slate-900 mb-2">shadcn/ui</h4>
             <p className="text-sm text-slate-600 mb-2">
-              Componentes de UI reutilizables construidos con Radix UI y Tailwind
+              Componentes de UI reutilizables construidos con Radix UI y
+              Tailwind
             </p>
             <div className="text-sm text-slate-700 space-y-1">
               <p>

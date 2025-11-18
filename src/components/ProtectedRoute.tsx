@@ -17,7 +17,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
       try {
         await authApi.getProfile();
         setIsAuthenticated(true);
-      } catch (error) {
+      } catch {
         setIsAuthenticated(false);
         // Mostrar notificación solo si no estamos ya en login o registro
         if (

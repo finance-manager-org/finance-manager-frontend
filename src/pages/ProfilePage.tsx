@@ -71,8 +71,8 @@ export default function ProfilePage() {
         nickname: response.user.nickname || "",
         email: response.user.email,
       });
-    } catch (error: any) {
-      toast.error(error.message || "Error al cargar perfil");
+    } catch (error: unknown) {
+      toast.error((error as Error).message || "Error al cargar perfil");
       navigate("/login");
     } finally {
       setIsLoading(false);
@@ -102,8 +102,8 @@ export default function ProfilePage() {
       setUser(response.user);
       toast.success("Perfil actualizado exitosamente");
       setIsEditDialogOpen(false);
-    } catch (error: any) {
-      toast.error(error.message || "Error al actualizar perfil");
+    } catch (error: unknown) {
+      toast.error((error as Error).message || "Error al actualizar perfil");
     } finally {
       setIsSubmitting(false);
     }
@@ -146,8 +146,8 @@ export default function ProfilePage() {
         newPassword: "",
         confirmPassword: "",
       });
-    } catch (error: any) {
-      toast.error(error.message || "Error al cambiar contraseña");
+    } catch (error: unknown) {
+      toast.error((error as Error).message || "Error al cambiar contraseña");
     } finally {
       setIsSubmitting(false);
     }
@@ -172,8 +172,8 @@ export default function ProfilePage() {
 
       toast.success("Cuenta eliminada exitosamente");
       navigate("/login");
-    } catch (error: any) {
-      toast.error(error.message || "Error al eliminar cuenta");
+    } catch (error: unknown) {
+      toast.error((error as Error).message || "Error al eliminar cuenta");
     } finally {
       setIsSubmitting(false);
     }

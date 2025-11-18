@@ -32,11 +32,11 @@ import {
   Pencil,
   Trash2,
   TrendingUp,
-  TrendingDown,
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
-import { categoryApi, Category, ApiError } from "../lib/api";
+import { categoryApi } from "../lib/api";
+import type { Category, ApiError } from "../lib/api";
 import { Navbar } from "../components/Navbar";
 
 export function CategoriesPage() {

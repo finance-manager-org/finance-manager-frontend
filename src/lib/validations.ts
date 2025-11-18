@@ -16,7 +16,7 @@ export function validatePassword(password: string): boolean {
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
   const hasNumber = /[0-9]/.test(password);
-  const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
 
   return hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
 }
@@ -41,7 +41,7 @@ export function getPasswordErrors(password: string): string[] {
   if (!/[0-9]/.test(password)) {
     errors.push("Al menos un número");
   }
-  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
     errors.push("Al menos un carácter especial");
   }
 

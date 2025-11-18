@@ -40,10 +40,8 @@ import {
   accountApi,
   categoryApi,
   authApi,
-  Account,
-  Category,
-  ApiError,
 } from "../lib/api";
+import type { Account, Category, ApiError } from "../lib/api";
 import { Navbar } from "../components/Navbar";
 
 export function AccountsPage() {

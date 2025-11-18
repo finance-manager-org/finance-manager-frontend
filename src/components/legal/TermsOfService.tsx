@@ -146,7 +146,9 @@ export function TermsOfService({ isOpen, onClose }: TermsOfServiceProps) {
           3.2. Seguridad de la Cuenta:
         </h4>
         <ul className="list-disc pl-6 mb-4 text-slate-700 space-y-1">
-          <li>Debe notificarnos inmediatamente de cualquier uso no autorizado</li>
+          <li>
+            Debe notificarnos inmediatamente de cualquier uso no autorizado
+          </li>
           <li>No debe compartir sus credenciales con terceros</li>
           <li>Debe utilizar una contraseña segura</li>
           <li>
@@ -219,7 +221,8 @@ export function TermsOfService({ isOpen, onClose }: TermsOfServiceProps) {
           autor, marcas registradas y otras leyes de propiedad intelectual.
         </p>
         <p className="text-slate-700 mb-3">
-          Se le otorga una licencia limitada, no exclusiva, no transferible para:
+          Se le otorga una licencia limitada, no exclusiva, no transferible
+          para:
         </p>
         <ul className="list-disc pl-6 mb-4 text-slate-700 space-y-1">
           <li>Acceder y usar el Servicio para su uso personal</li>
@@ -245,8 +248,13 @@ export function TermsOfService({ isOpen, onClose }: TermsOfServiceProps) {
             <li>
               El servicio se proporciona "TAL CUAL" y "SEGÚN DISPONIBILIDAD"
             </li>
-            <li>No garantizamos que el servicio será ininterrumpido o libre de errores</li>
-            <li>No nos hacemos responsables de pérdidas de datos o interrupciones</li>
+            <li>
+              No garantizamos que el servicio será ininterrumpido o libre de
+              errores
+            </li>
+            <li>
+              No nos hacemos responsables de pérdidas de datos o interrupciones
+            </li>
             <li>
               No somos responsables de decisiones financieras tomadas basándose
               en el uso del servicio

@@ -23,7 +23,8 @@ import {
 import { Footer } from "../components/Footer";
 import { toast } from "sonner";
 import { validateEmail, validateRequired } from "../lib/validations";
-import { authApi, ApiError } from "../lib/api";
+import { authApi } from "../lib/api";
+import type { ApiError } from "../lib/api";
 
 export function LoginPage() {
   const navigate = useNavigate();

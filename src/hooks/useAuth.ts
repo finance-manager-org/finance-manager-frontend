@@ -8,7 +8,7 @@ import { authApi } from "../lib/api";
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: number; nickname: string; email: string } | null>(null);
 
   useEffect(() => {
     checkAuth();
@@ -20,7 +20,7 @@ export function useAuth() {
       const response = await authApi.getProfile();
       setUser(response.user);
       setIsAuthenticated(true);
-    } catch (error) {
+    } catch {
       // Si falla, el usuario no está autenticado
       setIsAuthenticated(false);
       setUser(null);

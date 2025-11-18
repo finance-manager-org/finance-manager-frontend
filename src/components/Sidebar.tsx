@@ -10,7 +10,6 @@ import {
   Tag,
   ArrowRightLeft,
   BarChart3,
-  Menu,
   X,
 } from "lucide-react";
 import { Button } from "./ui/button";

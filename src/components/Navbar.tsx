@@ -91,7 +91,7 @@ export function Navbar() {
       setUser(response.user);
       setIsAuthenticated(true);
       console.log("✅ [Navbar] Usuario autenticado:", response.user.nickname);
-    } catch (error) {
+    } catch {
       setUser(null);
       setIsAuthenticated(false);
       console.log("❌ [Navbar] Usuario no autenticado");

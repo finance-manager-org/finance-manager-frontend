@@ -33,8 +33,6 @@ import {
   accountApi,
   transactionApi,
   authApi,
-  Transaction,
-  Account,
 } from "../lib/api";
 import { format, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import { es } from "date-fns/locale";
@@ -44,21 +42,21 @@ export function DashboardPage() {
   const { goToHome } = useRedirect();
 
   const [loading, setLoading] = useState(true);
-  // Commented out unused state variables - may be used in future
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [userId, setUserId] = useState<number | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  // Unused state variables - reserved for future features
+  // const [userId, setUserId] = useState<number | null>(null);
+  // const [accounts, setAccounts] = useState<Account[]>([]);
+  // const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [stats, setStats] = useState({
     totalBalance: 0,
     monthIncome: 0,
     monthExpenses: 0,
     savings: 0,
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [monthlyData, setMonthlyData] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [categoryData, setCategoryData] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
 
   useEffect(() => {
@@ -72,11 +70,11 @@ export function DashboardPage() {
       // Get user profile
       const profileResponse = await authApi.getProfile();
       const currentUserId = profileResponse.user.id;
-      setUserId(currentUserId);
+      // setUserId(currentUserId); // Unused for now
 
       // Fetch accounts
       const accountsData = await accountApi.getAll(currentUserId);
-      setAccounts(accountsData);
+      // setAccounts(accountsData); // Unused for now
 
       // Calculate total balance
       const totalBalance = accountsData.reduce(
@@ -86,7 +84,7 @@ export function DashboardPage() {
 
       // Fetch all transactions
       const transactionsData = await transactionApi.getAll();
-      setTransactions(transactionsData);
+      // setTransactions(transactionsData); // Unused for now
 
       // Calculate current month stats
       const now = new Date();

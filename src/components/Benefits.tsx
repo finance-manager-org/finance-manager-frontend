@@ -3,20 +3,24 @@ import { CheckCircle2 } from "lucide-react";
 const benefits = [
   {
     title: "Ahorra más dinero",
-    description: "Identifica gastos innecesarios y oportunidades de ahorro. Los usuarios ahorran en promedio 25% más al mes."
+    description:
+      "Identifica gastos innecesarios y oportunidades de ahorro. Los usuarios ahorran en promedio 25% más al mes.",
   },
   {
     title: "Toma mejores decisiones",
-    description: "Con información clara y precisa sobre tus finanzas, toma decisiones informadas sobre tu dinero."
+    description:
+      "Con información clara y precisa sobre tus finanzas, toma decisiones informadas sobre tu dinero.",
   },
   {
     title: "Alcanza tus metas",
-    description: "Define objetivos de ahorro y sigue tu progreso. Haz realidad tus planes financieros."
+    description:
+      "Define objetivos de ahorro y sigue tu progreso. Haz realidad tus planes financieros.",
   },
   {
     title: "Elimina el estrés financiero",
-    description: "Saber exactamente dónde está tu dinero te da paz mental y control sobre tu futuro."
-  }
+    description:
+      "Saber exactamente dónde está tu dinero te da paz mental y control sobre tu futuro.",
+  },
 ];
 
 export function Benefits() {
@@ -30,11 +34,12 @@ export function Benefits() {
                 Transforma tu relación con el dinero
               </h2>
               <p className="text-slate-600 text-lg">
-                No se trata solo de registrar números. Se trata de construir hábitos financieros 
-                saludables que cambiarán tu vida para siempre.
+                No se trata solo de registrar números. Se trata de construir
+                hábitos financieros saludables que cambiarán tu vida para
+                siempre.
               </p>
             </div>
-            
+
             <div className="space-y-6">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex gap-4">
@@ -49,7 +54,7 @@ export function Benefits() {
               ))}
             </div>
           </div>
-          
+
           <div className="relative">
             <div className="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
               <div className="flex items-center justify-between pb-4 border-b">
@@ -57,7 +62,9 @@ export function Benefits() {
                 <span className="text-green-600">Este Mes</span>
               </div>
               <div>
-                <div className="text-slate-500 text-sm mb-1">Total Disponible</div>
+                <div className="text-slate-500 text-sm mb-1">
+                  Total Disponible
+                </div>
                 <div className="text-slate-900">$12,450.00</div>
               </div>
               <div className="grid grid-cols-2 gap-4">

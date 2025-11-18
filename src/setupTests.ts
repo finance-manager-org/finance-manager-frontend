@@ -11,4 +11,4 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder as typeof global.TextDecoder;
 
 // Mock env module for Jest tests
-jest.mock('./lib/env');
+jest.mock("./lib/env");

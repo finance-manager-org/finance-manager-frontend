@@ -7,7 +7,6 @@ import {
   ArrowUpCircle,
   ArrowDownCircle,
   Loader2,
-  X,
   Calendar as CalendarIcon,
   Search,
 } from "lucide-react";
@@ -27,7 +26,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
@@ -50,11 +48,8 @@ import {
   tagApi,
   accountApi,
   authApi,
-  Transaction,
-  Tag,
-  Account,
-  TransactionFilters,
 } from "../lib/api";
+import type { Transaction, Tag, Account, TransactionFilters } from "../lib/api";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -400,9 +395,9 @@ export function TransactionsPage() {
 
       setIsDialogOpen(false);
       loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving transaction:", error);
-      toast.error(error.message || "Error al guardar la transacción");
+      toast.error((error as Error).message || "Error al guardar la transacción");
     } finally {
       setSubmitting(false);
     }
@@ -417,9 +412,9 @@ export function TransactionsPage() {
       setIsDeleteDialogOpen(false);
       setDeletingTransaction(null);
       loadData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting transaction:", error);
-      toast.error(error.message || "Error al eliminar la transacción");
+      toast.error((error as Error).message || "Error al eliminar la transacción");
     }
   };
 

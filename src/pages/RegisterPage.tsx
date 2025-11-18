@@ -28,7 +28,8 @@ import {
   validateName,
   getPasswordErrors,
 } from "../lib/validations";
-import { authApi, ApiError } from "../lib/api";
+import { authApi } from "../lib/api";
+import type { ApiError } from "../lib/api";
 import { Footer } from "../components/Footer";
 
 const benefits = [
@@ -91,7 +92,7 @@ export function RegisterPage() {
         }
         return "";
 
-      case "password":
+      case "password": {
         if (!validateRequired(value)) {
           return "Este campo es requerido";
         }
@@ -100,6 +101,7 @@ export function RegisterPage() {
           return passwordErrors.join(", ");
         }
         return "";
+      }
 
       case "confirmPassword":
         if (!validateRequired(value)) {

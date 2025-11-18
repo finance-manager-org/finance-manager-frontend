@@ -16,7 +16,7 @@ const cleanupToast = (id: string) => {
 };
 
 export const toast = {
-  success: (message: string, options?: any) => {
+  success: (message: string, options?: Record<string, unknown>) => {
     const id = getToastId(message, "success");
 
     // Si ya existe un toast con este mensaje, no mostrar otro
@@ -32,16 +32,18 @@ export const toast = {
       ...options,
       onDismiss: () => {
         cleanupToast(id);
-        options?.onDismiss?.();
+        const dismiss = options?.onDismiss as (() => void) | undefined;
+        dismiss?.();
       },
       onAutoClose: () => {
         cleanupToast(id);
-        options?.onAutoClose?.();
+        const autoClose = options?.onAutoClose as (() => void) | undefined;
+        autoClose?.();
       },
     });
   },
 
-  error: (message: string, options?: any) => {
+  error: (message: string, options?: Record<string, unknown>) => {
     const id = getToastId(message, "error");
 
     // Si ya existe un toast con este mensaje, no mostrar otro
@@ -57,16 +59,18 @@ export const toast = {
       ...options,
       onDismiss: () => {
         cleanupToast(id);
-        options?.onDismiss?.();
+        const dismiss = options?.onDismiss as (() => void) | undefined;
+        dismiss?.();
       },
       onAutoClose: () => {
         cleanupToast(id);
-        options?.onAutoClose?.();
+        const autoClose = options?.onAutoClose as (() => void) | undefined;
+        autoClose?.();
       },
     });
   },
 
-  info: (message: string, options?: any) => {
+  info: (message: string, options?: Record<string, unknown>) => {
     const id = getToastId(message, "info");
 
     if (activeToasts.has(id)) {
@@ -81,16 +85,18 @@ export const toast = {
       ...options,
       onDismiss: () => {
         cleanupToast(id);
-        options?.onDismiss?.();
+        const dismiss = options?.onDismiss as (() => void) | undefined;
+        dismiss?.();
       },
       onAutoClose: () => {
         cleanupToast(id);
-        options?.onAutoClose?.();
+        const autoClose = options?.onAutoClose as (() => void) | undefined;
+        autoClose?.();
       },
     });
   },
 
-  warning: (message: string, options?: any) => {
+  warning: (message: string, options?: Record<string, unknown>) => {
     const id = getToastId(message, "warning");
 
     if (activeToasts.has(id)) {
@@ -105,11 +111,13 @@ export const toast = {
       ...options,
       onDismiss: () => {
         cleanupToast(id);
-        options?.onDismiss?.();
+        const dismiss = options?.onDismiss as (() => void) | undefined;
+        dismiss?.();
       },
       onAutoClose: () => {
         cleanupToast(id);
-        options?.onAutoClose?.();
+        const autoClose = options?.onAutoClose as (() => void) | undefined;
+        autoClose?.();
       },
     });
   },

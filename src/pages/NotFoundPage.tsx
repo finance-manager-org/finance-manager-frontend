@@ -17,7 +17,7 @@ export function NotFoundPage() {
         await authApi.getProfile();
         console.log("✅ [NotFoundPage] Usuario autenticado");
         setIsAuthenticated(true);
-      } catch (error) {
+      } catch {
         console.log("❌ [NotFoundPage] Usuario no autenticado");
         setIsAuthenticated(false);
       }

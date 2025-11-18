@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -27,7 +27,6 @@ import { authApi } from "../lib/api";
 import type { ApiError } from "../lib/api";
 
 export function LoginPage() {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -133,11 +132,14 @@ export function LoginPage() {
         icon: <CheckCircle2 />,
       });
 
-      // Pequeña pausa para asegurar que las cookies se establezcan
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Marcar que acabamos de hacer login para evitar verificaciones prematuras
+      sessionStorage.setItem("justLoggedIn", "true");
 
-      // Redirigir a dashboard
-      navigate("/dashboard", { replace: true });
+      // Pausa para asegurar que las cookies se establezcan correctamente
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Forzar recarga para asegurar que las cookies estén disponibles
+      window.location.href = "/dashboard";
     } catch (error) {
       // Manejo de errores del servidor
       const apiError = error as ApiError;

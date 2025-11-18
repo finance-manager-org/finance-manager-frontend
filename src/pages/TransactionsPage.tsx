@@ -43,12 +43,7 @@ import {
 } from "../components/ui/popover";
 import { Calendar } from "../components/ui/calendar";
 import { toast } from "../utils/toast";
-import {
-  transactionApi,
-  tagApi,
-  accountApi,
-  authApi,
-} from "../lib/api";
+import { transactionApi, tagApi, accountApi, authApi } from "../lib/api";
 import type { Transaction, Tag, Account, TransactionFilters } from "../lib/api";
 import {
   AlertDialog,
@@ -397,7 +392,9 @@ export function TransactionsPage() {
       loadData();
     } catch (error: unknown) {
       console.error("Error saving transaction:", error);
-      toast.error((error as Error).message || "Error al guardar la transacción");
+      toast.error(
+        (error as Error).message || "Error al guardar la transacción"
+      );
     } finally {
       setSubmitting(false);
     }
@@ -414,7 +411,9 @@ export function TransactionsPage() {
       loadData();
     } catch (error: unknown) {
       console.error("Error deleting transaction:", error);
-      toast.error((error as Error).message || "Error al eliminar la transacción");
+      toast.error(
+        (error as Error).message || "Error al eliminar la transacción"
+      );
     }
   };
 

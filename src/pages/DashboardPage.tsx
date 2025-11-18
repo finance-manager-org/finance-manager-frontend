@@ -29,11 +29,7 @@ import {
 } from "recharts";
 import useRedirect from "../basicFunctions/functions";
 import { useState, useEffect } from "react";
-import {
-  accountApi,
-  transactionApi,
-  authApi,
-} from "../lib/api";
+import { accountApi, transactionApi, authApi } from "../lib/api";
 import { format, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import { es } from "date-fns/locale";
 
